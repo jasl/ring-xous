@@ -19,6 +19,7 @@
 import subprocess
 import os
 import re
+import json
 
 RING_C_FILES = [
     "crypto/fipsmodule/aes/aes_nohw.c",
@@ -186,39 +187,33 @@ def run():
     # Generate the `compile_commands.json` file that c2rust uses
     cwd = os.getcwd()
     with open(COMMANDS_FILE, "w") as cmd_file:
-        print("[", file=cmd_file)
-        first_line = False
+        files_list = []
         for file in RING_C_FILES:
             rs_file = file.replace(".c", ".rs")
             if os.path.exists(rs_file):
                 os.unlink(rs_file)
-            if first_line is not False:
-                print(",", file=cmd_file)
-            first_line = True
-            print("    {", file=cmd_file)
-            print(
-                f"""        "arguments": [
-            "cc",
-            "-c",
-            "-o",
-            "build/tmp.o",
-            "-m32",
-            "-Iinclude",
-            "-UOPENSSL_X86_64",
-            "-U__x86_64",
-            "-D__xous__",
-            "-D__riscv",
-            "-D__riscv_xlen=32",
-            "{file}"
-        ],
-        "directory": "{cwd}",
-        "file": "{file}"
-    }}""",
-                file=cmd_file,
-                end="",
-            )
-        print("", file=cmd_file)
-        print("]", file=cmd_file)
+
+            entry = {
+                "directory": cwd,
+                "file": file,
+                "arguments": [
+                    "cc",
+                    "-c",
+                    "-o",
+                    "build/tmp.o",
+                    "-m32",
+                    "-Iinclude",
+                    "-UOPENSSL_X86_64",
+                    "-U__x86_64",
+                    "-D__xous__",
+                    "-D__riscv",
+                    "-D__riscv_xlen=32",
+                    file
+                ]
+            }
+            files_list.append(entry)
+
+        print(json.dumps(files_list, indent=4), file=cmd_file)
 
     subprocess.run(["c2rust", "transpile", COMMANDS_FILE])
 
