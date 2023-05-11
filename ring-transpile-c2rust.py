@@ -1,6 +1,6 @@
 #
 # 1. Install c2rust dependencies:
-#      sudo apt install build-essential llvm clang libclang-dev cmake libssl-dev pkg-config python3
+#      sudo apt install build-essential llvm clang libclang-dev cmake libssl-dev pkg-config python3 gcc-multilib
 # 2. Install c2rust:
 #     cargo install c2rust:
 # 3. Run this program inside the target directory:
@@ -37,10 +37,10 @@ RING_C_FILES = [
     "crypto/fipsmodule/ec_17/p256.c",
 ]
 
-
 COMMANDS_FILE = "compile_commands.json"
 
 p_sizeof = re.compile(r'(.*)(std::mem::size_of::)(.*)(as u64)(.*)')
+
 
 def massage_line(line):
     line = line.strip()
@@ -72,12 +72,13 @@ def massage_line(line):
     line = line.replace("libc::c_uint", "core::ffi::c_uint")
     line = line.replace("libc::c_ulonglong", "u64")
     line = line.replace("libc::c_longlong", "i64")
-    line = line.replace("libc::c_ulong", "u32") # this must come after the longlong
+    line = line.replace("libc::c_ulong", "u32")  # this must come after the longlong
     line = line.replace("libc::c_long", "i32")
     line = line.replace("libc::c_void", "core::ffi::c_void")
 
     # Fix program-specific oddities
-    line = line.replace(" bf16", " u128") # fixed in https://github.com/immunant/c2rust/issues/486, but not yet released
+    line = line.replace(" bf16",
+                        " u128")  # fixed in https://github.com/immunant/c2rust/issues/486, but not yet released
     if line == "GFp_memcpy(":
         line = line.replace("GFp_memcpy(", "let _ = GFp_memcpy(")
     if line == "GFp_memset(":
@@ -102,6 +103,7 @@ def massage_line(line):
     )
 
     return line
+
 
 def lint():
     # lint the c2rust using cargo and a cleanup pass
@@ -167,20 +169,20 @@ def lint():
                                 # this is an unused assignment
                                 line = line[:warn[2] - 1] + 'let _' + line[warn[2] - 1:]
                         elif "unused variable" in warn[0]:
-                            line = line[:warn[2]-1] + '_' + line[warn[2]-1:]
+                            line = line[:warn[2] - 1] + '_' + line[warn[2] - 1:]
                             # print("DEBUG: {}".format(subs[fname][line_no]))
                         elif "remove mut":
                             # print("DEBUG: {}".format(line))
-                            line = line[:warn[2]-1] + line[warn[2]+3:]
+                            line = line[:warn[2] - 1] + line[warn[2] + 3:]
                         elif "unused func":
-                            line = line[:warn[2]-1] + '_' + line[warn[2]-1:]
+                            line = line[:warn[2] - 1] + '_' + line[warn[2] - 1:]
                         else:
                             print("TODO: {}".format(subs[fname][line_no]))
                     line_no += 1
                     print(line, file=dst_file, end="")
 
-def run():
 
+def run():
     # Generate the `compile_commands.json` file that c2rust uses
     cwd = os.getcwd()
     with open(COMMANDS_FILE, "w") as cmd_file:
@@ -236,7 +238,7 @@ def run():
                 print("#![allow(non_camel_case_types)]", file=dest_file)
                 print("#![allow(non_snake_case)]", file=dest_file)
                 print("#![allow(non_upper_case_globals)]", file=dest_file)
-                #print("use core::ffi::*;", file=dest_file)
+                # print("use core::ffi::*;", file=dest_file)
                 for line in src_file:
                     print(massage_line(line), file=dest_file)
             subprocess.run(["rm", rs_file])
@@ -252,6 +254,7 @@ def run():
     lint()
     print("pass3")
     lint()
+
 
 if __name__ == "__main__":
     run()

@@ -11,6 +11,8 @@ doc/doc.css
 *.orig
 *~
 
+compile_commands.*
+
 # Visual Studio Junk
 .vs/
 *.opensdf
@@ -28,7 +30,6 @@ doc/doc.css
 *.sln
 *.vcxproj
 *.filters
-
 
 # Cargo Junk
 Cargo.lock
