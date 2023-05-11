@@ -20,9 +20,9 @@ pub type BN_ULONG = crypto_word;
 pub type Limb = crypto_word;
 #[no_mangle]
 pub unsafe extern "C" fn p256_scalar_mul_mont(
-    r: *mut Limb,
-    a: *const Limb,
-    b: *const Limb,
+    mut r: *mut Limb,
+    mut a: *const Limb,
+    mut b: *const Limb,
 ) {
     static mut N: [BN_ULONG; 8] = [
         0xfc632551 as core::ffi::c_uint,
@@ -49,9 +49,9 @@ pub unsafe extern "C" fn p256_scalar_mul_mont(
 }
 #[no_mangle]
 pub unsafe extern "C" fn p256_scalar_sqr_rep_mont(
-    r: *mut Limb,
-    a: *const Limb,
-    rep: Limb,
+    mut r: *mut Limb,
+    mut a: *const Limb,
+    mut rep: Limb,
 ) {
     p256_scalar_mul_mont(r, a, a);
     let mut i: Limb = 1 as core::ffi::c_int as Limb;

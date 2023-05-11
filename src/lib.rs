@@ -145,20 +145,59 @@ mod sealed {
     pub trait Sealed {}
 }
 
-#[cfg(any(target_arch="wasm32", target_os="xous"))]
+#[cfg(target_os="xous")]
 mod c2rust {
-    pub mod aes_nohw;
-    pub mod montgomery;
+    #[path = "./xous/aes_nohw.rs"]
+    mod aes_nohw;
+    #[path = "./xous/montgomery.rs"]
+    mod montgomery;
+    #[path = "./xous/montgomery_inv.rs"]
     mod montgomery_inv;
-    pub mod limbs;
+    #[path = "./xous/limbs.rs"]
+    mod limbs;
+    #[path = "./xous/mem.rs"]
     mod mem;
+    #[path = "./xous/poly1305.rs"]
     mod poly1305;
+    #[path = "./xous/crypto.rs"]
     mod crypto;
+    #[path = "./xous/curve25519.rs"]
     mod curve25519;
+    #[path = "./xous/ecp_nistz.rs"]
     mod ecp_nistz;
-    // mod ecp_nistz256;
+    #[path = "./xous/gfp_p256.rs"]
     mod gfp_p256;
+    #[path = "./xous/gfp_p384.rs"]
     mod gfp_p384;
+    #[path = "./xous/p256.rs"]
+    mod p256;
+}
+
+#[cfg(target_arch="wasm32")]
+mod c2rust {
+    #[path = "./wasm32/aes_nohw.rs"]
+    mod aes_nohw;
+    #[path = "./wasm32/montgomery.rs"]
+    mod montgomery;
+    #[path = "./wasm32/montgomery_inv.rs"]
+    mod montgomery_inv;
+    #[path = "./wasm32/limbs.rs"]
+    mod limbs;
+    #[path = "./wasm32/mem.rs"]
+    mod mem;
+    #[path = "./wasm32/poly1305.rs"]
+    mod poly1305;
+    #[path = "./wasm32/crypto.rs"]
+    mod crypto;
+    #[path = "./wasm32/curve25519.rs"]
+    mod curve25519;
+    #[path = "./wasm32/ecp_nistz.rs"]
+    mod ecp_nistz;
+    #[path = "./wasm32/gfp_p256.rs"]
+    mod gfp_p256;
+    #[path = "./wasm32/gfp_p384.rs"]
+    mod gfp_p384;
+    #[path = "./wasm32/p256.rs"]
     mod p256;
 }
 
