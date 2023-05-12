@@ -3,21 +3,7 @@
 #![allow(non_upper_case_globals)]
 
 extern "C" {
-    fn LIMBS_are_zero(a: *const Limb, num_limbs: size_t) -> Limb;
-    fn __assert_fail(
-        __assertion: *const core::ffi::c_char,
-        __file: *const core::ffi::c_char,
-        __line: core::ffi::c_uint,
-        __function: *const core::ffi::c_char,
-    ) -> !;
-    fn LIMBS_equal(a: *const Limb, b: *const Limb, num_limbs: size_t) -> Limb;
-    fn LIMBS_add_mod(
-        r: *mut Limb,
-        a: *const Limb,
-        b: *const Limb,
-        m: *const Limb,
-        num_limbs: size_t,
-    );
+    fn LIMBS_shl_mod(r: *mut Limb, a: *const Limb, m: *const Limb, num_limbs: size_t);
     fn LIMBS_sub_mod(
         r: *mut Limb,
         a: *const Limb,
@@ -25,7 +11,21 @@ extern "C" {
         m: *const Limb,
         num_limbs: size_t,
     );
-    fn LIMBS_shl_mod(r: *mut Limb, a: *const Limb, m: *const Limb, num_limbs: size_t);
+    fn LIMBS_add_mod(
+        r: *mut Limb,
+        a: *const Limb,
+        b: *const Limb,
+        m: *const Limb,
+        num_limbs: size_t,
+    );
+    fn LIMBS_equal(a: *const Limb, b: *const Limb, num_limbs: size_t) -> Limb;
+    fn LIMBS_are_zero(a: *const Limb, num_limbs: size_t) -> Limb;
+    fn __assert_fail(
+        __assertion: *const core::ffi::c_char,
+        __file: *const core::ffi::c_char,
+        __line: core::ffi::c_uint,
+        __function: *const core::ffi::c_char,
+    ) -> !;
     fn bn_mul_mont(
         rp: *mut BN_ULONG,
         ap: *const BN_ULONG,
@@ -62,47 +62,47 @@ pub type Carry = Limb;
 pub type DoubleLimb = uint64_t;
 pub type Elem = [Limb; 12];
 #[inline]
-unsafe extern "C" fn value_barrier_w(mut a: crypto_word) -> crypto_word {
+unsafe extern "C" fn value_barrier_w(a: crypto_word) -> crypto_word {
     core::sync::atomic::compiler_fence(core::sync::atomic::Ordering::SeqCst);
     return a;
 }
 #[inline]
-unsafe extern "C" fn constant_time_msb_w(mut a: crypto_word) -> crypto_word {
+unsafe extern "C" fn constant_time_msb_w(a: crypto_word) -> crypto_word {
     return (0 as core::ffi::c_uint).wrapping_sub(
-        a >> (::core::mem::size_of::<crypto_word>() as u32)
+        a >> (core::mem::size_of::<crypto_word>() as u32)
             .wrapping_mul(8 as core::ffi::c_int as core::ffi::c_uint)
             .wrapping_sub(1 as core::ffi::c_int as core::ffi::c_uint),
     );
 }
 #[inline]
-unsafe extern "C" fn constant_time_is_zero_w(mut a: crypto_word) -> crypto_word {
+unsafe extern "C" fn constant_time_is_zero_w(a: crypto_word) -> crypto_word {
     return constant_time_msb_w(!a & a.wrapping_sub(1 as core::ffi::c_int as core::ffi::c_uint));
 }
 #[inline]
-unsafe extern "C" fn constant_time_is_nonzero_w(mut a: crypto_word) -> crypto_word {
+unsafe extern "C" fn constant_time_is_nonzero_w(a: crypto_word) -> crypto_word {
     return !constant_time_is_zero_w(a);
 }
 #[inline]
-unsafe extern "C" fn constant_time_eq_w(mut a: crypto_word, mut b: crypto_word) -> crypto_word {
+unsafe extern "C" fn constant_time_eq_w(a: crypto_word, b: crypto_word) -> crypto_word {
     return constant_time_is_zero_w(a ^ b);
 }
 #[inline]
 unsafe extern "C" fn constant_time_select_w(
-    mut mask: crypto_word,
-    mut a: crypto_word,
-    mut b: crypto_word,
+    mask: crypto_word,
+    a: crypto_word,
+    b: crypto_word,
 ) -> crypto_word {
     return value_barrier_w(mask) & a | value_barrier_w(!mask) & b;
 }
 #[inline]
 unsafe extern "C" fn limb_adc(
-    mut r: *mut Limb,
-    mut a: Limb,
-    mut b: Limb,
-    mut carry_in: Carry,
+    r: *mut Limb,
+    a: Limb,
+    b: Limb,
+    carry_in: Carry,
 ) -> Carry {
-    let mut ret: Carry = 0;
-    let mut x: DoubleLimb = (a as DoubleLimb)
+    let ret: Carry;
+    let x: DoubleLimb = (a as DoubleLimb)
         .wrapping_add(b as u64)
         .wrapping_add(carry_in as u64);
     *r = x as Limb;
@@ -110,22 +110,22 @@ unsafe extern "C" fn limb_adc(
     return ret;
 }
 #[inline]
-unsafe extern "C" fn limb_add(mut r: *mut Limb, mut a: Limb, mut b: Limb) -> Carry {
-    let mut ret: Carry = 0;
-    let mut x: DoubleLimb = (a as DoubleLimb).wrapping_add(b as u64);
+unsafe extern "C" fn limb_add(r: *mut Limb, a: Limb, b: Limb) -> Carry {
+    let ret: Carry;
+    let x: DoubleLimb = (a as DoubleLimb).wrapping_add(b as u64);
     *r = x as Limb;
     ret = (x >> 32 as core::ffi::c_uint) as Carry;
     return ret;
 }
 #[inline]
 unsafe extern "C" fn limb_sbb(
-    mut r: *mut Limb,
-    mut a: Limb,
-    mut b: Limb,
-    mut borrow_in: Carry,
+    r: *mut Limb,
+    a: Limb,
+    b: Limb,
+    borrow_in: Carry,
 ) -> Carry {
-    let mut ret: Carry = 0;
-    let mut x: DoubleLimb = (a as DoubleLimb)
+    let ret: Carry;
+    let x: DoubleLimb = (a as DoubleLimb)
         .wrapping_sub(b as u64)
         .wrapping_sub(borrow_in as u64);
     *r = x as Limb;
@@ -133,19 +133,19 @@ unsafe extern "C" fn limb_sbb(
     return ret;
 }
 #[inline]
-unsafe extern "C" fn limb_sub(mut r: *mut Limb, mut a: Limb, mut b: Limb) -> Carry {
-    let mut ret: Carry = 0;
-    let mut x: DoubleLimb = (a as DoubleLimb).wrapping_sub(b as u64);
+unsafe extern "C" fn limb_sub(r: *mut Limb, a: Limb, b: Limb) -> Carry {
+    let ret: Carry;
+    let x: DoubleLimb = (a as DoubleLimb).wrapping_sub(b as u64);
     *r = x as Limb;
     ret = (x >> 32 as core::ffi::c_uint & 1 as core::ffi::c_int as u64) as Carry;
     return ret;
 }
 #[inline]
 unsafe extern "C" fn limbs_add(
-    mut r: *mut Limb,
-    mut a: *const Limb,
-    mut b: *const Limb,
-    mut num_limbs: size_t,
+    r: *mut Limb,
+    a: *const Limb,
+    b: *const Limb,
+    num_limbs: size_t,
 ) -> Carry {
     if num_limbs >= 1 as core::ffi::c_int as core::ffi::c_uint {
     } else {
@@ -154,7 +154,7 @@ unsafe extern "C" fn limbs_add(
             b"crypto/fipsmodule/ec_17/../../limbs/limbs.inl\0" as *const u8
                 as *const core::ffi::c_char,
             118 as core::ffi::c_int as core::ffi::c_uint,
-            (*::core::mem::transmute::<&[u8; 60], &[core::ffi::c_char; 60]>(
+            (*core::mem::transmute::<&[u8; 60], &[core::ffi::c_char; 60]>(
                 b"Carry limbs_add(Limb *, const Limb *, const Limb *, size_t)\0",
             ))
             .as_ptr(),
@@ -179,10 +179,10 @@ unsafe extern "C" fn limbs_add(
 }
 #[inline]
 unsafe extern "C" fn limbs_sub(
-    mut r: *mut Limb,
-    mut a: *const Limb,
-    mut b: *const Limb,
-    mut num_limbs: size_t,
+    r: *mut Limb,
+    a: *const Limb,
+    b: *const Limb,
+    num_limbs: size_t,
 ) -> Carry {
     if num_limbs >= 1 as core::ffi::c_int as core::ffi::c_uint {
     } else {
@@ -191,7 +191,7 @@ unsafe extern "C" fn limbs_sub(
             b"crypto/fipsmodule/ec_17/../../limbs/limbs.inl\0" as *const u8
                 as *const core::ffi::c_char,
             129 as core::ffi::c_int as core::ffi::c_uint,
-            (*::core::mem::transmute::<&[u8; 60], &[core::ffi::c_char; 60]>(
+            (*core::mem::transmute::<&[u8; 60], &[core::ffi::c_char; 60]>(
                 b"Carry limbs_sub(Limb *, const Limb *, const Limb *, size_t)\0",
             ))
             .as_ptr(),
@@ -215,7 +215,7 @@ unsafe extern "C" fn limbs_sub(
     return borrow;
 }
 #[inline]
-unsafe extern "C" fn limbs_copy(mut r: *mut Limb, mut a: *const Limb, mut num_limbs: size_t) {
+unsafe extern "C" fn limbs_copy(r: *mut Limb, a: *const Limb, num_limbs: size_t) {
     let mut i: size_t = 0 as core::ffi::c_int as size_t;
     while i < num_limbs {
         *r.offset(i as isize) = *a.offset(i as isize);
@@ -223,7 +223,7 @@ unsafe extern "C" fn limbs_copy(mut r: *mut Limb, mut a: *const Limb, mut num_li
     }
 }
 #[inline]
-unsafe extern "C" fn limbs_zero(mut r: *mut Limb, mut num_limbs: size_t) {
+unsafe extern "C" fn limbs_zero(r: *mut Limb, num_limbs: size_t) {
     let mut i: size_t = 0 as core::ffi::c_int as size_t;
     while i < num_limbs {
         *r.offset(i as isize) = 0 as core::ffi::c_int as Limb;
@@ -273,7 +273,7 @@ static mut ONE: [BN_ULONG; 12] = [
     0 as core::ffi::c_int as BN_ULONG,
 ];
 #[inline]
-unsafe extern "C" fn is_equal(mut a: *const Limb, mut b: *const Limb) -> Limb {
+unsafe extern "C" fn is_equal(a: *const Limb, b: *const Limb) -> Limb {
     return LIMBS_equal(
         a,
         b,
@@ -281,14 +281,14 @@ unsafe extern "C" fn is_equal(mut a: *const Limb, mut b: *const Limb) -> Limb {
     );
 }
 #[inline]
-unsafe extern "C" fn is_zero(mut a: *const BN_ULONG) -> Limb {
+unsafe extern "C" fn is_zero(a: *const BN_ULONG) -> Limb {
     return LIMBS_are_zero(
         a,
         (384 as core::ffi::c_uint).wrapping_div(32 as core::ffi::c_uint),
     );
 }
 #[inline]
-unsafe extern "C" fn copy_conditional(mut r: *mut Limb, mut a: *const Limb, condition: Limb) {
+unsafe extern "C" fn copy_conditional(r: *mut Limb, a: *const Limb, condition: Limb) {
     let mut i: size_t = 0 as core::ffi::c_int as size_t;
     while i < (384 as core::ffi::c_uint).wrapping_div(32 as core::ffi::c_uint) {
         *r.offset(i as isize) =
@@ -297,7 +297,7 @@ unsafe extern "C" fn copy_conditional(mut r: *mut Limb, mut a: *const Limb, cond
     }
 }
 #[inline]
-unsafe extern "C" fn elem_add(mut r: *mut Limb, mut a: *const Limb, mut b: *const Limb) {
+unsafe extern "C" fn elem_add(r: *mut Limb, a: *const Limb, b: *const Limb) {
     LIMBS_add_mod(
         r,
         a,
@@ -307,7 +307,7 @@ unsafe extern "C" fn elem_add(mut r: *mut Limb, mut a: *const Limb, mut b: *cons
     );
 }
 #[inline]
-unsafe extern "C" fn elem_sub(mut r: *mut Limb, mut a: *const Limb, mut b: *const Limb) {
+unsafe extern "C" fn elem_sub(r: *mut Limb, a: *const Limb, b: *const Limb) {
     LIMBS_sub_mod(
         r,
         a,
@@ -316,8 +316,8 @@ unsafe extern "C" fn elem_sub(mut r: *mut Limb, mut a: *const Limb, mut b: *cons
         (384 as core::ffi::c_uint).wrapping_div(32 as core::ffi::c_uint),
     );
 }
-unsafe extern "C" fn elem_div_by_2(mut r: *mut Limb, mut a: *const Limb) {
-    let mut is_odd: Limb = constant_time_is_nonzero_w(
+unsafe extern "C" fn elem_div_by_2(r: *mut Limb, a: *const Limb) {
+    let is_odd: Limb = constant_time_is_nonzero_w(
         *a.offset(0 as core::ffi::c_int as isize) & 1 as core::ffi::c_int as core::ffi::c_uint,
     );
     let mut carry: Limb = *a.offset(
@@ -336,7 +336,7 @@ unsafe extern "C" fn elem_div_by_2(mut r: *mut Limb, mut a: *const Limb) {
     ) >> 1 as core::ffi::c_int;
     let mut i: size_t = 1 as core::ffi::c_int as size_t;
     while i < (384 as core::ffi::c_uint).wrapping_div(32 as core::ffi::c_uint) {
-        let mut new_carry: Limb = *a.offset(
+        let new_carry: Limb = *a.offset(
             (384 as core::ffi::c_uint)
                 .wrapping_div(32 as core::ffi::c_uint)
                 .wrapping_sub(i)
@@ -374,7 +374,7 @@ unsafe extern "C" fn elem_div_by_2(mut r: *mut Limb, mut a: *const Limb) {
         0x7fffffff as core::ffi::c_int as Limb,
     ];
     let mut adjusted: Elem = [0; 12];
-    let mut carry2: BN_ULONG = limbs_add(
+    let _carry2: BN_ULONG = limbs_add(
         adjusted.as_mut_ptr(),
         r as *const Limb,
         Q_PLUS_1_SHR_1.as_ptr(),
@@ -383,7 +383,7 @@ unsafe extern "C" fn elem_div_by_2(mut r: *mut Limb, mut a: *const Limb) {
     copy_conditional(r, adjusted.as_mut_ptr() as *const Limb, is_odd);
 }
 #[inline]
-unsafe extern "C" fn elem_mul_mont(mut r: *mut Limb, mut a: *const Limb, mut b: *const Limb) {
+unsafe extern "C" fn elem_mul_mont(r: *mut Limb, a: *const Limb, b: *const Limb) {
     static mut Q_N0: [BN_ULONG; 2] = [
         0x1 as core::ffi::c_int as BN_ULONG,
         0x1 as core::ffi::c_int as BN_ULONG,
@@ -398,7 +398,7 @@ unsafe extern "C" fn elem_mul_mont(mut r: *mut Limb, mut a: *const Limb, mut b: 
     );
 }
 #[inline]
-unsafe extern "C" fn elem_mul_by_2(mut r: *mut Limb, mut a: *const Limb) {
+unsafe extern "C" fn elem_mul_by_2(r: *mut Limb, a: *const Limb) {
     LIMBS_shl_mod(
         r,
         a,
@@ -407,38 +407,38 @@ unsafe extern "C" fn elem_mul_by_2(mut r: *mut Limb, mut a: *const Limb) {
     );
 }
 #[inline]
-unsafe extern "C" fn elem_mul_by_3(mut r: *mut Limb, mut a: *const Limb) {
+unsafe extern "C" fn elem_mul_by_3(r: *mut Limb, a: *const Limb) {
     let mut doubled: Elem = [0; 12];
     elem_add(doubled.as_mut_ptr(), a, a);
     elem_add(r, doubled.as_mut_ptr() as *const Limb, a);
 }
 #[inline]
-unsafe extern "C" fn elem_sqr_mont(mut r: *mut Limb, mut a: *const Limb) {
+unsafe extern "C" fn elem_sqr_mont(r: *mut Limb, a: *const Limb) {
     elem_mul_mont(r, a, a);
 }
 #[no_mangle]
-pub unsafe extern "C" fn p384_elem_sub(mut r: *mut Limb, mut a: *const Limb, mut b: *const Limb) {
+pub unsafe extern "C" fn p384_elem_sub(r: *mut Limb, a: *const Limb, b: *const Limb) {
     elem_sub(r, a, b);
 }
 #[no_mangle]
-pub unsafe extern "C" fn p384_elem_div_by_2(mut r: *mut Limb, mut a: *const Limb) {
+pub unsafe extern "C" fn p384_elem_div_by_2(r: *mut Limb, a: *const Limb) {
     elem_div_by_2(r, a);
 }
 #[no_mangle]
 pub unsafe extern "C" fn p384_elem_mul_mont(
-    mut r: *mut Limb,
-    mut a: *const Limb,
-    mut b: *const Limb,
+    r: *mut Limb,
+    a: *const Limb,
+    b: *const Limb,
 ) {
     elem_mul_mont(r, a, b);
 }
 #[no_mangle]
-pub unsafe extern "C" fn p384_elem_neg(mut r: *mut Limb, mut a: *const Limb) {
-    let mut is_zero_0: Limb = LIMBS_are_zero(
+pub unsafe extern "C" fn p384_elem_neg(r: *mut Limb, a: *const Limb) {
+    let is_zero_0: Limb = LIMBS_are_zero(
         a,
         (384 as core::ffi::c_uint).wrapping_div(32 as core::ffi::c_uint),
     );
-    let mut borrow: Carry = limbs_sub(
+    let _borrow: Carry = limbs_sub(
         r,
         Q.as_ptr(),
         a,
@@ -456,9 +456,9 @@ pub unsafe extern "C" fn p384_elem_neg(mut r: *mut Limb, mut a: *const Limb) {
 }
 #[no_mangle]
 pub unsafe extern "C" fn p384_scalar_mul_mont(
-    mut r: *mut Limb,
-    mut a: *const Limb,
-    mut b: *const Limb,
+    r: *mut Limb,
+    a: *const Limb,
+    b: *const Limb,
 ) {
     static mut N_N0: [BN_ULONG; 2] = [
         0xe88fdc45 as core::ffi::c_uint,
@@ -474,9 +474,9 @@ pub unsafe extern "C" fn p384_scalar_mul_mont(
     );
 }
 unsafe extern "C" fn p384_point_select_w5(
-    mut out: *mut P384_POINT,
-    mut table: *const P384_POINT,
-    mut index: size_t,
+    out: *mut P384_POINT,
+    table: *const P384_POINT,
+    index: size_t,
 ) {
     let mut x: Elem = [0; 12];
     limbs_zero(
@@ -495,7 +495,7 @@ unsafe extern "C" fn p384_point_select_w5(
     );
     let mut i: size_t = 0 as core::ffi::c_int as size_t;
     while i < 16 as core::ffi::c_int as core::ffi::c_uint {
-        let mut equal: crypto_word = constant_time_eq_w(
+        let equal: crypto_word = constant_time_eq_w(
             index,
             i.wrapping_add(1 as core::ffi::c_int as core::ffi::c_uint),
         );
@@ -538,10 +538,10 @@ unsafe extern "C" fn p384_point_select_w5(
 }
 #[inline]
 unsafe extern "C" fn booth_recode(
-    mut is_negative: *mut crypto_word,
-    mut digit: *mut crypto_word,
-    mut in_0: crypto_word,
-    mut w: crypto_word,
+    is_negative: *mut crypto_word,
+    digit: *mut crypto_word,
+    in_0: crypto_word,
+    w: crypto_word,
 ) {
     if w >= 2 as core::ffi::c_int as core::ffi::c_uint {
     } else {
@@ -549,7 +549,7 @@ unsafe extern "C" fn booth_recode(
             b"w >= 2\0" as *const u8 as *const core::ffi::c_char,
             b"crypto/fipsmodule/ec_17/ecp_nistz.h\0" as *const u8 as *const core::ffi::c_char,
             251 as core::ffi::c_int as core::ffi::c_uint,
-            (*::core::mem::transmute::<&[u8; 74], &[core::ffi::c_char; 74]>(
+            (*core::mem::transmute::<&[u8; 74], &[core::ffi::c_char; 74]>(
                 b"void booth_recode(crypto_word *, crypto_word *, crypto_word, crypto_word)\0",
             ))
             .as_ptr(),
@@ -561,14 +561,14 @@ unsafe extern "C" fn booth_recode(
             b"w <= 7\0" as *const u8 as *const core::ffi::c_char,
             b"crypto/fipsmodule/ec_17/ecp_nistz.h\0" as *const u8 as *const core::ffi::c_char,
             252 as core::ffi::c_int as core::ffi::c_uint,
-            (*::core::mem::transmute::<&[u8; 74], &[core::ffi::c_char; 74]>(
+            (*core::mem::transmute::<&[u8; 74], &[core::ffi::c_char; 74]>(
                 b"void booth_recode(crypto_word *, crypto_word *, crypto_word, crypto_word)\0",
             ))
             .as_ptr(),
         );
     }
-    let mut s: crypto_word = !(in_0 >> w).wrapping_sub(1 as core::ffi::c_int as core::ffi::c_uint);
-    let mut d: crypto_word = 0;
+    let s: crypto_word = !(in_0 >> w).wrapping_sub(1 as core::ffi::c_int as core::ffi::c_uint);
+    let mut d: crypto_word;
     d = ((1 as core::ffi::c_uint) << w.wrapping_add(1 as core::ffi::c_int as core::ffi::c_uint))
         .wrapping_sub(in_0)
         .wrapping_sub(1 as core::ffi::c_int as core::ffi::c_uint);
@@ -578,17 +578,17 @@ unsafe extern "C" fn booth_recode(
     *digit = d;
 }
 #[no_mangle]
-pub unsafe extern "C" fn nistz384_point_double(mut r: *mut P384_POINT, mut a: *const P384_POINT) {
+pub unsafe extern "C" fn nistz384_point_double(r: *mut P384_POINT, a: *const P384_POINT) {
     let mut S: [BN_ULONG; 12] = [0; 12];
     let mut M: [BN_ULONG; 12] = [0; 12];
     let mut Zsqr: [BN_ULONG; 12] = [0; 12];
     let mut tmp0: [BN_ULONG; 12] = [0; 12];
-    let mut in_x: *const BN_ULONG = ((*a).X).as_ptr();
-    let mut in_y: *const BN_ULONG = ((*a).Y).as_ptr();
-    let mut in_z: *const BN_ULONG = ((*a).Z).as_ptr();
-    let mut res_x: *mut BN_ULONG = ((*r).X).as_mut_ptr();
-    let mut res_y: *mut BN_ULONG = ((*r).Y).as_mut_ptr();
-    let mut res_z: *mut BN_ULONG = ((*r).Z).as_mut_ptr();
+    let in_x: *const BN_ULONG = ((*a).X).as_ptr();
+    let in_y: *const BN_ULONG = ((*a).Y).as_ptr();
+    let in_z: *const BN_ULONG = ((*a).Z).as_ptr();
+    let res_x: *mut BN_ULONG = ((*r).X).as_mut_ptr();
+    let res_y: *mut BN_ULONG = ((*r).Y).as_mut_ptr();
+    let res_z: *mut BN_ULONG = ((*r).Z).as_mut_ptr();
     elem_mul_by_2(S.as_mut_ptr(), in_y);
     elem_sqr_mont(Zsqr.as_mut_ptr(), in_z);
     elem_sqr_mont(S.as_mut_ptr(), S.as_mut_ptr() as *const Limb);
@@ -626,9 +626,9 @@ pub unsafe extern "C" fn nistz384_point_double(mut r: *mut P384_POINT, mut a: *c
 }
 #[no_mangle]
 pub unsafe extern "C" fn nistz384_point_add(
-    mut r: *mut P384_POINT,
-    mut a: *const P384_POINT,
-    mut b: *const P384_POINT,
+    r: *mut P384_POINT,
+    a: *const P384_POINT,
+    b: *const P384_POINT,
 ) {
     let mut U2: [BN_ULONG; 12] = [0; 12];
     let mut S2: [BN_ULONG; 12] = [0; 12];
@@ -644,14 +644,14 @@ pub unsafe extern "C" fn nistz384_point_add(
     let mut res_x: [BN_ULONG; 12] = [0; 12];
     let mut res_y: [BN_ULONG; 12] = [0; 12];
     let mut res_z: [BN_ULONG; 12] = [0; 12];
-    let mut in1_x: *const BN_ULONG = ((*a).X).as_ptr();
-    let mut in1_y: *const BN_ULONG = ((*a).Y).as_ptr();
-    let mut in1_z: *const BN_ULONG = ((*a).Z).as_ptr();
-    let mut in2_x: *const BN_ULONG = ((*b).X).as_ptr();
-    let mut in2_y: *const BN_ULONG = ((*b).Y).as_ptr();
-    let mut in2_z: *const BN_ULONG = ((*b).Z).as_ptr();
-    let mut in1infty: BN_ULONG = is_zero(((*a).Z).as_ptr());
-    let mut in2infty: BN_ULONG = is_zero(((*b).Z).as_ptr());
+    let in1_x: *const BN_ULONG = ((*a).X).as_ptr();
+    let in1_y: *const BN_ULONG = ((*a).Y).as_ptr();
+    let in1_z: *const BN_ULONG = ((*a).Z).as_ptr();
+    let in2_x: *const BN_ULONG = ((*b).X).as_ptr();
+    let in2_y: *const BN_ULONG = ((*b).Y).as_ptr();
+    let in2_z: *const BN_ULONG = ((*b).Z).as_ptr();
+    let in1infty: BN_ULONG = is_zero(((*a).Z).as_ptr());
+    let in2infty: BN_ULONG = is_zero(((*b).Z).as_ptr());
     elem_sqr_mont(Z2sqr.as_mut_ptr(), in2_z);
     elem_sqr_mont(Z1sqr.as_mut_ptr(), in1_z);
     elem_mul_mont(S1.as_mut_ptr(), Z2sqr.as_mut_ptr() as *const Limb, in2_z);
@@ -670,7 +670,7 @@ pub unsafe extern "C" fn nistz384_point_add(
         U2.as_mut_ptr() as *const Limb,
         U1.as_mut_ptr() as *const Limb,
     );
-    let mut is_exceptional: BN_ULONG = is_equal(
+    let is_exceptional: BN_ULONG = is_equal(
         U1.as_mut_ptr() as *const Limb,
         U2.as_mut_ptr() as *const Limb,
     ) & !in1infty
@@ -766,9 +766,9 @@ pub unsafe extern "C" fn nistz384_point_add(
     );
 }
 unsafe extern "C" fn add_precomputed_w5(
-    mut r: *mut P384_POINT,
-    mut wvalue: crypto_word,
-    mut table: *const P384_POINT,
+    r: *mut P384_POINT,
+    wvalue: crypto_word,
+    table: *const P384_POINT,
 ) {
     let mut recoded_is_negative: crypto_word = 0;
     let mut recoded: crypto_word = 0;
@@ -795,10 +795,10 @@ unsafe extern "C" fn add_precomputed_w5(
 }
 #[no_mangle]
 pub unsafe extern "C" fn nistz384_point_mul(
-    mut r: *mut P384_POINT,
-    mut p_scalar: *const BN_ULONG,
-    mut p_x: *const BN_ULONG,
-    mut p_y: *const BN_ULONG,
+    r: *mut P384_POINT,
+    p_scalar: *const BN_ULONG,
+    p_x: *const BN_ULONG,
+    p_y: *const BN_ULONG,
 ) {
     static mut kWindowSize: size_t = 5 as core::ffi::c_int as size_t;
     static mut kMask: crypto_word = (((1 as core::ffi::c_int)
@@ -807,8 +807,8 @@ pub unsafe extern "C" fn nistz384_point_mul(
     let mut p_str: [uint8_t; 49] = [0; 49];
     little_endian_bytes_from_scalar(
         p_str.as_mut_ptr(),
-        (::core::mem::size_of::<[uint8_t; 49]>() as u32)
-            .wrapping_div(::core::mem::size_of::<uint8_t>() as u32),
+        (core::mem::size_of::<[uint8_t; 49]>() as u32)
+            .wrapping_div(core::mem::size_of::<uint8_t>() as u32),
         p_scalar,
         (384 as core::ffi::c_uint).wrapping_div(32 as core::ffi::c_uint),
     );
@@ -817,7 +817,7 @@ pub unsafe extern "C" fn nistz384_point_mul(
         Y: [0; 12],
         Z: [0; 12],
     }; 16];
-    let mut row: *mut P384_POINT = table.as_mut_ptr();
+    let row: *mut P384_POINT = table.as_mut_ptr();
     limbs_copy(
         ((*row.offset((1 as core::ffi::c_int - 1 as core::ffi::c_int) as isize)).X).as_mut_ptr(),
         p_x,
@@ -922,7 +922,7 @@ pub unsafe extern "C" fn nistz384_point_mul(
     p384_point_select_w5(r, table.as_mut_ptr() as *const P384_POINT, recoded);
     while index >= kWindowSize {
         if index != START_INDEX {
-            let mut off: size_t = index
+            let off: size_t = index
                 .wrapping_sub(1 as core::ffi::c_int as core::ffi::c_uint)
                 .wrapping_div(8 as core::ffi::c_int as core::ffi::c_uint);
             wvalue = (p_str[off as usize] as core::ffi::c_int
