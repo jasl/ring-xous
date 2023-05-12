@@ -36,37 +36,37 @@ pub type fiat_p256_int1 = core::ffi::c_schar;
 pub type fiat_p256_limb_t = uint32_t;
 pub type fiat_p256_felem = [uint32_t; 8];
 #[inline]
-unsafe extern "C" fn constant_time_msb_w(mut a: crypto_word) -> crypto_word {
-    return (0 as core::ffi::c_uint).wrapping_sub(
+unsafe extern "C" fn constant_time_msb_w(a: crypto_word) -> crypto_word {
+    (0 as core::ffi::c_uint).wrapping_sub(
         a >> (::core::mem::size_of::<crypto_word>() as u32)
             .wrapping_mul(8 as core::ffi::c_int as core::ffi::c_uint)
             .wrapping_sub(1 as core::ffi::c_int as core::ffi::c_uint),
-    );
+    )
 }
 #[inline]
-unsafe extern "C" fn value_barrier_w(mut a: crypto_word) -> crypto_word {
+unsafe extern "C" fn value_barrier_w(a: crypto_word) -> crypto_word {
     core::sync::atomic::compiler_fence(core::sync::atomic::Ordering::SeqCst);
-    return a;
+    a
 }
 #[inline]
-unsafe extern "C" fn value_barrier_u32(mut a: uint32_t) -> uint32_t {
+unsafe extern "C" fn value_barrier_u32(a: uint32_t) -> uint32_t {
     core::sync::atomic::compiler_fence(core::sync::atomic::Ordering::SeqCst);
-    return a;
+    a
 }
 #[inline]
-unsafe extern "C" fn constant_time_is_zero_w(mut a: crypto_word) -> crypto_word {
-    return constant_time_msb_w(!a & a.wrapping_sub(1 as core::ffi::c_int as core::ffi::c_uint));
+unsafe extern "C" fn constant_time_is_zero_w(a: crypto_word) -> crypto_word {
+    constant_time_msb_w(!a & a.wrapping_sub(1 as core::ffi::c_int as core::ffi::c_uint))
 }
 #[inline]
 unsafe extern "C" fn constant_time_select_w(
-    mut mask: crypto_word,
-    mut a: crypto_word,
-    mut b: crypto_word,
+    mask: crypto_word,
+    a: crypto_word,
+    b: crypto_word,
 ) -> crypto_word {
-    return value_barrier_w(mask) & a | value_barrier_w(!mask) & b;
+    value_barrier_w(mask) & a | value_barrier_w(!mask) & b
 }
 #[inline]
-unsafe extern "C" fn limbs_copy(mut r: *mut Limb, mut a: *const Limb, mut num_limbs: size_t) {
+unsafe extern "C" fn limbs_copy(r: *mut Limb, a: *const Limb, num_limbs: size_t) {
     let mut i: size_t = 0 as core::ffi::c_int as size_t;
     while i < num_limbs {
         *r.offset(i as isize) = *a.offset(i as isize);
@@ -75,8 +75,8 @@ unsafe extern "C" fn limbs_copy(mut r: *mut Limb, mut a: *const Limb, mut num_li
 }
 #[inline]
 unsafe extern "C" fn p256_scalar_bytes_from_limbs(
-    mut bytes_out: *mut core::ffi::c_uchar,
-    mut limbs: *const BN_ULONG,
+    bytes_out: *mut core::ffi::c_uchar,
+    limbs: *const BN_ULONG,
 ) {
     OPENSSL_memcpy(
         bytes_out as *mut core::ffi::c_void,
@@ -88,9 +88,9 @@ unsafe extern "C" fn p256_scalar_bytes_from_limbs(
 }
 #[inline]
 unsafe extern "C" fn recode_scalar_bits(
-    mut sign: *mut crypto_word,
-    mut digit: *mut crypto_word,
-    mut in_0: crypto_word,
+    sign: *mut crypto_word,
+    digit: *mut crypto_word,
+    in_0: crypto_word,
 ) {
     let mut s: crypto_word = 0;
     let mut d: crypto_word = 0;
@@ -105,99 +105,99 @@ unsafe extern "C" fn recode_scalar_bits(
 }
 #[no_mangle]
 pub unsafe extern "C" fn OPENSSL_memcpy(
-    mut dst: *mut core::ffi::c_void,
-    mut src: *const core::ffi::c_void,
-    mut n: size_t,
+    dst: *mut core::ffi::c_void,
+    src: *const core::ffi::c_void,
+    n: size_t,
 ) -> *mut core::ffi::c_void {
-    let mut d: *mut core::ffi::c_uchar = dst as *mut core::ffi::c_uchar;
-    let mut s: *const core::ffi::c_uchar = src as *const core::ffi::c_uchar;
+    let d: *mut core::ffi::c_uchar = dst as *mut core::ffi::c_uchar;
+    let s: *const core::ffi::c_uchar = src as *const core::ffi::c_uchar;
     let mut i: size_t = 0 as core::ffi::c_int as size_t;
     while i < n {
         *d.offset(i as isize) = *s.offset(i as isize);
         i = i.wrapping_add(1);
     }
-    return dst;
+    dst
 }
 #[no_mangle]
 pub unsafe extern "C" fn OPENSSL_memset(
-    mut dst: *mut core::ffi::c_void,
-    mut c: core::ffi::c_int,
-    mut n: size_t,
+    dst: *mut core::ffi::c_void,
+    c: core::ffi::c_int,
+    n: size_t,
 ) -> *mut core::ffi::c_void {
-    let mut d: *mut core::ffi::c_uchar = dst as *mut core::ffi::c_uchar;
+    let d: *mut core::ffi::c_uchar = dst as *mut core::ffi::c_uchar;
     let mut i: size_t = 0 as core::ffi::c_int as size_t;
     while i < n {
         *d.offset(i as isize) = c as core::ffi::c_uchar;
         i = i.wrapping_add(1);
     }
-    return dst;
+    dst
 }
 unsafe extern "C" fn fiat_p256_addcarryx_u32(
-    mut out1: *mut uint32_t,
-    mut out2: *mut fiat_p256_uint1,
-    mut arg1: fiat_p256_uint1,
-    mut arg2: uint32_t,
-    mut arg3: uint32_t,
+    out1: *mut uint32_t,
+    out2: *mut fiat_p256_uint1,
+    arg1: fiat_p256_uint1,
+    arg2: uint32_t,
+    arg3: uint32_t,
 ) {
-    let mut x1: uint64_t = (arg1 as u64)
+    let x1: uint64_t = (arg1 as u64)
         .wrapping_add(arg2 as uint64_t)
         .wrapping_add(arg3 as u64);
-    let mut x2: uint32_t = (x1 & 0xffffffff as core::ffi::c_uint as u64) as uint32_t;
-    let mut x3: fiat_p256_uint1 = (x1 >> 32 as core::ffi::c_int) as fiat_p256_uint1;
+    let x2: uint32_t = (x1 & 0xffffffff as core::ffi::c_uint as u64) as uint32_t;
+    let x3: fiat_p256_uint1 = (x1 >> 32 as core::ffi::c_int) as fiat_p256_uint1;
     *out1 = x2;
     *out2 = x3;
 }
 unsafe extern "C" fn fiat_p256_subborrowx_u32(
-    mut out1: *mut uint32_t,
-    mut out2: *mut fiat_p256_uint1,
-    mut arg1: fiat_p256_uint1,
-    mut arg2: uint32_t,
-    mut arg3: uint32_t,
+    out1: *mut uint32_t,
+    out2: *mut fiat_p256_uint1,
+    arg1: fiat_p256_uint1,
+    arg2: uint32_t,
+    arg3: uint32_t,
 ) {
-    let mut x1: int64_t = arg2 as i64 - arg1 as int64_t - arg3 as i64;
-    let mut x2: fiat_p256_int1 = (x1 >> 32 as core::ffi::c_int) as fiat_p256_int1;
-    let mut x3: uint32_t = (x1 & 0xffffffff as core::ffi::c_uint as i64) as uint32_t;
+    let x1: int64_t = arg2 as i64 - arg1 as int64_t - arg3 as i64;
+    let x2: fiat_p256_int1 = (x1 >> 32 as core::ffi::c_int) as fiat_p256_int1;
+    let x3: uint32_t = (x1 & 0xffffffff as core::ffi::c_uint as i64) as uint32_t;
     *out1 = x3;
     *out2 = (0 as core::ffi::c_int - x2 as core::ffi::c_int) as fiat_p256_uint1;
 }
 unsafe extern "C" fn fiat_p256_mulx_u32(
-    mut out1: *mut uint32_t,
-    mut out2: *mut uint32_t,
-    mut arg1: uint32_t,
-    mut arg2: uint32_t,
+    out1: *mut uint32_t,
+    out2: *mut uint32_t,
+    arg1: uint32_t,
+    arg2: uint32_t,
 ) {
-    let mut x1: uint64_t = (arg1 as uint64_t).wrapping_mul(arg2 as u64);
-    let mut x2: uint32_t = (x1 & 0xffffffff as core::ffi::c_uint as u64) as uint32_t;
-    let mut x3: uint32_t = (x1 >> 32 as core::ffi::c_int) as uint32_t;
+    let x1: uint64_t = (arg1 as uint64_t).wrapping_mul(arg2 as u64);
+    let x2: uint32_t = (x1 & 0xffffffff as core::ffi::c_uint as u64) as uint32_t;
+    let x3: uint32_t = (x1 >> 32 as core::ffi::c_int) as uint32_t;
     *out1 = x2;
     *out2 = x3;
 }
 unsafe extern "C" fn fiat_p256_cmovznz_u32(
-    mut out1: *mut uint32_t,
-    mut arg1: fiat_p256_uint1,
-    mut arg2: uint32_t,
-    mut arg3: uint32_t,
+    out1: *mut uint32_t,
+    arg1: fiat_p256_uint1,
+    arg2: uint32_t,
+    arg3: uint32_t,
 ) {
-    let mut x1: fiat_p256_uint1 = (arg1 != 0) as core::ffi::c_int as fiat_p256_uint1;
-    let mut x2: uint32_t = (0 as core::ffi::c_int - x1 as core::ffi::c_int) as fiat_p256_int1
+    let x1: fiat_p256_uint1 = (arg1 != 0) as core::ffi::c_int as fiat_p256_uint1;
+    let x2: uint32_t = (0 as core::ffi::c_int - x1 as core::ffi::c_int) as fiat_p256_int1
         as core::ffi::c_uint
         & 0xffffffff as core::ffi::c_uint;
-    let mut x3: uint32_t = value_barrier_u32(x2) & arg3 | value_barrier_u32(!x2) & arg2;
+    let x3: uint32_t = value_barrier_u32(x2) & arg3 | value_barrier_u32(!x2) & arg2;
     *out1 = x3;
 }
 unsafe extern "C" fn fiat_p256_mul(
-    mut out1: *mut uint32_t,
-    mut arg1: *const uint32_t,
-    mut arg2: *const uint32_t,
+    out1: *mut uint32_t,
+    arg1: *const uint32_t,
+    arg2: *const uint32_t,
 ) {
-    let mut x1: uint32_t = *arg1.offset(1 as core::ffi::c_int as isize);
-    let mut x2: uint32_t = *arg1.offset(2 as core::ffi::c_int as isize);
-    let mut x3: uint32_t = *arg1.offset(3 as core::ffi::c_int as isize);
-    let mut x4: uint32_t = *arg1.offset(4 as core::ffi::c_int as isize);
-    let mut x5: uint32_t = *arg1.offset(5 as core::ffi::c_int as isize);
-    let mut x6: uint32_t = *arg1.offset(6 as core::ffi::c_int as isize);
-    let mut x7: uint32_t = *arg1.offset(7 as core::ffi::c_int as isize);
-    let mut x8: uint32_t = *arg1.offset(0 as core::ffi::c_int as isize);
+    let x1: uint32_t = *arg1.offset(1 as core::ffi::c_int as isize);
+    let x2: uint32_t = *arg1.offset(2 as core::ffi::c_int as isize);
+    let x3: uint32_t = *arg1.offset(3 as core::ffi::c_int as isize);
+    let x4: uint32_t = *arg1.offset(4 as core::ffi::c_int as isize);
+    let x5: uint32_t = *arg1.offset(5 as core::ffi::c_int as isize);
+    let x6: uint32_t = *arg1.offset(6 as core::ffi::c_int as isize);
+    let x7: uint32_t = *arg1.offset(7 as core::ffi::c_int as isize);
+    let x8: uint32_t = *arg1.offset(0 as core::ffi::c_int as isize);
     let mut x9: uint32_t = 0;
     let mut x10: uint32_t = 0;
     fiat_p256_mulx_u32(
@@ -289,7 +289,7 @@ unsafe extern "C" fn fiat_p256_mul(
     let mut x37: uint32_t = 0;
     let mut x38: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x37, &mut x38, x36, x12, x9);
-    let mut x39: uint32_t = (x38 as core::ffi::c_uint).wrapping_add(x10);
+    let x39: uint32_t = (x38 as core::ffi::c_uint).wrapping_add(x10);
     let mut x40: uint32_t = 0;
     let mut x41: uint32_t = 0;
     fiat_p256_mulx_u32(&mut x40, &mut x41, x23, 0xffffffff as core::ffi::c_uint);
@@ -314,7 +314,7 @@ unsafe extern "C" fn fiat_p256_mul(
     let mut x50: uint32_t = 0;
     let mut x51: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x50, &mut x51, x49, x45, x42);
-    let mut x52: uint32_t = (x51 as core::ffi::c_uint).wrapping_add(x43);
+    let x52: uint32_t = (x51 as core::ffi::c_uint).wrapping_add(x43);
     let mut x53: uint32_t = 0;
     let mut x54: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(
@@ -451,7 +451,7 @@ unsafe extern "C" fn fiat_p256_mul(
     let mut x99: uint32_t = 0;
     let mut x100: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x99, &mut x100, x98, x74, x71);
-    let mut x101: uint32_t = (x100 as core::ffi::c_uint).wrapping_add(x72);
+    let x101: uint32_t = (x100 as core::ffi::c_uint).wrapping_add(x72);
     let mut x102: uint32_t = 0;
     let mut x103: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(
@@ -509,7 +509,7 @@ unsafe extern "C" fn fiat_p256_mul(
     let mut x130: uint32_t = 0;
     let mut x131: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x130, &mut x131, x129, x125, x122);
-    let mut x132: uint32_t = (x131 as core::ffi::c_uint).wrapping_add(x123);
+    let x132: uint32_t = (x131 as core::ffi::c_uint).wrapping_add(x123);
     let mut x133: uint32_t = 0;
     let mut x134: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(
@@ -555,7 +555,7 @@ unsafe extern "C" fn fiat_p256_mul(
     let mut x149: uint32_t = 0;
     let mut x150: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x149, &mut x150, x148, x118, x121);
-    let mut x151: uint32_t = (x150 as uint32_t).wrapping_add(x119 as core::ffi::c_uint);
+    let x151: uint32_t = (x150 as uint32_t).wrapping_add(x119 as core::ffi::c_uint);
     let mut x152: uint32_t = 0;
     let mut x153: uint32_t = 0;
     fiat_p256_mulx_u32(
@@ -647,7 +647,7 @@ unsafe extern "C" fn fiat_p256_mul(
     let mut x180: uint32_t = 0;
     let mut x181: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x180, &mut x181, x179, x155, x152);
-    let mut x182: uint32_t = (x181 as core::ffi::c_uint).wrapping_add(x153);
+    let x182: uint32_t = (x181 as core::ffi::c_uint).wrapping_add(x153);
     let mut x183: uint32_t = 0;
     let mut x184: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(
@@ -705,7 +705,7 @@ unsafe extern "C" fn fiat_p256_mul(
     let mut x211: uint32_t = 0;
     let mut x212: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x211, &mut x212, x210, x206, x203);
-    let mut x213: uint32_t = (x212 as core::ffi::c_uint).wrapping_add(x204);
+    let x213: uint32_t = (x212 as core::ffi::c_uint).wrapping_add(x204);
     let mut x214: uint32_t = 0;
     let mut x215: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(
@@ -751,7 +751,7 @@ unsafe extern "C" fn fiat_p256_mul(
     let mut x230: uint32_t = 0;
     let mut x231: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x230, &mut x231, x229, x199, x202);
-    let mut x232: uint32_t = (x231 as uint32_t).wrapping_add(x200 as core::ffi::c_uint);
+    let x232: uint32_t = (x231 as uint32_t).wrapping_add(x200 as core::ffi::c_uint);
     let mut x233: uint32_t = 0;
     let mut x234: uint32_t = 0;
     fiat_p256_mulx_u32(
@@ -843,7 +843,7 @@ unsafe extern "C" fn fiat_p256_mul(
     let mut x261: uint32_t = 0;
     let mut x262: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x261, &mut x262, x260, x236, x233);
-    let mut x263: uint32_t = (x262 as core::ffi::c_uint).wrapping_add(x234);
+    let x263: uint32_t = (x262 as core::ffi::c_uint).wrapping_add(x234);
     let mut x264: uint32_t = 0;
     let mut x265: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(
@@ -901,7 +901,7 @@ unsafe extern "C" fn fiat_p256_mul(
     let mut x292: uint32_t = 0;
     let mut x293: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x292, &mut x293, x291, x287, x284);
-    let mut x294: uint32_t = (x293 as core::ffi::c_uint).wrapping_add(x285);
+    let x294: uint32_t = (x293 as core::ffi::c_uint).wrapping_add(x285);
     let mut x295: uint32_t = 0;
     let mut x296: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(
@@ -947,7 +947,7 @@ unsafe extern "C" fn fiat_p256_mul(
     let mut x311: uint32_t = 0;
     let mut x312: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x311, &mut x312, x310, x280, x283);
-    let mut x313: uint32_t = (x312 as uint32_t).wrapping_add(x281 as core::ffi::c_uint);
+    let x313: uint32_t = (x312 as uint32_t).wrapping_add(x281 as core::ffi::c_uint);
     let mut x314: uint32_t = 0;
     let mut x315: uint32_t = 0;
     fiat_p256_mulx_u32(
@@ -1039,7 +1039,7 @@ unsafe extern "C" fn fiat_p256_mul(
     let mut x342: uint32_t = 0;
     let mut x343: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x342, &mut x343, x341, x317, x314);
-    let mut x344: uint32_t = (x343 as core::ffi::c_uint).wrapping_add(x315);
+    let x344: uint32_t = (x343 as core::ffi::c_uint).wrapping_add(x315);
     let mut x345: uint32_t = 0;
     let mut x346: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(
@@ -1097,7 +1097,7 @@ unsafe extern "C" fn fiat_p256_mul(
     let mut x373: uint32_t = 0;
     let mut x374: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x373, &mut x374, x372, x368, x365);
-    let mut x375: uint32_t = (x374 as core::ffi::c_uint).wrapping_add(x366);
+    let x375: uint32_t = (x374 as core::ffi::c_uint).wrapping_add(x366);
     let mut x376: uint32_t = 0;
     let mut x377: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(
@@ -1143,7 +1143,7 @@ unsafe extern "C" fn fiat_p256_mul(
     let mut x392: uint32_t = 0;
     let mut x393: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x392, &mut x393, x391, x361, x364);
-    let mut x394: uint32_t = (x393 as uint32_t).wrapping_add(x362 as core::ffi::c_uint);
+    let x394: uint32_t = (x393 as uint32_t).wrapping_add(x362 as core::ffi::c_uint);
     let mut x395: uint32_t = 0;
     let mut x396: uint32_t = 0;
     fiat_p256_mulx_u32(
@@ -1235,7 +1235,7 @@ unsafe extern "C" fn fiat_p256_mul(
     let mut x423: uint32_t = 0;
     let mut x424: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x423, &mut x424, x422, x398, x395);
-    let mut x425: uint32_t = (x424 as core::ffi::c_uint).wrapping_add(x396);
+    let x425: uint32_t = (x424 as core::ffi::c_uint).wrapping_add(x396);
     let mut x426: uint32_t = 0;
     let mut x427: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(
@@ -1293,7 +1293,7 @@ unsafe extern "C" fn fiat_p256_mul(
     let mut x454: uint32_t = 0;
     let mut x455: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x454, &mut x455, x453, x449, x446);
-    let mut x456: uint32_t = (x455 as core::ffi::c_uint).wrapping_add(x447);
+    let x456: uint32_t = (x455 as core::ffi::c_uint).wrapping_add(x447);
     let mut x457: uint32_t = 0;
     let mut x458: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(
@@ -1339,7 +1339,7 @@ unsafe extern "C" fn fiat_p256_mul(
     let mut x473: uint32_t = 0;
     let mut x474: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x473, &mut x474, x472, x442, x445);
-    let mut x475: uint32_t = (x474 as uint32_t).wrapping_add(x443 as core::ffi::c_uint);
+    let x475: uint32_t = (x474 as uint32_t).wrapping_add(x443 as core::ffi::c_uint);
     let mut x476: uint32_t = 0;
     let mut x477: uint32_t = 0;
     fiat_p256_mulx_u32(
@@ -1431,7 +1431,7 @@ unsafe extern "C" fn fiat_p256_mul(
     let mut x504: uint32_t = 0;
     let mut x505: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x504, &mut x505, x503, x479, x476);
-    let mut x506: uint32_t = (x505 as core::ffi::c_uint).wrapping_add(x477);
+    let x506: uint32_t = (x505 as core::ffi::c_uint).wrapping_add(x477);
     let mut x507: uint32_t = 0;
     let mut x508: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(
@@ -1489,7 +1489,7 @@ unsafe extern "C" fn fiat_p256_mul(
     let mut x535: uint32_t = 0;
     let mut x536: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x535, &mut x536, x534, x530, x527);
-    let mut x537: uint32_t = (x536 as core::ffi::c_uint).wrapping_add(x528);
+    let x537: uint32_t = (x536 as core::ffi::c_uint).wrapping_add(x528);
     let mut x538: uint32_t = 0;
     let mut x539: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(
@@ -1535,7 +1535,7 @@ unsafe extern "C" fn fiat_p256_mul(
     let mut x554: uint32_t = 0;
     let mut x555: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x554, &mut x555, x553, x523, x526);
-    let mut x556: uint32_t = (x555 as uint32_t).wrapping_add(x524 as core::ffi::c_uint);
+    let x556: uint32_t = (x555 as uint32_t).wrapping_add(x524 as core::ffi::c_uint);
     let mut x557: uint32_t = 0;
     let mut x558: uint32_t = 0;
     fiat_p256_mulx_u32(
@@ -1627,7 +1627,7 @@ unsafe extern "C" fn fiat_p256_mul(
     let mut x585: uint32_t = 0;
     let mut x586: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x585, &mut x586, x584, x560, x557);
-    let mut x587: uint32_t = (x586 as core::ffi::c_uint).wrapping_add(x558);
+    let x587: uint32_t = (x586 as core::ffi::c_uint).wrapping_add(x558);
     let mut x588: uint32_t = 0;
     let mut x589: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(
@@ -1685,7 +1685,7 @@ unsafe extern "C" fn fiat_p256_mul(
     let mut x616: uint32_t = 0;
     let mut x617: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x616, &mut x617, x615, x611, x608);
-    let mut x618: uint32_t = (x617 as core::ffi::c_uint).wrapping_add(x609);
+    let x618: uint32_t = (x617 as core::ffi::c_uint).wrapping_add(x609);
     let mut x619: uint32_t = 0;
     let mut x620: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(
@@ -1731,7 +1731,7 @@ unsafe extern "C" fn fiat_p256_mul(
     let mut x635: uint32_t = 0;
     let mut x636: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x635, &mut x636, x634, x604, x607);
-    let mut x637: uint32_t = (x636 as uint32_t).wrapping_add(x605 as core::ffi::c_uint);
+    let x637: uint32_t = (x636 as uint32_t).wrapping_add(x605 as core::ffi::c_uint);
     let mut x638: uint32_t = 0;
     let mut x639: fiat_p256_uint1 = 0;
     fiat_p256_subborrowx_u32(
@@ -1838,15 +1838,15 @@ unsafe extern "C" fn fiat_p256_mul(
     *out1.offset(6 as core::ffi::c_int as isize) = x662;
     *out1.offset(7 as core::ffi::c_int as isize) = x663;
 }
-unsafe extern "C" fn fiat_p256_square(mut out1: *mut uint32_t, mut arg1: *const uint32_t) {
-    let mut x1: uint32_t = *arg1.offset(1 as core::ffi::c_int as isize);
-    let mut x2: uint32_t = *arg1.offset(2 as core::ffi::c_int as isize);
-    let mut x3: uint32_t = *arg1.offset(3 as core::ffi::c_int as isize);
-    let mut x4: uint32_t = *arg1.offset(4 as core::ffi::c_int as isize);
-    let mut x5: uint32_t = *arg1.offset(5 as core::ffi::c_int as isize);
-    let mut x6: uint32_t = *arg1.offset(6 as core::ffi::c_int as isize);
-    let mut x7: uint32_t = *arg1.offset(7 as core::ffi::c_int as isize);
-    let mut x8: uint32_t = *arg1.offset(0 as core::ffi::c_int as isize);
+unsafe extern "C" fn fiat_p256_square(out1: *mut uint32_t, arg1: *const uint32_t) {
+    let x1: uint32_t = *arg1.offset(1 as core::ffi::c_int as isize);
+    let x2: uint32_t = *arg1.offset(2 as core::ffi::c_int as isize);
+    let x3: uint32_t = *arg1.offset(3 as core::ffi::c_int as isize);
+    let x4: uint32_t = *arg1.offset(4 as core::ffi::c_int as isize);
+    let x5: uint32_t = *arg1.offset(5 as core::ffi::c_int as isize);
+    let x6: uint32_t = *arg1.offset(6 as core::ffi::c_int as isize);
+    let x7: uint32_t = *arg1.offset(7 as core::ffi::c_int as isize);
+    let x8: uint32_t = *arg1.offset(0 as core::ffi::c_int as isize);
     let mut x9: uint32_t = 0;
     let mut x10: uint32_t = 0;
     fiat_p256_mulx_u32(
@@ -1938,7 +1938,7 @@ unsafe extern "C" fn fiat_p256_square(mut out1: *mut uint32_t, mut arg1: *const 
     let mut x37: uint32_t = 0;
     let mut x38: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x37, &mut x38, x36, x12, x9);
-    let mut x39: uint32_t = (x38 as core::ffi::c_uint).wrapping_add(x10);
+    let x39: uint32_t = (x38 as core::ffi::c_uint).wrapping_add(x10);
     let mut x40: uint32_t = 0;
     let mut x41: uint32_t = 0;
     fiat_p256_mulx_u32(&mut x40, &mut x41, x23, 0xffffffff as core::ffi::c_uint);
@@ -1963,7 +1963,7 @@ unsafe extern "C" fn fiat_p256_square(mut out1: *mut uint32_t, mut arg1: *const 
     let mut x50: uint32_t = 0;
     let mut x51: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x50, &mut x51, x49, x45, x42);
-    let mut x52: uint32_t = (x51 as core::ffi::c_uint).wrapping_add(x43);
+    let x52: uint32_t = (x51 as core::ffi::c_uint).wrapping_add(x43);
     let mut x53: uint32_t = 0;
     let mut x54: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(
@@ -2100,7 +2100,7 @@ unsafe extern "C" fn fiat_p256_square(mut out1: *mut uint32_t, mut arg1: *const 
     let mut x99: uint32_t = 0;
     let mut x100: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x99, &mut x100, x98, x74, x71);
-    let mut x101: uint32_t = (x100 as core::ffi::c_uint).wrapping_add(x72);
+    let x101: uint32_t = (x100 as core::ffi::c_uint).wrapping_add(x72);
     let mut x102: uint32_t = 0;
     let mut x103: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(
@@ -2158,7 +2158,7 @@ unsafe extern "C" fn fiat_p256_square(mut out1: *mut uint32_t, mut arg1: *const 
     let mut x130: uint32_t = 0;
     let mut x131: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x130, &mut x131, x129, x125, x122);
-    let mut x132: uint32_t = (x131 as core::ffi::c_uint).wrapping_add(x123);
+    let x132: uint32_t = (x131 as core::ffi::c_uint).wrapping_add(x123);
     let mut x133: uint32_t = 0;
     let mut x134: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(
@@ -2204,7 +2204,7 @@ unsafe extern "C" fn fiat_p256_square(mut out1: *mut uint32_t, mut arg1: *const 
     let mut x149: uint32_t = 0;
     let mut x150: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x149, &mut x150, x148, x118, x121);
-    let mut x151: uint32_t = (x150 as uint32_t).wrapping_add(x119 as core::ffi::c_uint);
+    let x151: uint32_t = (x150 as uint32_t).wrapping_add(x119 as core::ffi::c_uint);
     let mut x152: uint32_t = 0;
     let mut x153: uint32_t = 0;
     fiat_p256_mulx_u32(
@@ -2296,7 +2296,7 @@ unsafe extern "C" fn fiat_p256_square(mut out1: *mut uint32_t, mut arg1: *const 
     let mut x180: uint32_t = 0;
     let mut x181: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x180, &mut x181, x179, x155, x152);
-    let mut x182: uint32_t = (x181 as core::ffi::c_uint).wrapping_add(x153);
+    let x182: uint32_t = (x181 as core::ffi::c_uint).wrapping_add(x153);
     let mut x183: uint32_t = 0;
     let mut x184: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(
@@ -2354,7 +2354,7 @@ unsafe extern "C" fn fiat_p256_square(mut out1: *mut uint32_t, mut arg1: *const 
     let mut x211: uint32_t = 0;
     let mut x212: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x211, &mut x212, x210, x206, x203);
-    let mut x213: uint32_t = (x212 as core::ffi::c_uint).wrapping_add(x204);
+    let x213: uint32_t = (x212 as core::ffi::c_uint).wrapping_add(x204);
     let mut x214: uint32_t = 0;
     let mut x215: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(
@@ -2400,7 +2400,7 @@ unsafe extern "C" fn fiat_p256_square(mut out1: *mut uint32_t, mut arg1: *const 
     let mut x230: uint32_t = 0;
     let mut x231: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x230, &mut x231, x229, x199, x202);
-    let mut x232: uint32_t = (x231 as uint32_t).wrapping_add(x200 as core::ffi::c_uint);
+    let x232: uint32_t = (x231 as uint32_t).wrapping_add(x200 as core::ffi::c_uint);
     let mut x233: uint32_t = 0;
     let mut x234: uint32_t = 0;
     fiat_p256_mulx_u32(
@@ -2492,7 +2492,7 @@ unsafe extern "C" fn fiat_p256_square(mut out1: *mut uint32_t, mut arg1: *const 
     let mut x261: uint32_t = 0;
     let mut x262: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x261, &mut x262, x260, x236, x233);
-    let mut x263: uint32_t = (x262 as core::ffi::c_uint).wrapping_add(x234);
+    let x263: uint32_t = (x262 as core::ffi::c_uint).wrapping_add(x234);
     let mut x264: uint32_t = 0;
     let mut x265: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(
@@ -2550,7 +2550,7 @@ unsafe extern "C" fn fiat_p256_square(mut out1: *mut uint32_t, mut arg1: *const 
     let mut x292: uint32_t = 0;
     let mut x293: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x292, &mut x293, x291, x287, x284);
-    let mut x294: uint32_t = (x293 as core::ffi::c_uint).wrapping_add(x285);
+    let x294: uint32_t = (x293 as core::ffi::c_uint).wrapping_add(x285);
     let mut x295: uint32_t = 0;
     let mut x296: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(
@@ -2596,7 +2596,7 @@ unsafe extern "C" fn fiat_p256_square(mut out1: *mut uint32_t, mut arg1: *const 
     let mut x311: uint32_t = 0;
     let mut x312: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x311, &mut x312, x310, x280, x283);
-    let mut x313: uint32_t = (x312 as uint32_t).wrapping_add(x281 as core::ffi::c_uint);
+    let x313: uint32_t = (x312 as uint32_t).wrapping_add(x281 as core::ffi::c_uint);
     let mut x314: uint32_t = 0;
     let mut x315: uint32_t = 0;
     fiat_p256_mulx_u32(
@@ -2688,7 +2688,7 @@ unsafe extern "C" fn fiat_p256_square(mut out1: *mut uint32_t, mut arg1: *const 
     let mut x342: uint32_t = 0;
     let mut x343: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x342, &mut x343, x341, x317, x314);
-    let mut x344: uint32_t = (x343 as core::ffi::c_uint).wrapping_add(x315);
+    let x344: uint32_t = (x343 as core::ffi::c_uint).wrapping_add(x315);
     let mut x345: uint32_t = 0;
     let mut x346: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(
@@ -2746,7 +2746,7 @@ unsafe extern "C" fn fiat_p256_square(mut out1: *mut uint32_t, mut arg1: *const 
     let mut x373: uint32_t = 0;
     let mut x374: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x373, &mut x374, x372, x368, x365);
-    let mut x375: uint32_t = (x374 as core::ffi::c_uint).wrapping_add(x366);
+    let x375: uint32_t = (x374 as core::ffi::c_uint).wrapping_add(x366);
     let mut x376: uint32_t = 0;
     let mut x377: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(
@@ -2792,7 +2792,7 @@ unsafe extern "C" fn fiat_p256_square(mut out1: *mut uint32_t, mut arg1: *const 
     let mut x392: uint32_t = 0;
     let mut x393: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x392, &mut x393, x391, x361, x364);
-    let mut x394: uint32_t = (x393 as uint32_t).wrapping_add(x362 as core::ffi::c_uint);
+    let x394: uint32_t = (x393 as uint32_t).wrapping_add(x362 as core::ffi::c_uint);
     let mut x395: uint32_t = 0;
     let mut x396: uint32_t = 0;
     fiat_p256_mulx_u32(
@@ -2884,7 +2884,7 @@ unsafe extern "C" fn fiat_p256_square(mut out1: *mut uint32_t, mut arg1: *const 
     let mut x423: uint32_t = 0;
     let mut x424: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x423, &mut x424, x422, x398, x395);
-    let mut x425: uint32_t = (x424 as core::ffi::c_uint).wrapping_add(x396);
+    let x425: uint32_t = (x424 as core::ffi::c_uint).wrapping_add(x396);
     let mut x426: uint32_t = 0;
     let mut x427: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(
@@ -2942,7 +2942,7 @@ unsafe extern "C" fn fiat_p256_square(mut out1: *mut uint32_t, mut arg1: *const 
     let mut x454: uint32_t = 0;
     let mut x455: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x454, &mut x455, x453, x449, x446);
-    let mut x456: uint32_t = (x455 as core::ffi::c_uint).wrapping_add(x447);
+    let x456: uint32_t = (x455 as core::ffi::c_uint).wrapping_add(x447);
     let mut x457: uint32_t = 0;
     let mut x458: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(
@@ -2988,7 +2988,7 @@ unsafe extern "C" fn fiat_p256_square(mut out1: *mut uint32_t, mut arg1: *const 
     let mut x473: uint32_t = 0;
     let mut x474: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x473, &mut x474, x472, x442, x445);
-    let mut x475: uint32_t = (x474 as uint32_t).wrapping_add(x443 as core::ffi::c_uint);
+    let x475: uint32_t = (x474 as uint32_t).wrapping_add(x443 as core::ffi::c_uint);
     let mut x476: uint32_t = 0;
     let mut x477: uint32_t = 0;
     fiat_p256_mulx_u32(
@@ -3080,7 +3080,7 @@ unsafe extern "C" fn fiat_p256_square(mut out1: *mut uint32_t, mut arg1: *const 
     let mut x504: uint32_t = 0;
     let mut x505: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x504, &mut x505, x503, x479, x476);
-    let mut x506: uint32_t = (x505 as core::ffi::c_uint).wrapping_add(x477);
+    let x506: uint32_t = (x505 as core::ffi::c_uint).wrapping_add(x477);
     let mut x507: uint32_t = 0;
     let mut x508: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(
@@ -3138,7 +3138,7 @@ unsafe extern "C" fn fiat_p256_square(mut out1: *mut uint32_t, mut arg1: *const 
     let mut x535: uint32_t = 0;
     let mut x536: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x535, &mut x536, x534, x530, x527);
-    let mut x537: uint32_t = (x536 as core::ffi::c_uint).wrapping_add(x528);
+    let x537: uint32_t = (x536 as core::ffi::c_uint).wrapping_add(x528);
     let mut x538: uint32_t = 0;
     let mut x539: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(
@@ -3184,7 +3184,7 @@ unsafe extern "C" fn fiat_p256_square(mut out1: *mut uint32_t, mut arg1: *const 
     let mut x554: uint32_t = 0;
     let mut x555: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x554, &mut x555, x553, x523, x526);
-    let mut x556: uint32_t = (x555 as uint32_t).wrapping_add(x524 as core::ffi::c_uint);
+    let x556: uint32_t = (x555 as uint32_t).wrapping_add(x524 as core::ffi::c_uint);
     let mut x557: uint32_t = 0;
     let mut x558: uint32_t = 0;
     fiat_p256_mulx_u32(
@@ -3276,7 +3276,7 @@ unsafe extern "C" fn fiat_p256_square(mut out1: *mut uint32_t, mut arg1: *const 
     let mut x585: uint32_t = 0;
     let mut x586: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x585, &mut x586, x584, x560, x557);
-    let mut x587: uint32_t = (x586 as core::ffi::c_uint).wrapping_add(x558);
+    let x587: uint32_t = (x586 as core::ffi::c_uint).wrapping_add(x558);
     let mut x588: uint32_t = 0;
     let mut x589: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(
@@ -3334,7 +3334,7 @@ unsafe extern "C" fn fiat_p256_square(mut out1: *mut uint32_t, mut arg1: *const 
     let mut x616: uint32_t = 0;
     let mut x617: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x616, &mut x617, x615, x611, x608);
-    let mut x618: uint32_t = (x617 as core::ffi::c_uint).wrapping_add(x609);
+    let x618: uint32_t = (x617 as core::ffi::c_uint).wrapping_add(x609);
     let mut x619: uint32_t = 0;
     let mut x620: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(
@@ -3380,7 +3380,7 @@ unsafe extern "C" fn fiat_p256_square(mut out1: *mut uint32_t, mut arg1: *const 
     let mut x635: uint32_t = 0;
     let mut x636: fiat_p256_uint1 = 0;
     fiat_p256_addcarryx_u32(&mut x635, &mut x636, x634, x604, x607);
-    let mut x637: uint32_t = (x636 as uint32_t).wrapping_add(x605 as core::ffi::c_uint);
+    let x637: uint32_t = (x636 as uint32_t).wrapping_add(x605 as core::ffi::c_uint);
     let mut x638: uint32_t = 0;
     let mut x639: fiat_p256_uint1 = 0;
     fiat_p256_subborrowx_u32(
@@ -3488,9 +3488,9 @@ unsafe extern "C" fn fiat_p256_square(mut out1: *mut uint32_t, mut arg1: *const 
     *out1.offset(7 as core::ffi::c_int as isize) = x663;
 }
 unsafe extern "C" fn fiat_p256_add(
-    mut out1: *mut uint32_t,
-    mut arg1: *const uint32_t,
-    mut arg2: *const uint32_t,
+    out1: *mut uint32_t,
+    arg1: *const uint32_t,
+    arg2: *const uint32_t,
 ) {
     let mut x1: uint32_t = 0;
     let mut x2: fiat_p256_uint1 = 0;
@@ -3659,9 +3659,9 @@ unsafe extern "C" fn fiat_p256_add(
     *out1.offset(7 as core::ffi::c_int as isize) = x42;
 }
 unsafe extern "C" fn fiat_p256_sub(
-    mut out1: *mut uint32_t,
-    mut arg1: *const uint32_t,
-    mut arg2: *const uint32_t,
+    out1: *mut uint32_t,
+    arg1: *const uint32_t,
+    arg2: *const uint32_t,
 ) {
     let mut x1: uint32_t = 0;
     let mut x2: fiat_p256_uint1 = 0;
@@ -3823,7 +3823,7 @@ unsafe extern "C" fn fiat_p256_sub(
     *out1.offset(6 as core::ffi::c_int as isize) = x30;
     *out1.offset(7 as core::ffi::c_int as isize) = x32;
 }
-unsafe extern "C" fn fiat_p256_opp(mut out1: *mut uint32_t, mut arg1: *const uint32_t) {
+unsafe extern "C" fn fiat_p256_opp(out1: *mut uint32_t, arg1: *const uint32_t) {
     let mut x1: uint32_t = 0;
     let mut x2: fiat_p256_uint1 = 0;
     fiat_p256_subborrowx_u32(
@@ -3984,8 +3984,8 @@ unsafe extern "C" fn fiat_p256_opp(mut out1: *mut uint32_t, mut arg1: *const uin
     *out1.offset(6 as core::ffi::c_int as isize) = x30;
     *out1.offset(7 as core::ffi::c_int as isize) = x32;
 }
-unsafe extern "C" fn fiat_p256_nonzero(mut out1: *mut uint32_t, mut arg1: *const uint32_t) {
-    let mut x1: uint32_t = *arg1.offset(0 as core::ffi::c_int as isize)
+unsafe extern "C" fn fiat_p256_nonzero(out1: *mut uint32_t, arg1: *const uint32_t) {
+    let x1: uint32_t = *arg1.offset(0 as core::ffi::c_int as isize)
         | (*arg1.offset(1 as core::ffi::c_int as isize)
             | (*arg1.offset(2 as core::ffi::c_int as isize)
                 | (*arg1.offset(3 as core::ffi::c_int as isize)
@@ -3997,10 +3997,10 @@ unsafe extern "C" fn fiat_p256_nonzero(mut out1: *mut uint32_t, mut arg1: *const
     *out1 = x1;
 }
 unsafe extern "C" fn fiat_p256_selectznz(
-    mut out1: *mut uint32_t,
-    mut arg1: fiat_p256_uint1,
-    mut arg2: *const uint32_t,
-    mut arg3: *const uint32_t,
+    out1: *mut uint32_t,
+    arg1: fiat_p256_uint1,
+    arg2: *const uint32_t,
+    arg3: *const uint32_t,
 ) {
     let mut x1: uint32_t = 0;
     fiat_p256_cmovznz_u32(
@@ -4077,14 +4077,14 @@ static mut fiat_p256_one: fiat_p256_felem = [
     0xfffffffe as core::ffi::c_uint,
     0 as core::ffi::c_int as uint32_t,
 ];
-unsafe extern "C" fn fiat_p256_nz(mut in1: *const fiat_p256_limb_t) -> fiat_p256_limb_t {
+unsafe extern "C" fn fiat_p256_nz(in1: *const fiat_p256_limb_t) -> fiat_p256_limb_t {
     let mut ret: fiat_p256_limb_t = 0;
     fiat_p256_nonzero(&mut ret, in1);
-    return ret;
+    ret
 }
 unsafe extern "C" fn fiat_p256_copy(
-    mut out: *mut fiat_p256_limb_t,
-    mut in1: *const fiat_p256_limb_t,
+    out: *mut fiat_p256_limb_t,
+    in1: *const fiat_p256_limb_t,
 ) {
     let mut i: size_t = 0 as core::ffi::c_int as size_t;
     while i < 8 as core::ffi::c_int as core::ffi::c_uint {
@@ -4093,20 +4093,20 @@ unsafe extern "C" fn fiat_p256_copy(
     }
 }
 unsafe extern "C" fn fiat_p256_cmovznz(
-    mut out: *mut fiat_p256_limb_t,
-    mut t: fiat_p256_limb_t,
-    mut z: *const fiat_p256_limb_t,
-    mut nz: *const fiat_p256_limb_t,
+    out: *mut fiat_p256_limb_t,
+    t: fiat_p256_limb_t,
+    z: *const fiat_p256_limb_t,
+    nz: *const fiat_p256_limb_t,
 ) {
     fiat_p256_selectznz(out, (t != 0) as core::ffi::c_int as fiat_p256_uint1, z, nz);
 }
 unsafe extern "C" fn fiat_p256_point_double(
-    mut x_out: *mut uint32_t,
-    mut y_out: *mut uint32_t,
-    mut z_out: *mut uint32_t,
-    mut x_in: *const uint32_t,
-    mut y_in: *const uint32_t,
-    mut z_in: *const uint32_t,
+    x_out: *mut uint32_t,
+    y_out: *mut uint32_t,
+    z_out: *mut uint32_t,
+    x_in: *const uint32_t,
+    y_in: *const uint32_t,
+    z_in: *const uint32_t,
 ) {
     let mut delta: fiat_p256_felem = [0; 8];
     let mut gamma: fiat_p256_felem = [0; 8];
@@ -4209,22 +4209,22 @@ unsafe extern "C" fn fiat_p256_point_double(
     );
 }
 unsafe extern "C" fn fiat_p256_point_add(
-    mut x3: *mut uint32_t,
-    mut y3: *mut uint32_t,
-    mut z3: *mut uint32_t,
-    mut x1: *const uint32_t,
-    mut y1: *const uint32_t,
-    mut z1: *const uint32_t,
+    x3: *mut uint32_t,
+    y3: *mut uint32_t,
+    z3: *mut uint32_t,
+    x1: *const uint32_t,
+    y1: *const uint32_t,
+    z1: *const uint32_t,
     mixed: core::ffi::c_int,
-    mut x2: *const uint32_t,
-    mut y2: *const uint32_t,
-    mut z2: *const uint32_t,
+    x2: *const uint32_t,
+    y2: *const uint32_t,
+    z2: *const uint32_t,
 ) {
     let mut x_out: fiat_p256_felem = [0; 8];
     let mut y_out: fiat_p256_felem = [0; 8];
     let mut z_out: fiat_p256_felem = [0; 8];
-    let mut z1nz: fiat_p256_limb_t = fiat_p256_nz(z1);
-    let mut z2nz: fiat_p256_limb_t = fiat_p256_nz(z2);
+    let z1nz: fiat_p256_limb_t = fiat_p256_nz(z1);
+    let z2nz: fiat_p256_limb_t = fiat_p256_nz(z2);
     let mut z1z1: fiat_p256_felem = [0; 8];
     fiat_p256_square(z1z1.as_mut_ptr(), z1);
     let mut u1: fiat_p256_felem = [0; 8];
@@ -4264,7 +4264,7 @@ unsafe extern "C" fn fiat_p256_point_add(
         u2.as_mut_ptr() as *const uint32_t,
         u1.as_mut_ptr() as *const uint32_t,
     );
-    let mut xneq: fiat_p256_limb_t = fiat_p256_nz(h.as_mut_ptr() as *const fiat_p256_limb_t);
+    let xneq: fiat_p256_limb_t = fiat_p256_nz(h.as_mut_ptr() as *const fiat_p256_limb_t);
     fiat_p256_mul(
         z_out.as_mut_ptr(),
         h.as_mut_ptr() as *const uint32_t,
@@ -4289,8 +4289,8 @@ unsafe extern "C" fn fiat_p256_point_add(
         r.as_mut_ptr() as *const uint32_t,
         r.as_mut_ptr() as *const uint32_t,
     );
-    let mut yneq: fiat_p256_limb_t = fiat_p256_nz(r.as_mut_ptr() as *const fiat_p256_limb_t);
-    let mut is_nontrivial_double: fiat_p256_limb_t = constant_time_is_zero_w(xneq | yneq)
+    let yneq: fiat_p256_limb_t = fiat_p256_nz(r.as_mut_ptr() as *const fiat_p256_limb_t);
+    let is_nontrivial_double: fiat_p256_limb_t = constant_time_is_zero_w(xneq | yneq)
         & !constant_time_is_zero_w(z1nz)
         & !constant_time_is_zero_w(z2nz);
     if is_nontrivial_double != 0 {
@@ -5048,9 +5048,9 @@ static mut fiat_p256_g_pre_comp: [[[fiat_p256_felem; 2]; 15]; 2] = [
 ];
 unsafe extern "C" fn fiat_p256_select_point_affine(
     idx: fiat_p256_limb_t,
-    mut size: size_t,
-    mut pre_comp: *const [fiat_p256_felem; 2],
-    mut out: *mut fiat_p256_felem,
+    size: size_t,
+    pre_comp: *const [fiat_p256_felem; 2],
+    out: *mut fiat_p256_felem,
 ) {
     OPENSSL_memset(
         out as *mut core::ffi::c_void,
@@ -5060,7 +5060,7 @@ unsafe extern "C" fn fiat_p256_select_point_affine(
     );
     let mut i: size_t = 0 as core::ffi::c_int as size_t;
     while i < size {
-        let mut mismatch: fiat_p256_limb_t =
+        let mismatch: fiat_p256_limb_t =
             i ^ idx.wrapping_sub(1 as core::ffi::c_int as core::ffi::c_uint);
         fiat_p256_cmovznz(
             (*out.offset(0 as core::ffi::c_int as isize)).as_mut_ptr(),
@@ -5085,9 +5085,9 @@ unsafe extern "C" fn fiat_p256_select_point_affine(
 }
 unsafe extern "C" fn fiat_p256_select_point(
     idx: fiat_p256_limb_t,
-    mut size: size_t,
-    mut pre_comp: *const [fiat_p256_felem; 3],
-    mut out: *mut fiat_p256_felem,
+    size: size_t,
+    pre_comp: *const [fiat_p256_felem; 3],
+    out: *mut fiat_p256_felem,
 ) {
     OPENSSL_memset(
         out as *mut core::ffi::c_void,
@@ -5097,7 +5097,7 @@ unsafe extern "C" fn fiat_p256_select_point(
     );
     let mut i: size_t = 0 as core::ffi::c_int as size_t;
     while i < size {
-        let mut mismatch: fiat_p256_limb_t = i ^ idx;
+        let mismatch: fiat_p256_limb_t = i ^ idx;
         fiat_p256_cmovznz(
             (*out.offset(0 as core::ffi::c_int as isize)).as_mut_ptr(),
             mismatch,
@@ -5120,22 +5120,22 @@ unsafe extern "C" fn fiat_p256_select_point(
     }
 }
 unsafe extern "C" fn fiat_p256_get_bit(
-    mut in_0: *const uint8_t,
-    mut i: core::ffi::c_int,
+    in_0: *const uint8_t,
+    i: core::ffi::c_int,
 ) -> crypto_word {
     if i < 0 as core::ffi::c_int || i >= 256 as core::ffi::c_int {
         return 0 as core::ffi::c_int as crypto_word;
     }
-    return (*in_0.offset((i >> 3 as core::ffi::c_int) as isize) as core::ffi::c_int
+    (*in_0.offset((i >> 3 as core::ffi::c_int) as isize) as core::ffi::c_int
         >> (i & 7 as core::ffi::c_int)
-        & 1 as core::ffi::c_int) as crypto_word;
+        & 1 as core::ffi::c_int) as crypto_word
 }
 #[no_mangle]
 pub unsafe extern "C" fn p256_point_mul(
-    mut r: *mut P256_POINT,
-    mut scalar: *const Limb,
-    mut p_x: *const Limb,
-    mut p_y: *const Limb,
+    r: *mut P256_POINT,
+    scalar: *const Limb,
+    p_x: *const Limb,
+    p_y: *const Limb,
 ) {
     if !r.is_null() {
     } else {
@@ -5380,7 +5380,7 @@ pub unsafe extern "C" fn p256_point_mul(
     );
 }
 #[no_mangle]
-pub unsafe extern "C" fn p256_point_mul_base(mut r: *mut P256_POINT, mut scalar: *const Limb) {
+pub unsafe extern "C" fn p256_point_mul_base(r: *mut P256_POINT, scalar: *const Limb) {
     let mut scalar_bytes: P256_SCALAR_BYTES = [0; 33];
     p256_scalar_bytes_from_limbs(scalar_bytes.as_mut_ptr(), scalar);
     let mut nq: [fiat_p256_felem; 3] = [
@@ -5502,18 +5502,18 @@ pub unsafe extern "C" fn p256_point_mul_base(mut r: *mut P256_POINT, mut scalar:
     );
 }
 #[no_mangle]
-pub unsafe extern "C" fn p256_mul_mont(mut r: *mut Limb, mut a: *const Limb, mut b: *const Limb) {
+pub unsafe extern "C" fn p256_mul_mont(r: *mut Limb, a: *const Limb, b: *const Limb) {
     fiat_p256_mul(r, a, b);
 }
 #[no_mangle]
-pub unsafe extern "C" fn p256_sqr_mont(mut r: *mut Limb, mut a: *const Limb) {
+pub unsafe extern "C" fn p256_sqr_mont(r: *mut Limb, a: *const Limb) {
     fiat_p256_square(r, a);
 }
 #[no_mangle]
 pub unsafe extern "C" fn p256_point_add(
-    mut r: *mut P256_POINT,
-    mut a: *const P256_POINT,
-    mut b: *const P256_POINT,
+    r: *mut P256_POINT,
+    a: *const P256_POINT,
+    b: *const P256_POINT,
 ) {
     fiat_p256_point_add(
         ((*r).X).as_mut_ptr(),
@@ -5529,7 +5529,7 @@ pub unsafe extern "C" fn p256_point_add(
     );
 }
 #[no_mangle]
-pub unsafe extern "C" fn p256_point_double(mut r: *mut P256_POINT, mut a: *const P256_POINT) {
+pub unsafe extern "C" fn p256_point_double(r: *mut P256_POINT, a: *const P256_POINT) {
     fiat_p256_point_double(
         ((*r).X).as_mut_ptr(),
         ((*r).Y).as_mut_ptr(),
@@ -5541,15 +5541,15 @@ pub unsafe extern "C" fn p256_point_double(mut r: *mut P256_POINT, mut a: *const
 }
 #[no_mangle]
 pub unsafe extern "C" fn p256_point_add_affine(
-    mut r: *mut P256_POINT,
-    mut a: *const P256_POINT,
-    mut b: *const BN_ULONG,
+    r: *mut P256_POINT,
+    a: *const P256_POINT,
+    b: *const BN_ULONG,
 ) {
-    let mut b_x: *const Limb = &*b.offset(0 as core::ffi::c_int as isize) as *const BN_ULONG;
-    let mut b_y: *const Limb =
+    let b_x: *const Limb = &*b.offset(0 as core::ffi::c_int as isize) as *const BN_ULONG;
+    let b_y: *const Limb =
         &*b.offset((256 as core::ffi::c_int / 32 as core::ffi::c_int) as isize) as *const BN_ULONG;
     let mut b_z: fiat_p256_felem = [0 as core::ffi::c_int as uint32_t, 0, 0, 0, 0, 0, 0, 0];
-    let mut b_is_inf: crypto_word = constant_time_select_w(
+    let b_is_inf: crypto_word = constant_time_select_w(
         LIMBS_are_zero(
             b_x,
             (256 as core::ffi::c_int / 32 as core::ffi::c_int) as size_t,

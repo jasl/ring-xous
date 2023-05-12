@@ -41,40 +41,40 @@ pub struct poly1305_state_st {
 }
 #[inline]
 unsafe extern "C" fn GFp_memcpy(
-    mut dst: *mut core::ffi::c_void,
-    mut src: *const core::ffi::c_void,
-    mut n: size_t,
+    dst: *mut core::ffi::c_void,
+    src: *const core::ffi::c_void,
+    n: size_t,
 ) -> *mut core::ffi::c_void {
     if n == 0 as core::ffi::c_int as core::ffi::c_uint {
         return dst;
     }
-    return memcpy(dst, src, n);
+    memcpy(dst, src, n)
 }
-unsafe extern "C" fn U8TO32_LE(mut m: *const uint8_t) -> uint32_t {
+unsafe extern "C" fn U8TO32_LE(m: *const uint8_t) -> uint32_t {
     let mut r: uint32_t = 0;
     let _ = GFp_memcpy(
         &mut r as *mut uint32_t as *mut core::ffi::c_void,
         m as *const core::ffi::c_void,
         ::core::mem::size_of::<uint32_t>() as u32,
     );
-    return r;
+    r
 }
-unsafe extern "C" fn U32TO8_LE(mut m: *mut uint8_t, mut v: uint32_t) {
+unsafe extern "C" fn U32TO8_LE(m: *mut uint8_t, mut v: uint32_t) {
     let _ = GFp_memcpy(
         m as *mut core::ffi::c_void,
         &mut v as *mut uint32_t as *const core::ffi::c_void,
         ::core::mem::size_of::<uint32_t>() as u32,
     );
 }
-unsafe extern "C" fn mul32x32_64(mut a: uint32_t, mut b: uint32_t) -> uint64_t {
-    return (a as uint64_t).wrapping_mul(b as u64);
+unsafe extern "C" fn mul32x32_64(a: uint32_t, b: uint32_t) -> uint64_t {
+    (a as uint64_t).wrapping_mul(b as u64)
 }
 #[inline]
 unsafe extern "C" fn poly1305_aligned_state(
-    mut state: *mut poly1305_state,
+    state: *mut poly1305_state,
 ) -> *mut poly1305_state_st {
-    return ((state as uintptr_t).wrapping_add(63 as core::ffi::c_int as core::ffi::c_uint)
-        & !(63 as core::ffi::c_int) as core::ffi::c_uint) as *mut poly1305_state_st;
+    ((state as uintptr_t).wrapping_add(63 as core::ffi::c_int as core::ffi::c_uint)
+        & !(63 as core::ffi::c_int) as core::ffi::c_uint) as *mut poly1305_state_st
 }
 unsafe extern "C" fn poly1305_update(
     mut state: *mut poly1305_state_st,
@@ -203,23 +203,23 @@ unsafe extern "C" fn poly1305_update(
             & 0x3ffffff as core::ffi::c_int as core::ffi::c_uint;
         c = t[0 as core::ffi::c_int as usize] >> 26 as core::ffi::c_int;
         t[1 as core::ffi::c_int as usize] =
-            (t[1 as core::ffi::c_int as usize] as u64).wrapping_add(c) as uint64_t as uint64_t;
+            t[1 as core::ffi::c_int as usize].wrapping_add(c) as uint64_t as uint64_t;
         (*state).h1 = t[1 as core::ffi::c_int as usize] as uint32_t
             & 0x3ffffff as core::ffi::c_int as core::ffi::c_uint;
         b = (t[1 as core::ffi::c_int as usize] >> 26 as core::ffi::c_int) as uint32_t;
-        t[2 as core::ffi::c_int as usize] = (t[2 as core::ffi::c_int as usize] as u64)
+        t[2 as core::ffi::c_int as usize] = t[2 as core::ffi::c_int as usize]
             .wrapping_add(b as u64) as uint64_t
             as uint64_t;
         (*state).h2 = t[2 as core::ffi::c_int as usize] as uint32_t
             & 0x3ffffff as core::ffi::c_int as core::ffi::c_uint;
         b = (t[2 as core::ffi::c_int as usize] >> 26 as core::ffi::c_int) as uint32_t;
-        t[3 as core::ffi::c_int as usize] = (t[3 as core::ffi::c_int as usize] as u64)
+        t[3 as core::ffi::c_int as usize] = t[3 as core::ffi::c_int as usize]
             .wrapping_add(b as u64) as uint64_t
             as uint64_t;
         (*state).h3 = t[3 as core::ffi::c_int as usize] as uint32_t
             & 0x3ffffff as core::ffi::c_int as core::ffi::c_uint;
         b = (t[3 as core::ffi::c_int as usize] >> 26 as core::ffi::c_int) as uint32_t;
-        t[4 as core::ffi::c_int as usize] = (t[4 as core::ffi::c_int as usize] as u64)
+        t[4 as core::ffi::c_int as usize] = t[4 as core::ffi::c_int as usize]
             .wrapping_add(b as u64) as uint64_t
             as uint64_t;
         (*state).h4 = t[4 as core::ffi::c_int as usize] as uint32_t
@@ -237,8 +237,8 @@ unsafe extern "C" fn poly1305_update(
 }
 #[no_mangle]
 pub unsafe extern "C" fn GFp_poly1305_init(
-    mut statep: *mut poly1305_state,
-    mut key: *const uint8_t,
+    statep: *mut poly1305_state,
+    key: *const uint8_t,
 ) {
     let mut state: *mut poly1305_state_st = poly1305_aligned_state(statep);
     let mut t0: uint32_t = 0;
@@ -279,7 +279,7 @@ pub unsafe extern "C" fn GFp_poly1305_init(
 }
 #[no_mangle]
 pub unsafe extern "C" fn GFp_poly1305_update(
-    mut statep: *mut poly1305_state,
+    statep: *mut poly1305_state,
     mut in_0: *const uint8_t,
     mut in_len: size_t,
 ) {
@@ -309,7 +309,7 @@ pub unsafe extern "C" fn GFp_poly1305_update(
         }
     }
     if in_len >= 16 as core::ffi::c_int as core::ffi::c_uint {
-        let mut todo_0: size_t = in_len & !(0xf as core::ffi::c_int) as core::ffi::c_uint;
+        let todo_0: size_t = in_len & !(0xf as core::ffi::c_int) as core::ffi::c_uint;
         poly1305_update(state, in_0, todo_0);
         in_0 = in_0.offset(todo_0 as isize);
         in_len &= 0xf as core::ffi::c_int as core::ffi::c_uint;
@@ -325,8 +325,8 @@ pub unsafe extern "C" fn GFp_poly1305_update(
 }
 #[no_mangle]
 pub unsafe extern "C" fn GFp_poly1305_finish(
-    mut statep: *mut poly1305_state,
-    mut mac: *mut uint8_t,
+    statep: *mut poly1305_state,
+    mac: *mut uint8_t,
 ) {
     let mut state: *mut poly1305_state_st = poly1305_aligned_state(statep);
     let mut f0: uint64_t = 0;
@@ -344,19 +344,19 @@ pub unsafe extern "C" fn GFp_poly1305_finish(
         poly1305_update(state, ((*state).buf).as_mut_ptr(), (*state).buf_used);
     }
     b = (*state).h0 >> 26 as core::ffi::c_int;
-    (*state).h0 = (*state).h0 & 0x3ffffff as core::ffi::c_int as core::ffi::c_uint;
+    (*state).h0 &= 0x3ffffff as core::ffi::c_int as core::ffi::c_uint;
     (*state).h1 = ((*state).h1 as core::ffi::c_uint).wrapping_add(b) as uint32_t as uint32_t;
     b = (*state).h1 >> 26 as core::ffi::c_int;
-    (*state).h1 = (*state).h1 & 0x3ffffff as core::ffi::c_int as core::ffi::c_uint;
+    (*state).h1 &= 0x3ffffff as core::ffi::c_int as core::ffi::c_uint;
     (*state).h2 = ((*state).h2 as core::ffi::c_uint).wrapping_add(b) as uint32_t as uint32_t;
     b = (*state).h2 >> 26 as core::ffi::c_int;
-    (*state).h2 = (*state).h2 & 0x3ffffff as core::ffi::c_int as core::ffi::c_uint;
+    (*state).h2 &= 0x3ffffff as core::ffi::c_int as core::ffi::c_uint;
     (*state).h3 = ((*state).h3 as core::ffi::c_uint).wrapping_add(b) as uint32_t as uint32_t;
     b = (*state).h3 >> 26 as core::ffi::c_int;
-    (*state).h3 = (*state).h3 & 0x3ffffff as core::ffi::c_int as core::ffi::c_uint;
+    (*state).h3 &= 0x3ffffff as core::ffi::c_int as core::ffi::c_uint;
     (*state).h4 = ((*state).h4 as core::ffi::c_uint).wrapping_add(b) as uint32_t as uint32_t;
     b = (*state).h4 >> 26 as core::ffi::c_int;
-    (*state).h4 = (*state).h4 & 0x3ffffff as core::ffi::c_int as core::ffi::c_uint;
+    (*state).h4 &= 0x3ffffff as core::ffi::c_int as core::ffi::c_uint;
     (*state).h0 = ((*state).h0 as core::ffi::c_uint)
         .wrapping_add(b.wrapping_mul(5 as core::ffi::c_int as core::ffi::c_uint))
         as uint32_t as uint32_t;
@@ -410,17 +410,17 @@ pub unsafe extern "C" fn GFp_poly1305_finish(
         &mut *mac.offset(0 as core::ffi::c_int as isize),
         f0 as uint32_t,
     );
-    f1 = (f1 as u64).wrapping_add(f0 >> 32 as core::ffi::c_int) as uint64_t as uint64_t;
+    f1 = f1.wrapping_add(f0 >> 32 as core::ffi::c_int) as uint64_t as uint64_t;
     U32TO8_LE(
         &mut *mac.offset(4 as core::ffi::c_int as isize),
         f1 as uint32_t,
     );
-    f2 = (f2 as u64).wrapping_add(f1 >> 32 as core::ffi::c_int) as uint64_t as uint64_t;
+    f2 = f2.wrapping_add(f1 >> 32 as core::ffi::c_int) as uint64_t as uint64_t;
     U32TO8_LE(
         &mut *mac.offset(8 as core::ffi::c_int as isize),
         f2 as uint32_t,
     );
-    f3 = (f3 as u64).wrapping_add(f2 >> 32 as core::ffi::c_int) as uint64_t as uint64_t;
+    f3 = f3.wrapping_add(f2 >> 32 as core::ffi::c_int) as uint64_t as uint64_t;
     U32TO8_LE(
         &mut *mac.offset(12 as core::ffi::c_int as isize),
         f3 as uint32_t,
