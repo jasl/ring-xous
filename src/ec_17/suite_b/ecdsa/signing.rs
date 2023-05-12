@@ -136,7 +136,6 @@ impl EcdsaKeyPair {
         alg: &'static EcdsaSigningAlgorithm,
         private_key: &[u8],
         public_key: &[u8],
-        rng: &dyn rand::SecureRandom,
     ) -> Result<Self, error::KeyRejected> {
         let key_pair = ec::suite_b::key_pair_from_bytes(
             alg.curve,
@@ -144,7 +143,8 @@ impl EcdsaKeyPair {
             untrusted::Input::from(public_key),
             cpu::features(),
         )?;
-        Self::new(alg, key_pair, rng)
+        let rng = rand::SystemRandom::new(); // TODO: make this a parameter.
+        Self::new(alg, key_pair, &rng)
     }
 
     fn new(
@@ -515,12 +515,10 @@ static EC_PUBLIC_KEY_P384_PKCS8_V1_TEMPLATE: pkcs8::Template = pkcs8::Template {
 
 #[cfg(test)]
 mod tests {
-    use crate::{rand, signature, test};
+    use crate::{signature, test};
 
     #[test]
     fn signature_ecdsa_sign_fixed_test() {
-        let rng = rand::SystemRandom::new();
-
         test::run(
             test_file!("ecdsa_sign_fixed_tests.txt"),
             |section, test_case| {
@@ -544,7 +542,7 @@ mod tests {
                 };
 
                 let private_key =
-                    signature::EcdsaKeyPair::from_private_key_and_public_key(alg, &d, &q, &rng)
+                    signature::EcdsaKeyPair::from_private_key_and_public_key(alg, &d, &q)
                         .unwrap();
                 let rng = test::rand::FixedSliceRandom { bytes: &k };
 
@@ -561,8 +559,6 @@ mod tests {
 
     #[test]
     fn signature_ecdsa_sign_asn1_test() {
-        let rng = rand::SystemRandom::new();
-
         test::run(
             test_file!("ecdsa_sign_asn1_tests.txt"),
             |section, test_case| {
@@ -586,7 +582,7 @@ mod tests {
                 };
 
                 let private_key =
-                    signature::EcdsaKeyPair::from_private_key_and_public_key(alg, &d, &q, &rng)
+                    signature::EcdsaKeyPair::from_private_key_and_public_key(alg, &d, &q)
                         .unwrap();
                 let rng = test::rand::FixedSliceRandom { bytes: &k };
 

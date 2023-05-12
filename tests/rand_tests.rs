@@ -12,19 +12,24 @@
 // OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
 // CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
+#![cfg(any(not(target_arch = "wasm32"), feature = "web-sys"))]
+
 use ring::{
     rand::{self, SecureRandom as _},
     test,
 };
 
 #[cfg(target_arch = "wasm32")]
-use wasm_bindgen_test::{wasm_bindgen_test, wasm_bindgen_test_configure};
+use wasm_bindgen_test::wasm_bindgen_test;
 
-#[cfg(target_arch = "wasm32")]
+#[cfg(all(target_arch = "wasm32", any(feature = "web-sys", feature = "wasm32_c")))]
+use wasm_bindgen_test::wasm_bindgen_test_configure;
+#[cfg(all(target_arch = "wasm32", any(feature = "web-sys", feature = "wasm32_c")))]
 wasm_bindgen_test_configure!(run_in_browser);
 
 #[test]
-#[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
+#[cfg_attr(all(target_arch = "wasm32", feature = "web-sys"), ignore)]
+#[cfg_attr(all(target_arch = "wasm32", not(feature = "web-sys")), wasm_bindgen_test)]
 fn test_system_random_lengths() {
     const LINUX_LIMIT: usize = 256;
     const WEB_LIMIT: usize = 65536;
@@ -68,7 +73,8 @@ fn test_system_random_lengths() {
 }
 
 #[test]
-#[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
+#[cfg_attr(all(target_arch = "wasm32", feature = "web-sys"), ignore)]
+#[cfg_attr(all(target_arch = "wasm32", not(feature = "web-sys")), wasm_bindgen_test)]
 fn test_system_random_traits() {
     test::compile_time_assert_clone::<rand::SystemRandom>();
     test::compile_time_assert_send::<rand::SystemRandom>();

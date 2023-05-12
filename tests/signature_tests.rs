@@ -1,9 +1,11 @@
 use ring::{signature, test};
 
 #[cfg(target_arch = "wasm32")]
-use wasm_bindgen_test::{wasm_bindgen_test, wasm_bindgen_test_configure};
+use wasm_bindgen_test::wasm_bindgen_test;
 
-#[cfg(target_arch = "wasm32")]
+#[cfg(all(target_arch = "wasm32", any(feature = "web-sys", feature = "wasm32_c")))]
+use wasm_bindgen_test::wasm_bindgen_test_configure;
+#[cfg(all(target_arch = "wasm32", any(feature = "web-sys", feature = "wasm32_c")))]
 wasm_bindgen_test_configure!(run_in_browser);
 
 #[test]

@@ -22,15 +22,17 @@ use ring::{
 };
 use std::convert::TryFrom;
 
-#[cfg(all(target_arch = "wasm32", feature = "wasm32_c"))]
-use wasm_bindgen_test::{wasm_bindgen_test, wasm_bindgen_test_configure};
+#[cfg(target_arch = "wasm32")]
+use wasm_bindgen_test::wasm_bindgen_test;
 
-#[cfg(all(target_arch = "wasm32", feature = "wasm32_c"))]
+#[cfg(all(target_arch = "wasm32", any(feature = "web-sys", feature = "wasm32_c")))]
+use wasm_bindgen_test::wasm_bindgen_test_configure;
+#[cfg(all(target_arch = "wasm32", any(feature = "web-sys", feature = "wasm32_c")))]
 wasm_bindgen_test_configure!(run_in_browser);
 
 #[cfg(feature = "alloc")]
 #[test]
-#[cfg_attr(all(target_arch = "wasm32", feature = "wasm32_c"), wasm_bindgen_test)]
+#[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
 fn rsa_from_pkcs8_test() {
     test::run(
         test_file!("rsa_from_pkcs8_tests.txt"),
@@ -54,7 +56,7 @@ fn rsa_from_pkcs8_test() {
 
 #[cfg(feature = "alloc")]
 #[test]
-#[cfg_attr(all(target_arch = "wasm32", feature = "wasm32_c"), wasm_bindgen_test)]
+#[cfg_attr(all(target_arch = "wasm32", not(feature = "web-sys")), wasm_bindgen_test)]
 fn test_signature_rsa_pkcs1_sign() {
     let rng = rand::SystemRandom::new();
     test::run(
@@ -96,7 +98,7 @@ fn test_signature_rsa_pkcs1_sign() {
 
 #[cfg(feature = "alloc")]
 #[test]
-#[cfg_attr(all(target_arch = "wasm32", feature = "wasm32_c"), wasm_bindgen_test)]
+#[cfg_attr(all(target_arch = "wasm32", not(feature = "web-sys")), wasm_bindgen_test)]
 fn test_signature_rsa_pss_sign() {
     test::run(
         test_file!("rsa_pss_sign_tests.txt"),
@@ -134,7 +136,7 @@ fn test_signature_rsa_pss_sign() {
 
 #[cfg(feature = "alloc")]
 #[test]
-#[cfg_attr(all(target_arch = "wasm32", feature = "wasm32_c"), wasm_bindgen_test)]
+#[cfg_attr(all(target_arch = "wasm32", not(feature = "web-sys")), wasm_bindgen_test)]
 fn test_signature_rsa_pkcs1_verify() {
     let sha1_params = &[
         (
@@ -216,7 +218,7 @@ fn test_signature_rsa_pkcs1_verify() {
 
 #[cfg(feature = "alloc")]
 #[test]
-#[cfg_attr(all(target_arch = "wasm32", feature = "wasm32_c"), wasm_bindgen_test)]
+#[cfg_attr(all(target_arch = "wasm32", not(feature = "web-sys")), wasm_bindgen_test)]
 fn test_signature_rsa_pss_verify() {
     test::run(
         test_file!("rsa_pss_verify_tests.txt"),
@@ -266,7 +268,7 @@ fn test_signature_rsa_pss_verify() {
 // and use them to verify a signature.
 #[cfg(feature = "alloc")]
 #[test]
-#[cfg_attr(all(target_arch = "wasm32", feature = "wasm32_c"), wasm_bindgen_test)]
+#[cfg_attr(all(target_arch = "wasm32", not(feature = "web-sys")), wasm_bindgen_test)]
 fn test_signature_rsa_primitive_verification() {
     test::run(
         test_file!("rsa_primitive_verify_tests.txt"),
@@ -287,7 +289,7 @@ fn test_signature_rsa_primitive_verification() {
 
 #[cfg(feature = "alloc")]
 #[test]
-#[cfg_attr(all(target_arch = "wasm32", feature = "wasm32_c"), wasm_bindgen_test)]
+#[cfg_attr(all(target_arch = "wasm32", not(feature = "web-sys")), wasm_bindgen_test)]
 fn rsa_test_public_key_coverage() {
     const PRIVATE_KEY: &[u8] = include_bytes!("rsa_test_private_key_2048.p8");
     const PUBLIC_KEY: &[u8] = include_bytes!("rsa_test_public_key_2048.der");

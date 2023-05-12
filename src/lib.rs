@@ -81,7 +81,6 @@ extern crate alloc;
 #[macro_use]
 mod debug;
 
-#[cfg(any(target_arch="wasm32", target_os="xous"))]
 #[macro_use]
 mod prefixed;
 
@@ -109,11 +108,11 @@ pub mod io;
 
 mod cpu;
 pub mod digest;
-#[cfg(any(target_arch="wasm32", all(target_os="xous",not(target_arch="x86_64"))))]
+#[cfg(any(all(target_arch="wasm32", not(any(feature = "web-sys", feature = "wasm32_c"))), all(target_os="xous",not(target_arch="x86_64"))))]
 pub mod ec_17;
-#[cfg(any(target_arch="wasm32", all(target_os="xous",not(target_arch="x86_64"))))]
+#[cfg(any(all(target_arch="wasm32", not(any(feature = "web-sys", feature = "wasm32_c"))), all(target_os="xous",not(target_arch="x86_64"))))]
 pub use ec_17 as ec;
-#[cfg(not(any(target_arch="wasm32", all(target_os="xous",not(target_arch="x86_64")))))]
+#[cfg(not(any(all(target_arch="wasm32", not(any(feature = "web-sys", feature = "wasm32_c"))), all(target_os="xous",not(target_arch="x86_64")))))]
 mod ec;
 mod endian;
 pub mod error;
@@ -147,57 +146,57 @@ mod sealed {
 
 #[cfg(target_os="xous")]
 mod c2rust {
-    #[path = "./xous/aes_nohw.rs"]
+    #[path = "xous/aes_nohw.rs"]
     mod aes_nohw;
-    #[path = "./xous/montgomery.rs"]
+    #[path = "xous/montgomery.rs"]
     mod montgomery;
-    #[path = "./xous/montgomery_inv.rs"]
+    #[path = "xous/montgomery_inv.rs"]
     mod montgomery_inv;
-    #[path = "./xous/limbs.rs"]
+    #[path = "xous/limbs.rs"]
     mod limbs;
-    #[path = "./xous/mem.rs"]
+    #[path = "xous/mem.rs"]
     mod mem;
-    #[path = "./xous/poly1305.rs"]
+    #[path = "xous/poly1305.rs"]
     mod poly1305;
-    #[path = "./xous/crypto.rs"]
+    #[path = "xous/crypto.rs"]
     mod crypto;
-    #[path = "./xous/curve25519.rs"]
+    #[path = "xous/curve25519.rs"]
     mod curve25519;
-    #[path = "./xous/ecp_nistz.rs"]
+    #[path = "xous/ecp_nistz.rs"]
     mod ecp_nistz;
-    #[path = "./xous/gfp_p256.rs"]
+    #[path = "xous/gfp_p256.rs"]
     mod gfp_p256;
-    #[path = "./xous/gfp_p384.rs"]
+    #[path = "xous/gfp_p384.rs"]
     mod gfp_p384;
-    #[path = "./xous/p256.rs"]
+    #[path = "xous/p256.rs"]
     mod p256;
 }
 
-#[cfg(target_arch="wasm32")]
+#[cfg(all(target_arch="wasm32", not(any(feature = "web-sys", feature = "wasm32_c"))))]
 mod c2rust {
-    #[path = "./wasm32/aes_nohw.rs"]
+    #[path = "wasm32/aes_nohw.rs"]
     mod aes_nohw;
-    #[path = "./wasm32/montgomery.rs"]
+    #[path = "wasm32/montgomery.rs"]
     mod montgomery;
-    #[path = "./wasm32/montgomery_inv.rs"]
+    #[path = "wasm32/montgomery_inv.rs"]
     mod montgomery_inv;
-    #[path = "./wasm32/limbs.rs"]
+    #[path = "wasm32/limbs.rs"]
     mod limbs;
-    #[path = "./wasm32/mem.rs"]
+    #[path = "wasm32/mem.rs"]
     mod mem;
-    #[path = "./wasm32/poly1305.rs"]
+    #[path = "wasm32/poly1305.rs"]
     mod poly1305;
-    #[path = "./wasm32/crypto.rs"]
+    #[path = "wasm32/crypto.rs"]
     mod crypto;
-    #[path = "./wasm32/curve25519.rs"]
+    #[path = "wasm32/curve25519.rs"]
     mod curve25519;
-    #[path = "./wasm32/ecp_nistz.rs"]
+    #[path = "wasm32/ecp_nistz.rs"]
     mod ecp_nistz;
-    #[path = "./wasm32/gfp_p256.rs"]
+    #[path = "wasm32/gfp_p256.rs"]
     mod gfp_p256;
-    #[path = "./wasm32/gfp_p384.rs"]
+    #[path = "wasm32/gfp_p384.rs"]
     mod gfp_p384;
-    #[path = "./wasm32/p256.rs"]
+    #[path = "wasm32/p256.rs"]
     mod p256;
 }
 
@@ -206,12 +205,12 @@ mod xous_rand;
 #[cfg(target_os="xous")]
 pub mod xous_test;
 
-#[cfg(any(target_arch="wasm32", target_os="xous"))]
+#[cfg(any(all(target_arch="wasm32", not(any(feature = "web-sys", feature = "wasm32_c"))), target_os="xous"))]
 type c_char = i8;
-#[cfg(any(target_arch="wasm32", target_os="xous"))]
+#[cfg(any(all(target_arch="wasm32", not(any(feature = "web-sys", feature = "wasm32_c"))), target_os="xous"))]
 type c_uint = u32;
 #[export_name = "__assert_fail"]
-#[cfg(any(target_arch="wasm32", target_os="xous"))]
+#[cfg(any(all(target_arch="wasm32", not(any(feature = "web-sys", feature = "wasm32_c"))), target_os="xous"))]
 pub unsafe extern "C" fn __assert_fail(
     __assertion: *const c_char,
     __file: *const c_char,

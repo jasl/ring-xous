@@ -191,7 +191,7 @@ impl EcdsaKeyPair {
     }
 
     #[cfg(test)]
-    fn sign_with_fixed_nonce_during_test(
+    pub(crate) fn sign_with_fixed_nonce_during_test(
         &self,
         rng: &dyn rand::SecureRandom,
         message: &[u8],

@@ -1,3 +1,5 @@
+#![allow(unused_macros)]
+
 macro_rules! prefixed_extern {
     // Functions.
     {
