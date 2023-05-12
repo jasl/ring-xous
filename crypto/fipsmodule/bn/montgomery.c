@@ -197,7 +197,7 @@ int GFp_bn_from_montgomery_in_place(BN_ULONG r[], size_t num_r, BN_ULONG a[],
 }
 
 #if !defined(OPENSSL_X86) && !defined(OPENSSL_X86_64) && \
-    !defined(OPENSSL_ARM) && !defined(OPENSSL_AARCH64) || defined(__xous__)
+    !defined(OPENSSL_ARM) && !defined(OPENSSL_AARCH64) || defined(__xous__) || defined(__wasm__)
 void bn_mul_mont(BN_ULONG *rp, const BN_ULONG *ap, const BN_ULONG *bp,
                  const BN_ULONG *np, const BN_ULONG *n0, size_t num) {
   Limb tmp[2 * num];

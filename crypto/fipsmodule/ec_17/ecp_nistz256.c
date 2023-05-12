@@ -347,7 +347,7 @@ void GFp_nistz256_point_mul_base(P256_POINT *r,
 #endif
 #endif
 
-#if defined(__xous__)
+#if defined(__xous__) || defined(__wasm__)
 #include "p256_32.h"
 
 #define FIAT_P256_NLIMBS 8

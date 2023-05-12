@@ -52,6 +52,8 @@ TARGETS = [
     {
         "target": "wasm32-unknown-unknown",
         "compile_arguments": [
+            "-D__wasm__",
+            "-D__wasm32__",
             "-m32"
         ],
         "save_to_dir": "src/c2rust/wasm32"
@@ -117,7 +119,7 @@ def massage_line(line):
         "core::sync::atomic::compiler_fence(core::sync::atomic::Ordering::SeqCst);"
     )
     line = line.replace(
-        'asm!("", inlateout(reg) a, options(preserves_flags, pure, readonly));',
+        'asm!("", inlateout(reg) a, options(preserves_flags, pure, readonly, att_syntax));',
         compiler_fence,
     )
 
