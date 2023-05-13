@@ -38,6 +38,12 @@ RING_C_FILES = [
     "crypto/fipsmodule/ec_17/p256.c",
 ]
 
+COMPILE_ARGUMENTS = [
+    "-Iinclude",
+    "-UOPENSSL_X86_64",
+    "-U__x86_64"
+]
+
 TARGETS = [
     {
         "target": "riscv32imac-unknown-xous-elf",
@@ -52,6 +58,7 @@ TARGETS = [
     {
         "target": "wasm32-unknown-unknown",
         "compile_arguments": [
+            "-DOPENSSL_NO_ASM",
             "-D__wasm__",
             "-D__wasm32__",
             "-m32"
@@ -220,9 +227,7 @@ def generate_c2rust_files_list(output_file_name, append_arguments: []):
                     "-c",
                     "-o",
                     "build/tmp.o",
-                    "-Iinclude",
-                    "-UOPENSSL_X86_64",
-                    "-U__x86_64",
+                    *COMPILE_ARGUMENTS,
                     *append_arguments,
                     file
                 ]

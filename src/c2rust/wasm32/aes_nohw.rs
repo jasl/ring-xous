@@ -51,7 +51,7 @@ pub union C2RustUnnamed {
 }
 #[inline]
 unsafe extern "C" fn CRYPTO_bswap4(x: uint32_t) -> uint32_t {
-    x.swap_bytes()
+    return x.swap_bytes();
 }
 #[inline]
 unsafe extern "C" fn GFp_memset(
@@ -62,7 +62,7 @@ unsafe extern "C" fn GFp_memset(
     if n == 0 as core::ffi::c_int as core::ffi::c_uint {
         return dst;
     }
-    memset(dst, c, n)
+    return memset(dst, c, n);
 }
 #[inline]
 unsafe extern "C" fn GFp_memcpy(
@@ -73,31 +73,31 @@ unsafe extern "C" fn GFp_memcpy(
     if n == 0 as core::ffi::c_int as core::ffi::c_uint {
         return dst;
     }
-    memcpy(dst, src, n)
+    return memcpy(dst, src, n);
 }
 #[inline]
 unsafe extern "C" fn aes_nohw_and(a: aes_word_t, b: aes_word_t) -> aes_word_t {
-    a & b
+    return a & b;
 }
 #[inline]
 unsafe extern "C" fn aes_nohw_or(a: aes_word_t, b: aes_word_t) -> aes_word_t {
-    a | b
+    return a | b;
 }
 #[inline]
 unsafe extern "C" fn aes_nohw_xor(a: aes_word_t, b: aes_word_t) -> aes_word_t {
-    a ^ b
+    return a ^ b;
 }
 #[inline]
 unsafe extern "C" fn aes_nohw_not(a: aes_word_t) -> aes_word_t {
-    !a
+    return !a;
 }
 #[inline]
 unsafe extern "C" fn aes_nohw_shift_left(a: aes_word_t, i: aes_word_t) -> aes_word_t {
-    a << i.wrapping_mul(2 as core::ffi::c_int as core::ffi::c_uint)
+    return a << i.wrapping_mul(2 as core::ffi::c_int as core::ffi::c_uint);
 }
 #[inline]
 unsafe extern "C" fn aes_nohw_shift_right(a: aes_word_t, i: aes_word_t) -> aes_word_t {
-    a >> i.wrapping_mul(2 as core::ffi::c_int as core::ffi::c_uint)
+    return a >> i.wrapping_mul(2 as core::ffi::c_int as core::ffi::c_uint);
 }
 #[inline]
 unsafe extern "C" fn aes_nohw_batch_set(
@@ -134,7 +134,7 @@ unsafe extern "C" fn aes_nohw_delta_swap(
     shift: aes_word_t,
 ) -> aes_word_t {
     let b: aes_word_t = (a ^ a >> shift) & mask;
-    a ^ b ^ b << shift
+    return a ^ b ^ b << shift;
 }
 #[inline]
 unsafe extern "C" fn aes_nohw_compact_word(mut a: uint32_t) -> uint32_t {
@@ -148,7 +148,7 @@ unsafe extern "C" fn aes_nohw_compact_word(mut a: uint32_t) -> uint32_t {
         0xf0f0 as core::ffi::c_int as aes_word_t,
         12 as core::ffi::c_int as aes_word_t,
     );
-    a
+    return a;
 }
 #[inline]
 unsafe extern "C" fn aes_nohw_uncompact_word(mut a: uint32_t) -> uint32_t {
@@ -162,7 +162,7 @@ unsafe extern "C" fn aes_nohw_uncompact_word(mut a: uint32_t) -> uint32_t {
         0xcc00cc as core::ffi::c_int as aes_word_t,
         6 as core::ffi::c_int as aes_word_t,
     );
-    a
+    return a;
 }
 #[inline]
 unsafe extern "C" fn aes_nohw_word_from_bytes(
@@ -171,14 +171,14 @@ unsafe extern "C" fn aes_nohw_word_from_bytes(
     a2: uint8_t,
     a3: uint8_t,
 ) -> uint32_t {
-    a0 as uint32_t
+    return a0 as uint32_t
         | (a1 as uint32_t) << 8 as core::ffi::c_int
         | (a2 as uint32_t) << 16 as core::ffi::c_int
-        | (a3 as uint32_t) << 24 as core::ffi::c_int
+        | (a3 as uint32_t) << 24 as core::ffi::c_int;
 }
 #[inline]
 unsafe extern "C" fn lo(a: uint32_t) -> uint8_t {
-    a as uint8_t
+    return a as uint8_t;
 }
 #[inline]
 unsafe extern "C" fn aes_nohw_compact_block(out: *mut aes_word_t, in_0: *const uint8_t) {
@@ -579,13 +579,13 @@ unsafe extern "C" fn aes_nohw_shift_rows(mut batch: *mut AES_NOHW_BATCH) {
 }
 #[inline]
 unsafe extern "C" fn aes_nohw_rotate_rows_down(v: aes_word_t) -> aes_word_t {
-    v >> 2 as core::ffi::c_int & 0x3f3f3f3f as core::ffi::c_int as core::ffi::c_uint
-        | v << 6 as core::ffi::c_int & 0xc0c0c0c0 as core::ffi::c_uint
+    return v >> 2 as core::ffi::c_int & 0x3f3f3f3f as core::ffi::c_int as core::ffi::c_uint
+        | v << 6 as core::ffi::c_int & 0xc0c0c0c0 as core::ffi::c_uint;
 }
 #[inline]
 unsafe extern "C" fn aes_nohw_rotate_rows_twice(v: aes_word_t) -> aes_word_t {
-    v >> 4 as core::ffi::c_int & 0xf0f0f0f as core::ffi::c_int as core::ffi::c_uint
-        | v << 4 as core::ffi::c_int & 0xf0f0f0f0 as core::ffi::c_uint
+    return v >> 4 as core::ffi::c_int & 0xf0f0f0f as core::ffi::c_int as core::ffi::c_uint
+        | v << 4 as core::ffi::c_int & 0xf0f0f0f0 as core::ffi::c_uint;
 }
 unsafe extern "C" fn aes_nohw_mix_columns(mut batch: *mut AES_NOHW_BATCH) {
     let a0: aes_word_t = (*batch).w[0 as core::ffi::c_int as usize];
@@ -700,9 +700,10 @@ static mut aes_nohw_rcon: [uint8_t; 10] = [
 ];
 #[inline]
 unsafe extern "C" fn aes_nohw_rcon_slice(mut rcon: uint8_t, i: size_t) -> aes_word_t {
-    rcon = (rcon as core::ffi::c_int >> i.wrapping_mul(2 as core::ffi::c_int as core::ffi::c_uint) & (((1 as core::ffi::c_int) << 2 as core::ffi::c_int) - 1 as core::ffi::c_int))
+    rcon = (rcon as core::ffi::c_int >> i.wrapping_mul(2 as core::ffi::c_int as core::ffi::c_uint)
+        & ((1 as core::ffi::c_int) << 2 as core::ffi::c_int) - 1 as core::ffi::c_int)
         as uint8_t;
-    rcon as aes_word_t
+    return rcon as aes_word_t;
 }
 unsafe extern "C" fn aes_nohw_sub_block(out: *mut aes_word_t, in_0: *const aes_word_t) {
     let mut batch: AES_NOHW_BATCH = AES_NOHW_BATCH { w: [0; 8] };
@@ -894,7 +895,7 @@ pub unsafe extern "C" fn GFp_aes_nohw_set_encrypt_key(
         }
         _ => {}
     }
-    1 as core::ffi::c_int
+    return 1 as core::ffi::c_int;
 }
 #[no_mangle]
 pub unsafe extern "C" fn GFp_aes_nohw_encrypt(

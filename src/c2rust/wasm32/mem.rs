@@ -19,5 +19,5 @@ pub unsafe extern "C" fn GFp_memcmp(
             as uint8_t;
         i = i.wrapping_add(1);
     }
-    x as core::ffi::c_int
+    return x as core::ffi::c_int;
 }

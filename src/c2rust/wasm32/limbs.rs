@@ -22,28 +22,27 @@ pub type DoubleLimb = uint64_t;
 pub type BN_ULONG = crypto_word;
 #[inline]
 unsafe extern "C" fn value_barrier_w(a: crypto_word) -> crypto_word {
-    core::sync::atomic::compiler_fence(core::sync::atomic::Ordering::SeqCst);
-    a
+    return a;
 }
 #[inline]
 unsafe extern "C" fn constant_time_msb_w(a: crypto_word) -> crypto_word {
-    (0 as core::ffi::c_uint).wrapping_sub(
+    return (0 as core::ffi::c_uint).wrapping_sub(
         a >> (::core::mem::size_of::<crypto_word>() as u32)
             .wrapping_mul(8 as core::ffi::c_int as core::ffi::c_uint)
             .wrapping_sub(1 as core::ffi::c_int as core::ffi::c_uint),
-    )
+    );
 }
 #[inline]
 unsafe extern "C" fn constant_time_is_zero_w(a: crypto_word) -> crypto_word {
-    constant_time_msb_w(!a & a.wrapping_sub(1 as core::ffi::c_int as core::ffi::c_uint))
+    return constant_time_msb_w(!a & a.wrapping_sub(1 as core::ffi::c_int as core::ffi::c_uint));
 }
 #[inline]
 unsafe extern "C" fn constant_time_is_nonzero_w(a: crypto_word) -> crypto_word {
-    !constant_time_is_zero_w(a)
+    return !constant_time_is_zero_w(a);
 }
 #[inline]
 unsafe extern "C" fn constant_time_eq_w(a: crypto_word, b: crypto_word) -> crypto_word {
-    constant_time_is_zero_w(a ^ b)
+    return constant_time_is_zero_w(a ^ b);
 }
 #[inline]
 unsafe extern "C" fn constant_time_select_w(
@@ -51,7 +50,7 @@ unsafe extern "C" fn constant_time_select_w(
     a: crypto_word,
     b: crypto_word,
 ) -> crypto_word {
-    value_barrier_w(mask) & a | value_barrier_w(!mask) & b
+    return value_barrier_w(mask) & a | value_barrier_w(!mask) & b;
 }
 #[inline]
 unsafe extern "C" fn bn_umult_lohi(
@@ -71,21 +70,21 @@ unsafe extern "C" fn limb_adc(
     b: Limb,
     carry_in: Carry,
 ) -> Carry {
-    let mut ret: Carry = 0;
+    let ret: Carry;
     let x: DoubleLimb = (a as DoubleLimb)
         .wrapping_add(b as u64)
         .wrapping_add(carry_in as u64);
     *r = x as Limb;
     ret = (x >> 32 as core::ffi::c_uint) as Carry;
-    ret
+    return ret;
 }
 #[inline]
 unsafe extern "C" fn limb_add(r: *mut Limb, a: Limb, b: Limb) -> Carry {
-    let mut ret: Carry = 0;
+    let ret: Carry;
     let x: DoubleLimb = (a as DoubleLimb).wrapping_add(b as u64);
     *r = x as Limb;
     ret = (x >> 32 as core::ffi::c_uint) as Carry;
-    ret
+    return ret;
 }
 #[inline]
 unsafe extern "C" fn limb_sbb(
@@ -94,21 +93,21 @@ unsafe extern "C" fn limb_sbb(
     b: Limb,
     borrow_in: Carry,
 ) -> Carry {
-    let mut ret: Carry = 0;
+    let ret: Carry;
     let x: DoubleLimb = (a as DoubleLimb)
         .wrapping_sub(b as u64)
         .wrapping_sub(borrow_in as u64);
     *r = x as Limb;
     ret = (x >> 32 as core::ffi::c_uint & 1 as core::ffi::c_int as u64) as Carry;
-    ret
+    return ret;
 }
 #[inline]
 unsafe extern "C" fn limb_sub(r: *mut Limb, a: Limb, b: Limb) -> Carry {
-    let mut ret: Carry = 0;
+    let ret: Carry;
     let x: DoubleLimb = (a as DoubleLimb).wrapping_sub(b as u64);
     *r = x as Limb;
     ret = (x >> 32 as core::ffi::c_uint & 1 as core::ffi::c_int as u64) as Carry;
-    ret
+    return ret;
 }
 #[inline]
 unsafe extern "C" fn limbs_add(
@@ -144,7 +143,7 @@ unsafe extern "C" fn limbs_add(
         );
         i = i.wrapping_add(1);
     }
-    carry
+    return carry;
 }
 #[inline]
 unsafe extern "C" fn limbs_sub(
@@ -180,7 +179,7 @@ unsafe extern "C" fn limbs_sub(
         );
         i = i.wrapping_add(1);
     }
-    borrow
+    return borrow;
 }
 #[inline]
 unsafe extern "C" fn limbs_select(
@@ -222,7 +221,7 @@ pub unsafe extern "C" fn LIMBS_are_zero(a: *const Limb, num_limbs: size_t) -> Li
         );
         i = i.wrapping_add(1);
     }
-    is_zero
+    return is_zero;
 }
 #[no_mangle]
 pub unsafe extern "C" fn LIMBS_equal(
@@ -240,7 +239,7 @@ pub unsafe extern "C" fn LIMBS_equal(
         );
         i = i.wrapping_add(1);
     }
-    eq
+    return eq;
 }
 #[no_mangle]
 pub unsafe extern "C" fn LIMBS_equal_limb(
@@ -268,17 +267,17 @@ pub unsafe extern "C" fn LIMBS_equal_limb(
         &*a.offset(1 as core::ffi::c_int as isize),
         num_limbs.wrapping_sub(1 as core::ffi::c_int as core::ffi::c_uint),
     );
-    constant_time_select_w(lo_equal, hi_zero, 0 as core::ffi::c_int as crypto_word)
+    return constant_time_select_w(lo_equal, hi_zero, 0 as core::ffi::c_int as crypto_word);
 }
 #[no_mangle]
 pub unsafe extern "C" fn LIMBS_are_even(a: *const Limb, num_limbs: size_t) -> Limb {
-    let mut lo: Limb = 0;
+    let lo: Limb;
     if num_limbs == 0 as core::ffi::c_int as core::ffi::c_uint {
         lo = 0 as core::ffi::c_int as Limb;
     } else {
         lo = *a.offset(0 as core::ffi::c_int as isize);
     }
-    constant_time_is_zero_w(lo & 1 as core::ffi::c_int as core::ffi::c_uint)
+    return constant_time_is_zero_w(lo & 1 as core::ffi::c_int as core::ffi::c_uint);
 }
 #[no_mangle]
 pub unsafe extern "C" fn LIMBS_less_than(
@@ -314,7 +313,7 @@ pub unsafe extern "C" fn LIMBS_less_than(
         );
         i = i.wrapping_add(1);
     }
-    constant_time_is_nonzero_w(borrow)
+    return constant_time_is_nonzero_w(borrow);
 }
 #[no_mangle]
 pub unsafe extern "C" fn LIMBS_less_than_limb(
@@ -344,7 +343,7 @@ pub unsafe extern "C" fn LIMBS_less_than_limb(
         &*a.offset(1 as core::ffi::c_int as isize),
         num_limbs.wrapping_sub(1 as core::ffi::c_int as core::ffi::c_uint),
     );
-    constant_time_select_w(lo, hi, lo)
+    return constant_time_select_w(lo, hi, lo);
 }
 #[no_mangle]
 pub unsafe extern "C" fn LIMBS_reduce_once(
@@ -496,7 +495,7 @@ pub unsafe extern "C" fn LIMBS_select_512_32(
         return 0 as core::ffi::c_int;
     }
     limbs_select(r, table, num_limbs, 32 as core::ffi::c_int as size_t, index);
-    1 as core::ffi::c_int
+    return 1 as core::ffi::c_int;
 }
 static mut FIVE_BITS_MASK: Limb = 0x1f as core::ffi::c_int as Limb;
 #[no_mangle]
@@ -508,18 +507,18 @@ pub unsafe extern "C" fn LIMBS_window5_split_window(
     let high_bits: Limb =
         higher_limb << (32 as core::ffi::c_uint).wrapping_sub(index_within_word) & FIVE_BITS_MASK;
     let low_bits: Limb = lower_limb >> index_within_word;
-    low_bits | high_bits
+    return low_bits | high_bits;
 }
 #[no_mangle]
 pub unsafe extern "C" fn LIMBS_window5_unsplit_window(
     limb: Limb,
     index_within_word: size_t,
 ) -> crypto_word {
-    limb >> index_within_word & FIVE_BITS_MASK
+    return limb >> index_within_word & FIVE_BITS_MASK;
 }
 #[no_mangle]
 pub unsafe extern "C" fn LIMB_shr(a: Limb, shift: size_t) -> Limb {
-    a >> shift
+    return a >> shift;
 }
 #[no_mangle]
 pub unsafe extern "C" fn GFp_limbs_mul_add_limb(
@@ -536,12 +535,12 @@ pub unsafe extern "C" fn GFp_limbs_mul_add_limb(
         bn_umult_lohi(&mut lo, &mut hi, *a.offset(i as isize), b);
         let mut tmp: Limb = 0;
         let mut c: Carry = limb_add(&mut tmp, lo, carried);
-        c = limb_adc(&mut carried, hi, 0 as core::ffi::c_int as Limb, c);
+        let _c = limb_adc(&mut carried, hi, 0 as core::ffi::c_int as Limb, c);
         c = limb_add(&mut *r.offset(i as isize), *r.offset(i as isize), tmp);
-        c = limb_adc(&mut carried, carried, 0 as core::ffi::c_int as Limb, c);
+        let _c = limb_adc(&mut carried, carried, 0 as core::ffi::c_int as Limb, c);
         i = i.wrapping_add(1);
     }
-    carried
+    return carried;
 }
 #[no_mangle]
 pub unsafe extern "C" fn limbs_mul_add_limb(
@@ -558,10 +557,10 @@ pub unsafe extern "C" fn limbs_mul_add_limb(
         bn_umult_lohi(&mut lo, &mut hi, *a.offset(i as isize), b);
         let mut tmp: Limb = 0;
         let mut c: Carry = limb_add(&mut tmp, lo, carried);
-        c = limb_adc(&mut carried, hi, 0 as core::ffi::c_int as Limb, c);
+        let _c = limb_adc(&mut carried, hi, 0 as core::ffi::c_int as Limb, c);
         c = limb_add(&mut *r.offset(i as isize), *r.offset(i as isize), tmp);
-        c = limb_adc(&mut carried, carried, 0 as core::ffi::c_int as Limb, c);
+        let _c = limb_adc(&mut carried, carried, 0 as core::ffi::c_int as Limb, c);
         i = i.wrapping_add(1);
     }
-    carried
+    return carried;
 }

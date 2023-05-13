@@ -40,7 +40,7 @@ pub unsafe extern "C" fn little_endian_bytes_from_scalar(
             .as_ptr(),
         );
     }
-    let mut i: size_t = 0;
+    let mut i: size_t;
     i = 0 as core::ffi::c_int as size_t;
     while i < num_limbs.wrapping_mul(::core::mem::size_of::<Limb>() as u32) {
         let mut d: Limb =

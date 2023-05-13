@@ -37,25 +37,23 @@ pub type fiat_p256_limb_t = uint32_t;
 pub type fiat_p256_felem = [uint32_t; 8];
 #[inline]
 unsafe extern "C" fn constant_time_msb_w(a: crypto_word) -> crypto_word {
-    (0 as core::ffi::c_uint).wrapping_sub(
+    return (0 as core::ffi::c_uint).wrapping_sub(
         a >> (::core::mem::size_of::<crypto_word>() as u32)
             .wrapping_mul(8 as core::ffi::c_int as core::ffi::c_uint)
             .wrapping_sub(1 as core::ffi::c_int as core::ffi::c_uint),
-    )
+    );
 }
 #[inline]
 unsafe extern "C" fn value_barrier_w(a: crypto_word) -> crypto_word {
-    core::sync::atomic::compiler_fence(core::sync::atomic::Ordering::SeqCst);
-    a
+    return a;
 }
 #[inline]
 unsafe extern "C" fn value_barrier_u32(a: uint32_t) -> uint32_t {
-    core::sync::atomic::compiler_fence(core::sync::atomic::Ordering::SeqCst);
-    a
+    return a;
 }
 #[inline]
 unsafe extern "C" fn constant_time_is_zero_w(a: crypto_word) -> crypto_word {
-    constant_time_msb_w(!a & a.wrapping_sub(1 as core::ffi::c_int as core::ffi::c_uint))
+    return constant_time_msb_w(!a & a.wrapping_sub(1 as core::ffi::c_int as core::ffi::c_uint));
 }
 #[inline]
 unsafe extern "C" fn constant_time_select_w(
@@ -63,7 +61,7 @@ unsafe extern "C" fn constant_time_select_w(
     a: crypto_word,
     b: crypto_word,
 ) -> crypto_word {
-    value_barrier_w(mask) & a | value_barrier_w(!mask) & b
+    return value_barrier_w(mask) & a | value_barrier_w(!mask) & b;
 }
 #[inline]
 unsafe extern "C" fn limbs_copy(r: *mut Limb, a: *const Limb, num_limbs: size_t) {
@@ -92,8 +90,8 @@ unsafe extern "C" fn recode_scalar_bits(
     digit: *mut crypto_word,
     in_0: crypto_word,
 ) {
-    let mut s: crypto_word = 0;
-    let mut d: crypto_word = 0;
+    let s: crypto_word;
+    let mut d: crypto_word;
     s = !(in_0 >> 5 as core::ffi::c_int).wrapping_sub(1 as core::ffi::c_int as core::ffi::c_uint);
     d = (((1 as core::ffi::c_int) << 6 as core::ffi::c_int) as core::ffi::c_uint)
         .wrapping_sub(in_0)
@@ -116,7 +114,7 @@ pub unsafe extern "C" fn OPENSSL_memcpy(
         *d.offset(i as isize) = *s.offset(i as isize);
         i = i.wrapping_add(1);
     }
-    dst
+    return dst;
 }
 #[no_mangle]
 pub unsafe extern "C" fn OPENSSL_memset(
@@ -130,7 +128,7 @@ pub unsafe extern "C" fn OPENSSL_memset(
         *d.offset(i as isize) = c as core::ffi::c_uchar;
         i = i.wrapping_add(1);
     }
-    dst
+    return dst;
 }
 unsafe extern "C" fn fiat_p256_addcarryx_u32(
     out1: *mut uint32_t,
@@ -4080,7 +4078,7 @@ static mut fiat_p256_one: fiat_p256_felem = [
 unsafe extern "C" fn fiat_p256_nz(in1: *const fiat_p256_limb_t) -> fiat_p256_limb_t {
     let mut ret: fiat_p256_limb_t = 0;
     fiat_p256_nonzero(&mut ret, in1);
-    ret
+    return ret;
 }
 unsafe extern "C" fn fiat_p256_copy(
     out: *mut fiat_p256_limb_t,
@@ -5126,9 +5124,9 @@ unsafe extern "C" fn fiat_p256_get_bit(
     if i < 0 as core::ffi::c_int || i >= 256 as core::ffi::c_int {
         return 0 as core::ffi::c_int as crypto_word;
     }
-    (*in_0.offset((i >> 3 as core::ffi::c_int) as isize) as core::ffi::c_int
+    return (*in_0.offset((i >> 3 as core::ffi::c_int) as isize) as core::ffi::c_int
         >> (i & 7 as core::ffi::c_int)
-        & 1 as core::ffi::c_int) as crypto_word
+        & 1 as core::ffi::c_int) as crypto_word;
 }
 #[no_mangle]
 pub unsafe extern "C" fn p256_point_mul(

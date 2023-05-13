@@ -24,8 +24,7 @@ pub type Carry = Limb;
 pub type DoubleLimb = uint64_t;
 #[inline]
 unsafe extern "C" fn value_barrier_w(a: crypto_word) -> crypto_word {
-    core::sync::atomic::compiler_fence(core::sync::atomic::Ordering::SeqCst);
-    a
+    return a;
 }
 #[inline]
 unsafe extern "C" fn constant_time_select_w(
@@ -33,7 +32,7 @@ unsafe extern "C" fn constant_time_select_w(
     a: crypto_word,
     b: crypto_word,
 ) -> crypto_word {
-    value_barrier_w(mask) & a | value_barrier_w(!mask) & b
+    return value_barrier_w(mask) & a | value_barrier_w(!mask) & b;
 }
 #[inline]
 unsafe extern "C" fn limb_sbb(
@@ -42,21 +41,21 @@ unsafe extern "C" fn limb_sbb(
     b: Limb,
     borrow_in: Carry,
 ) -> Carry {
-    let mut ret: Carry = 0;
+    let ret: Carry;
     let x: DoubleLimb = (a as DoubleLimb)
         .wrapping_sub(b as u64)
         .wrapping_sub(borrow_in as u64);
     *r = x as Limb;
     ret = (x >> 32 as core::ffi::c_uint & 1 as core::ffi::c_int as u64) as Carry;
-    ret
+    return ret;
 }
 #[inline]
 unsafe extern "C" fn limb_sub(r: *mut Limb, a: Limb, b: Limb) -> Carry {
-    let mut ret: Carry = 0;
+    let ret: Carry;
     let x: DoubleLimb = (a as DoubleLimb).wrapping_sub(b as u64);
     *r = x as Limb;
     ret = (x >> 32 as core::ffi::c_uint & 1 as core::ffi::c_int as u64) as Carry;
-    ret
+    return ret;
 }
 #[inline]
 unsafe extern "C" fn limbs_sub(
@@ -93,7 +92,7 @@ unsafe extern "C" fn limbs_sub(
         );
         i = i.wrapping_add(1);
     }
-    borrow
+    return borrow;
 }
 #[no_mangle]
 pub unsafe extern "C" fn bn_from_montgomery_in_place(
@@ -141,7 +140,7 @@ pub unsafe extern "C" fn bn_from_montgomery_in_place(
         *a.offset(i_0 as isize) = 0 as core::ffi::c_int as BN_ULONG;
         i_0 = i_0.wrapping_add(1);
     }
-    1 as core::ffi::c_int
+    return 1 as core::ffi::c_int;
 }
 #[no_mangle]
 pub unsafe extern "C" fn GFp_bn_from_montgomery_in_place(
@@ -189,7 +188,7 @@ pub unsafe extern "C" fn GFp_bn_from_montgomery_in_place(
         *a.offset(i_0 as isize) = 0 as core::ffi::c_int as BN_ULONG;
         i_0 = i_0.wrapping_add(1);
     }
-    1 as core::ffi::c_int
+    return 1 as core::ffi::c_int;
 }
 #[no_mangle]
 pub unsafe extern "C" fn bn_mul_mont(
