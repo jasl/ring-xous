@@ -1,15 +1,13 @@
-#![allow(non_camel_case_types)]
-#![allow(non_snake_case)]
-#![allow(non_upper_case_globals)]
+#![allow(warnings)]
 
 pub type size_t = core::ffi::c_uint;
 pub type __uint8_t = core::ffi::c_uchar;
 pub type uint8_t = __uint8_t;
 #[no_mangle]
 pub unsafe extern "C" fn GFp_memcmp(
-    a: *const uint8_t,
-    b: *const uint8_t,
-    len: size_t,
+    mut a: *const uint8_t,
+    mut b: *const uint8_t,
+    mut len: size_t,
 ) -> core::ffi::c_int {
     let mut x: uint8_t = 0 as core::ffi::c_int as uint8_t;
     let mut i: size_t = 0 as core::ffi::c_int as size_t;

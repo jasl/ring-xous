@@ -1,6 +1,4 @@
-#![allow(non_camel_case_types)]
-#![allow(non_snake_case)]
-#![allow(non_upper_case_globals)]
+#![allow(warnings)]
 
 extern "C" {
     fn GFp_memcmp(a: *const uint8_t, b: *const uint8_t, len: size_t) -> core::ffi::c_int;
@@ -78,11 +76,11 @@ pub struct ge_cached {
 pub type fiat_25519_uint1 = core::ffi::c_uchar;
 pub type fiat_25519_int1 = core::ffi::c_schar;
 #[inline]
-unsafe extern "C" fn value_barrier_u32(a: uint32_t) -> uint32_t {
+unsafe extern "C" fn value_barrier_u32(mut a: uint32_t) -> uint32_t {
     return a;
 }
 #[inline]
-unsafe extern "C" fn fe_limbs_copy(r: *mut fe_limb_t, a: *const fe_limb_t) {
+unsafe extern "C" fn fe_limbs_copy(mut r: *mut fe_limb_t, mut a: *const fe_limb_t) {
     let mut i: size_t = 0 as core::ffi::c_int as size_t;
     while i < 10 as core::ffi::c_int as core::ffi::c_uint {
         *r.offset(i as isize) = *a.offset(i as isize);
@@ -91,9 +89,9 @@ unsafe extern "C" fn fe_limbs_copy(r: *mut fe_limb_t, a: *const fe_limb_t) {
 }
 #[inline]
 unsafe extern "C" fn GFp_memcpy(
-    dst: *mut core::ffi::c_void,
-    src: *const core::ffi::c_void,
-    n: size_t,
+    mut dst: *mut core::ffi::c_void,
+    mut src: *const core::ffi::c_void,
+    mut n: size_t,
 ) -> *mut core::ffi::c_void {
     if n == 0 as core::ffi::c_int as core::ffi::c_uint {
         return dst;
@@ -102,9 +100,9 @@ unsafe extern "C" fn GFp_memcpy(
 }
 #[inline]
 unsafe extern "C" fn GFp_memset(
-    dst: *mut core::ffi::c_void,
-    c: core::ffi::c_int,
-    n: size_t,
+    mut dst: *mut core::ffi::c_void,
+    mut c: core::ffi::c_int,
+    mut n: size_t,
 ) -> *mut core::ffi::c_void {
     if n == 0 as core::ffi::c_int as core::ffi::c_uint {
         return dst;
@@ -112,7 +110,7 @@ unsafe extern "C" fn GFp_memset(
     return memset(dst, c, n);
 }
 static mut d: fe = {
-    let init = fe {
+    let mut init = fe {
         v: [
             56195235 as core::ffi::c_int as fe_limb_t,
             13857412 as core::ffi::c_int as fe_limb_t,
@@ -129,7 +127,7 @@ static mut d: fe = {
     init
 };
 static mut sqrtm1: fe = {
-    let init = fe {
+    let mut init = fe {
         v: [
             34513072 as core::ffi::c_int as fe_limb_t,
             25610706 as core::ffi::c_int as fe_limb_t,
@@ -146,7 +144,7 @@ static mut sqrtm1: fe = {
     init
 };
 static mut d2: fe = {
-    let init = fe {
+    let mut init = fe {
         v: [
             45281625 as core::ffi::c_int as fe_limb_t,
             27714825 as core::ffi::c_int as fe_limb_t,
@@ -165,9 +163,9 @@ static mut d2: fe = {
 static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
     [
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             25967493 as core::ffi::c_int as fe_limb_t,
                             19198397 as core::ffi::c_int as fe_limb_t,
@@ -184,7 +182,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             54563134 as core::ffi::c_int as fe_limb_t,
                             934261 as core::ffi::c_int as fe_limb_t,
@@ -201,7 +199,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             58370664 as core::ffi::c_int as fe_limb_t,
                             4489569 as core::ffi::c_int as fe_limb_t,
@@ -221,9 +219,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             54292951 as core::ffi::c_int as fe_limb_t,
                             20578084 as core::ffi::c_int as fe_limb_t,
@@ -240,7 +238,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             45405608 as core::ffi::c_int as fe_limb_t,
                             6903824 as core::ffi::c_int as fe_limb_t,
@@ -257,7 +255,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             26966623 as core::ffi::c_int as fe_limb_t,
                             11152617 as core::ffi::c_int as fe_limb_t,
@@ -277,9 +275,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             15636272 as core::ffi::c_int as fe_limb_t,
                             23865875 as core::ffi::c_int as fe_limb_t,
@@ -296,7 +294,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             16568933 as core::ffi::c_int as fe_limb_t,
                             4717097 as core::ffi::c_int as fe_limb_t,
@@ -313,7 +311,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             30464137 as core::ffi::c_int as fe_limb_t,
                             27578307 as core::ffi::c_int as fe_limb_t,
@@ -333,9 +331,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             50071967 as core::ffi::c_int as fe_limb_t,
                             13921891 as core::ffi::c_int as fe_limb_t,
@@ -352,7 +350,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             23599295 as core::ffi::c_int as fe_limb_t,
                             25248385 as core::ffi::c_int as fe_limb_t,
@@ -369,7 +367,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             7798537 as core::ffi::c_int as fe_limb_t,
                             16710257 as core::ffi::c_int as fe_limb_t,
@@ -389,9 +387,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             10861363 as core::ffi::c_int as fe_limb_t,
                             11473154 as core::ffi::c_int as fe_limb_t,
@@ -408,7 +406,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             4708026 as core::ffi::c_int as fe_limb_t,
                             6336745 as core::ffi::c_int as fe_limb_t,
@@ -425,7 +423,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             19563141 as core::ffi::c_int as fe_limb_t,
                             16186464 as core::ffi::c_int as fe_limb_t,
@@ -445,9 +443,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             51736881 as core::ffi::c_int as fe_limb_t,
                             20691677 as core::ffi::c_int as fe_limb_t,
@@ -464,7 +462,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             58559652 as core::ffi::c_int as fe_limb_t,
                             109982 as core::ffi::c_int as fe_limb_t,
@@ -481,7 +479,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             48909169 as core::ffi::c_int as fe_limb_t,
                             17603008 as core::ffi::c_int as fe_limb_t,
@@ -501,9 +499,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             5153727 as core::ffi::c_int as fe_limb_t,
                             9909285 as core::ffi::c_int as fe_limb_t,
@@ -520,7 +518,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             36839857 as core::ffi::c_int as fe_limb_t,
                             30090922 as core::ffi::c_int as fe_limb_t,
@@ -537,7 +535,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             28881826 as core::ffi::c_int as fe_limb_t,
                             14381568 as core::ffi::c_int as fe_limb_t,
@@ -557,9 +555,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             14499471 as core::ffi::c_int as fe_limb_t,
                             30824833 as core::ffi::c_int as fe_limb_t,
@@ -576,7 +574,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             59913433 as core::ffi::c_int as fe_limb_t,
                             30899068 as core::ffi::c_int as fe_limb_t,
@@ -593,7 +591,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             27431194 as core::ffi::c_int as fe_limb_t,
                             8222322 as core::ffi::c_int as fe_limb_t,
@@ -615,9 +613,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
     ],
     [
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             53451805 as core::ffi::c_int as fe_limb_t,
                             20399000 as core::ffi::c_int as fe_limb_t,
@@ -634,7 +632,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             27939166 as core::ffi::c_int as fe_limb_t,
                             14210322 as core::ffi::c_int as fe_limb_t,
@@ -651,7 +649,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             17228999 as core::ffi::c_int as fe_limb_t,
                             17892808 as core::ffi::c_int as fe_limb_t,
@@ -671,9 +669,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             56150021 as core::ffi::c_int as fe_limb_t,
                             25864224 as core::ffi::c_int as fe_limb_t,
@@ -690,7 +688,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             29253598 as core::ffi::c_int as fe_limb_t,
                             15796703 as core::ffi::c_int as fe_limb_t,
@@ -707,7 +705,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             5793284 as core::ffi::c_int as fe_limb_t,
                             16271923 as core::ffi::c_int as fe_limb_t,
@@ -727,9 +725,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             39464912 as core::ffi::c_int as fe_limb_t,
                             22061425 as core::ffi::c_int as fe_limb_t,
@@ -746,7 +744,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             12650548 as core::ffi::c_int as fe_limb_t,
                             32057319 as core::ffi::c_int as fe_limb_t,
@@ -763,7 +761,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             25556948 as core::ffi::c_int as fe_limb_t,
                             30508442 as core::ffi::c_int as fe_limb_t,
@@ -783,9 +781,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             41020600 as core::ffi::c_int as fe_limb_t,
                             29543379 as core::ffi::c_int as fe_limb_t,
@@ -802,7 +800,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             64853442 as core::ffi::c_int as fe_limb_t,
                             14606629 as core::ffi::c_int as fe_limb_t,
@@ -819,7 +817,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             45080285 as core::ffi::c_int as fe_limb_t,
                             2943892 as core::ffi::c_int as fe_limb_t,
@@ -839,9 +837,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             2385296 as core::ffi::c_int as fe_limb_t,
                             2454213 as core::ffi::c_int as fe_limb_t,
@@ -858,7 +856,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             13741529 as core::ffi::c_int as fe_limb_t,
                             10911568 as core::ffi::c_int as fe_limb_t,
@@ -875,7 +873,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             21060490 as core::ffi::c_int as fe_limb_t,
                             31341688 as core::ffi::c_int as fe_limb_t,
@@ -895,9 +893,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             53436132 as core::ffi::c_int as fe_limb_t,
                             18466845 as core::ffi::c_int as fe_limb_t,
@@ -914,7 +912,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             43864724 as core::ffi::c_int as fe_limb_t,
                             33260226 as core::ffi::c_int as fe_limb_t,
@@ -931,7 +929,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             37608244 as core::ffi::c_int as fe_limb_t,
                             4770661 as core::ffi::c_int as fe_limb_t,
@@ -951,9 +949,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             24059538 as core::ffi::c_int as fe_limb_t,
                             14617003 as core::ffi::c_int as fe_limb_t,
@@ -970,7 +968,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             50127693 as core::ffi::c_int as fe_limb_t,
                             4124965 as core::ffi::c_int as fe_limb_t,
@@ -987,7 +985,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             44477957 as core::ffi::c_int as fe_limb_t,
                             12419371 as core::ffi::c_int as fe_limb_t,
@@ -1007,9 +1005,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             2379333 as core::ffi::c_int as fe_limb_t,
                             11839345 as core::ffi::c_int as fe_limb_t,
@@ -1026,7 +1024,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             33431108 as core::ffi::c_int as fe_limb_t,
                             22423954 as core::ffi::c_int as fe_limb_t,
@@ -1043,7 +1041,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             1767664 as core::ffi::c_int as fe_limb_t,
                             7197987 as core::ffi::c_int as fe_limb_t,
@@ -1065,9 +1063,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
     ],
     [
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             6721966 as core::ffi::c_int as fe_limb_t,
                             13833823 as core::ffi::c_int as fe_limb_t,
@@ -1084,7 +1082,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             4409022 as core::ffi::c_int as fe_limb_t,
                             2052381 as core::ffi::c_int as fe_limb_t,
@@ -1101,7 +1099,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             62687625 as core::ffi::c_int as fe_limb_t,
                             7169618 as core::ffi::c_int as fe_limb_t,
@@ -1121,9 +1119,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             1996056 as core::ffi::c_int as fe_limb_t,
                             10375649 as core::ffi::c_int as fe_limb_t,
@@ -1140,7 +1138,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             41801399 as core::ffi::c_int as fe_limb_t,
                             9795879 as core::ffi::c_int as fe_limb_t,
@@ -1157,7 +1155,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             49338080 as core::ffi::c_int as fe_limb_t,
                             11797795 as core::ffi::c_int as fe_limb_t,
@@ -1177,9 +1175,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             48526701 as core::ffi::c_int as fe_limb_t,
                             30138214 as core::ffi::c_int as fe_limb_t,
@@ -1196,7 +1194,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             20246567 as core::ffi::c_int as fe_limb_t,
                             19185054 as core::ffi::c_int as fe_limb_t,
@@ -1213,7 +1211,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             9648486 as core::ffi::c_int as fe_limb_t,
                             10094563 as core::ffi::c_int as fe_limb_t,
@@ -1233,9 +1231,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             50948792 as core::ffi::c_int as fe_limb_t,
                             5472694 as core::ffi::c_int as fe_limb_t,
@@ -1252,7 +1250,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             19153450 as core::ffi::c_int as fe_limb_t,
                             11523972 as core::ffi::c_int as fe_limb_t,
@@ -1269,7 +1267,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             8678006 as core::ffi::c_int as fe_limb_t,
                             2694440 as core::ffi::c_int as fe_limb_t,
@@ -1289,9 +1287,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             51950941 as core::ffi::c_int as fe_limb_t,
                             7134311 as core::ffi::c_int as fe_limb_t,
@@ -1308,7 +1306,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             11836410 as core::ffi::c_int as fe_limb_t,
                             29574944 as core::ffi::c_int as fe_limb_t,
@@ -1325,7 +1323,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             48993007 as core::ffi::c_int as fe_limb_t,
                             8653646 as core::ffi::c_int as fe_limb_t,
@@ -1345,9 +1343,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             43800366 as core::ffi::c_int as fe_limb_t,
                             22586119 as core::ffi::c_int as fe_limb_t,
@@ -1364,7 +1362,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             39571412 as core::ffi::c_int as fe_limb_t,
                             19301410 as core::ffi::c_int as fe_limb_t,
@@ -1381,7 +1379,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             1533110 as core::ffi::c_int as fe_limb_t,
                             3437855 as core::ffi::c_int as fe_limb_t,
@@ -1401,9 +1399,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             32173102 as core::ffi::c_int as fe_limb_t,
                             17425121 as core::ffi::c_int as fe_limb_t,
@@ -1420,7 +1418,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             36555903 as core::ffi::c_int as fe_limb_t,
                             31326030 as core::ffi::c_int as fe_limb_t,
@@ -1437,7 +1435,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             55493970 as core::ffi::c_int as fe_limb_t,
                             13323617 as core::ffi::c_int as fe_limb_t,
@@ -1457,9 +1455,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             31947050 as core::ffi::c_int as fe_limb_t,
                             19187781 as core::ffi::c_int as fe_limb_t,
@@ -1476,7 +1474,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             11685058 as core::ffi::c_int as fe_limb_t,
                             11822410 as core::ffi::c_int as fe_limb_t,
@@ -1493,7 +1491,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             46817982 as core::ffi::c_int as fe_limb_t,
                             8198641 as core::ffi::c_int as fe_limb_t,
@@ -1515,9 +1513,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
     ],
     [
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             7881532 as core::ffi::c_int as fe_limb_t,
                             10687937 as core::ffi::c_int as fe_limb_t,
@@ -1534,7 +1532,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             47173198 as core::ffi::c_int as fe_limb_t,
                             3899860 as core::ffi::c_int as fe_limb_t,
@@ -1551,7 +1549,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             55813245 as core::ffi::c_int as fe_limb_t,
                             29760862 as core::ffi::c_int as fe_limb_t,
@@ -1571,9 +1569,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             44636488 as core::ffi::c_int as fe_limb_t,
                             21985690 as core::ffi::c_int as fe_limb_t,
@@ -1590,7 +1588,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             14352079 as core::ffi::c_int as fe_limb_t,
                             30134717 as core::ffi::c_int as fe_limb_t,
@@ -1607,7 +1605,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             38867681 as core::ffi::c_int as fe_limb_t,
                             25481956 as core::ffi::c_int as fe_limb_t,
@@ -1627,9 +1625,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             15200332 as core::ffi::c_int as fe_limb_t,
                             8368572 as core::ffi::c_int as fe_limb_t,
@@ -1646,7 +1644,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             12876937 as core::ffi::c_int as fe_limb_t,
                             23074376 as core::ffi::c_int as fe_limb_t,
@@ -1663,7 +1661,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             62965568 as core::ffi::c_int as fe_limb_t,
                             21540023 as core::ffi::c_int as fe_limb_t,
@@ -1683,9 +1681,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             26660628 as core::ffi::c_int as fe_limb_t,
                             17876777 as core::ffi::c_int as fe_limb_t,
@@ -1702,7 +1700,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             14620696 as core::ffi::c_int as fe_limb_t,
                             13067227 as core::ffi::c_int as fe_limb_t,
@@ -1719,7 +1717,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             236881 as core::ffi::c_int as fe_limb_t,
                             10476226 as core::ffi::c_int as fe_limb_t,
@@ -1739,9 +1737,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             1276391 as core::ffi::c_int as fe_limb_t,
                             24182514 as core::ffi::c_int as fe_limb_t,
@@ -1758,7 +1756,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             5855666 as core::ffi::c_int as fe_limb_t,
                             4990204 as core::ffi::c_int as fe_limb_t,
@@ -1775,7 +1773,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             20590503 as core::ffi::c_int as fe_limb_t,
                             24535444 as core::ffi::c_int as fe_limb_t,
@@ -1795,9 +1793,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             24474287 as core::ffi::c_int as fe_limb_t,
                             4968103 as core::ffi::c_int as fe_limb_t,
@@ -1814,7 +1812,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             55541958 as core::ffi::c_int as fe_limb_t,
                             26988926 as core::ffi::c_int as fe_limb_t,
@@ -1831,7 +1829,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             38473832 as core::ffi::c_int as fe_limb_t,
                             13504660 as core::ffi::c_int as fe_limb_t,
@@ -1851,9 +1849,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             36513336 as core::ffi::c_int as fe_limb_t,
                             13793478 as core::ffi::c_int as fe_limb_t,
@@ -1870,7 +1868,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             55478669 as core::ffi::c_int as fe_limb_t,
                             22050529 as core::ffi::c_int as fe_limb_t,
@@ -1887,7 +1885,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             23152952 as core::ffi::c_int as fe_limb_t,
                             775386 as core::ffi::c_int as fe_limb_t,
@@ -1907,9 +1905,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             9770129 as core::ffi::c_int as fe_limb_t,
                             9586738 as core::ffi::c_int as fe_limb_t,
@@ -1926,7 +1924,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             34343820 as core::ffi::c_int as fe_limb_t,
                             1927589 as core::ffi::c_int as fe_limb_t,
@@ -1943,7 +1941,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             27461885 as core::ffi::c_int as fe_limb_t,
                             30576896 as core::ffi::c_int as fe_limb_t,
@@ -1965,9 +1963,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
     ],
     [
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             59098600 as core::ffi::c_int as fe_limb_t,
                             23963614 as core::ffi::c_int as fe_limb_t,
@@ -1984,7 +1982,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             34450527 as core::ffi::c_int as fe_limb_t,
                             27383209 as core::ffi::c_int as fe_limb_t,
@@ -2001,7 +1999,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             24687186 as core::ffi::c_int as fe_limb_t,
                             8613276 as core::ffi::c_int as fe_limb_t,
@@ -2021,9 +2019,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             11334899 as core::ffi::c_int as fe_limb_t,
                             24336410 as core::ffi::c_int as fe_limb_t,
@@ -2040,7 +2038,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             8911542 as core::ffi::c_int as fe_limb_t,
                             6887158 as core::ffi::c_int as fe_limb_t,
@@ -2057,7 +2055,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             38162480 as core::ffi::c_int as fe_limb_t,
                             15479762 as core::ffi::c_int as fe_limb_t,
@@ -2077,9 +2075,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             41365946 as core::ffi::c_int as fe_limb_t,
                             20987567 as core::ffi::c_int as fe_limb_t,
@@ -2096,7 +2094,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             10330056 as core::ffi::c_int as fe_limb_t,
                             70051 as core::ffi::c_int as fe_limb_t,
@@ -2113,7 +2111,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             10477963 as core::ffi::c_int as fe_limb_t,
                             26084172 as core::ffi::c_int as fe_limb_t,
@@ -2133,9 +2131,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             54820555 as core::ffi::c_int as fe_limb_t,
                             3169462 as core::ffi::c_int as fe_limb_t,
@@ -2152,7 +2150,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             40928506 as core::ffi::c_int as fe_limb_t,
                             9489186 as core::ffi::c_int as fe_limb_t,
@@ -2169,7 +2167,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             28685821 as core::ffi::c_int as fe_limb_t,
                             7759505 as core::ffi::c_int as fe_limb_t,
@@ -2189,9 +2187,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             34175969 as core::ffi::c_int as fe_limb_t,
                             13806335 as core::ffi::c_int as fe_limb_t,
@@ -2208,7 +2206,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             65528476 as core::ffi::c_int as fe_limb_t,
                             21825014 as core::ffi::c_int as fe_limb_t,
@@ -2225,7 +2223,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             36803549 as core::ffi::c_int as fe_limb_t,
                             14843443 as core::ffi::c_int as fe_limb_t,
@@ -2245,9 +2243,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             40828332 as core::ffi::c_int as fe_limb_t,
                             11007846 as core::ffi::c_int as fe_limb_t,
@@ -2264,7 +2262,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             43972811 as core::ffi::c_int as fe_limb_t,
                             9282191 as core::ffi::c_int as fe_limb_t,
@@ -2281,7 +2279,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             29969548 as core::ffi::c_int as fe_limb_t,
                             30812838 as core::ffi::c_int as fe_limb_t,
@@ -2301,9 +2299,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             63964118 as core::ffi::c_int as fe_limb_t,
                             8744660 as core::ffi::c_int as fe_limb_t,
@@ -2320,7 +2318,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             47644235 as core::ffi::c_int as fe_limb_t,
                             10110287 as core::ffi::c_int as fe_limb_t,
@@ -2337,7 +2335,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             61755510 as core::ffi::c_int as fe_limb_t,
                             4488612 as core::ffi::c_int as fe_limb_t,
@@ -2357,9 +2355,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             47665694 as core::ffi::c_int as fe_limb_t,
                             18041531 as core::ffi::c_int as fe_limb_t,
@@ -2376,7 +2374,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             23294591 as core::ffi::c_int as fe_limb_t,
                             16921819 as core::ffi::c_int as fe_limb_t,
@@ -2393,7 +2391,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             42385932 as core::ffi::c_int as fe_limb_t,
                             29377914 as core::ffi::c_int as fe_limb_t,
@@ -2415,9 +2413,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
     ],
     [
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             11433023 as core::ffi::c_int as fe_limb_t,
                             20325767 as core::ffi::c_int as fe_limb_t,
@@ -2434,7 +2432,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             35672693 as core::ffi::c_int as fe_limb_t,
                             15575145 as core::ffi::c_int as fe_limb_t,
@@ -2451,7 +2449,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             14098381 as core::ffi::c_int as fe_limb_t,
                             6555944 as core::ffi::c_int as fe_limb_t,
@@ -2471,9 +2469,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             63082644 as core::ffi::c_int as fe_limb_t,
                             18313596 as core::ffi::c_int as fe_limb_t,
@@ -2490,7 +2488,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             40577025 as core::ffi::c_int as fe_limb_t,
                             29858441 as core::ffi::c_int as fe_limb_t,
@@ -2507,7 +2505,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             41629544 as core::ffi::c_int as fe_limb_t,
                             10876442 as core::ffi::c_int as fe_limb_t,
@@ -2527,9 +2525,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             56675475 as core::ffi::c_int as fe_limb_t,
                             18941465 as core::ffi::c_int as fe_limb_t,
@@ -2546,7 +2544,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             19268631 as core::ffi::c_int as fe_limb_t,
                             26250011 as core::ffi::c_int as fe_limb_t,
@@ -2563,7 +2561,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             42244775 as core::ffi::c_int as fe_limb_t,
                             12986007 as core::ffi::c_int as fe_limb_t,
@@ -2583,9 +2581,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             40903763 as core::ffi::c_int as fe_limb_t,
                             4428546 as core::ffi::c_int as fe_limb_t,
@@ -2602,7 +2600,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             56546323 as core::ffi::c_int as fe_limb_t,
                             14895632 as core::ffi::c_int as fe_limb_t,
@@ -2619,7 +2617,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             47001790 as core::ffi::c_int as fe_limb_t,
                             32625013 as core::ffi::c_int as fe_limb_t,
@@ -2639,9 +2637,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             62874467 as core::ffi::c_int as fe_limb_t,
                             25515139 as core::ffi::c_int as fe_limb_t,
@@ -2658,7 +2656,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             51110167 as core::ffi::c_int as fe_limb_t,
                             7578151 as core::ffi::c_int as fe_limb_t,
@@ -2675,7 +2673,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             46206085 as core::ffi::c_int as fe_limb_t,
                             3296810 as core::ffi::c_int as fe_limb_t,
@@ -2695,9 +2693,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             27724736 as core::ffi::c_int as fe_limb_t,
                             2291157 as core::ffi::c_int as fe_limb_t,
@@ -2714,7 +2712,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             48242193 as core::ffi::c_int as fe_limb_t,
                             8331042 as core::ffi::c_int as fe_limb_t,
@@ -2731,7 +2729,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             55685435 as core::ffi::c_int as fe_limb_t,
                             28132841 as core::ffi::c_int as fe_limb_t,
@@ -2751,9 +2749,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             3924129 as core::ffi::c_int as fe_limb_t,
                             18246916 as core::ffi::c_int as fe_limb_t,
@@ -2770,7 +2768,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             51186905 as core::ffi::c_int as fe_limb_t,
                             16037936 as core::ffi::c_int as fe_limb_t,
@@ -2787,7 +2785,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             45781307 as core::ffi::c_int as fe_limb_t,
                             13448258 as core::ffi::c_int as fe_limb_t,
@@ -2807,9 +2805,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             31016192 as core::ffi::c_int as fe_limb_t,
                             16832003 as core::ffi::c_int as fe_limb_t,
@@ -2826,7 +2824,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             62033029 as core::ffi::c_int as fe_limb_t,
                             9368965 as core::ffi::c_int as fe_limb_t,
@@ -2843,7 +2841,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             29439664 as core::ffi::c_int as fe_limb_t,
                             3537914 as core::ffi::c_int as fe_limb_t,
@@ -2865,9 +2863,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
     ],
     [
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             54923003 as core::ffi::c_int as fe_limb_t,
                             25874643 as core::ffi::c_int as fe_limb_t,
@@ -2884,7 +2882,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             20714545 as core::ffi::c_int as fe_limb_t,
                             29217521 as core::ffi::c_int as fe_limb_t,
@@ -2901,7 +2899,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             50443312 as core::ffi::c_int as fe_limb_t,
                             22903641 as core::ffi::c_int as fe_limb_t,
@@ -2921,9 +2919,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             54218966 as core::ffi::c_int as fe_limb_t,
                             9373457 as core::ffi::c_int as fe_limb_t,
@@ -2940,7 +2938,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             22263325 as core::ffi::c_int as fe_limb_t,
                             26994382 as core::ffi::c_int as fe_limb_t,
@@ -2957,7 +2955,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             16259200 as core::ffi::c_int as fe_limb_t,
                             3261970 as core::ffi::c_int as fe_limb_t,
@@ -2977,9 +2975,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             9378160 as core::ffi::c_int as fe_limb_t,
                             20414246 as core::ffi::c_int as fe_limb_t,
@@ -2996,7 +2994,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             24977353 as core::ffi::c_int as fe_limb_t,
                             33240048 as core::ffi::c_int as fe_limb_t,
@@ -3013,7 +3011,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             65570671 as core::ffi::c_int as fe_limb_t,
                             11685645 as core::ffi::c_int as fe_limb_t,
@@ -3033,9 +3031,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             48505798 as core::ffi::c_int as fe_limb_t,
                             4762989 as core::ffi::c_int as fe_limb_t,
@@ -3052,7 +3050,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             34100715 as core::ffi::c_int as fe_limb_t,
                             28339925 as core::ffi::c_int as fe_limb_t,
@@ -3069,7 +3067,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             50707921 as core::ffi::c_int as fe_limb_t,
                             20442216 as core::ffi::c_int as fe_limb_t,
@@ -3089,9 +3087,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             53508735 as core::ffi::c_int as fe_limb_t,
                             10240080 as core::ffi::c_int as fe_limb_t,
@@ -3108,7 +3106,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             44903700 as core::ffi::c_int as fe_limb_t,
                             31034903 as core::ffi::c_int as fe_limb_t,
@@ -3125,7 +3123,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             60263160 as core::ffi::c_int as fe_limb_t,
                             15791201 as core::ffi::c_int as fe_limb_t,
@@ -3145,9 +3143,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             42616785 as core::ffi::c_int as fe_limb_t,
                             23983660 as core::ffi::c_int as fe_limb_t,
@@ -3164,7 +3162,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             55987368 as core::ffi::c_int as fe_limb_t,
                             30172197 as core::ffi::c_int as fe_limb_t,
@@ -3181,7 +3179,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             34956097 as core::ffi::c_int as fe_limb_t,
                             8917966 as core::ffi::c_int as fe_limb_t,
@@ -3201,9 +3199,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             5019539 as core::ffi::c_int as fe_limb_t,
                             25646962 as core::ffi::c_int as fe_limb_t,
@@ -3220,7 +3218,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             10853575 as core::ffi::c_int as fe_limb_t,
                             10721687 as core::ffi::c_int as fe_limb_t,
@@ -3237,7 +3235,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             50106456 as core::ffi::c_int as fe_limb_t,
                             5906789 as core::ffi::c_int as fe_limb_t,
@@ -3257,9 +3255,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             8139908 as core::ffi::c_int as fe_limb_t,
                             27007935 as core::ffi::c_int as fe_limb_t,
@@ -3276,7 +3274,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             6267067 as core::ffi::c_int as fe_limb_t,
                             9695052 as core::ffi::c_int as fe_limb_t,
@@ -3293,7 +3291,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             28584883 as core::ffi::c_int as fe_limb_t,
                             7787108 as core::ffi::c_int as fe_limb_t,
@@ -3315,9 +3313,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
     ],
     [
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             24949256 as core::ffi::c_int as fe_limb_t,
                             6376279 as core::ffi::c_int as fe_limb_t,
@@ -3334,7 +3332,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             26514970 as core::ffi::c_int as fe_limb_t,
                             4740088 as core::ffi::c_int as fe_limb_t,
@@ -3351,7 +3349,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             55490446 as core::ffi::c_int as fe_limb_t,
                             19000001 as core::ffi::c_int as fe_limb_t,
@@ -3371,9 +3369,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             11431185 as core::ffi::c_int as fe_limb_t,
                             15823007 as core::ffi::c_int as fe_limb_t,
@@ -3390,7 +3388,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             66948081 as core::ffi::c_int as fe_limb_t,
                             23228174 as core::ffi::c_int as fe_limb_t,
@@ -3407,7 +3405,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             46309467 as core::ffi::c_int as fe_limb_t,
                             12194511 as core::ffi::c_int as fe_limb_t,
@@ -3427,9 +3425,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             66170039 as core::ffi::c_int as fe_limb_t,
                             29623845 as core::ffi::c_int as fe_limb_t,
@@ -3446,7 +3444,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             47253587 as core::ffi::c_int as fe_limb_t,
                             31985546 as core::ffi::c_int as fe_limb_t,
@@ -3463,7 +3461,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             45357481 as core::ffi::c_int as fe_limb_t,
                             16823515 as core::ffi::c_int as fe_limb_t,
@@ -3483,9 +3481,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             15564307 as core::ffi::c_int as fe_limb_t,
                             19242862 as core::ffi::c_int as fe_limb_t,
@@ -3502,7 +3500,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             57666574 as core::ffi::c_int as fe_limb_t,
                             6624295 as core::ffi::c_int as fe_limb_t,
@@ -3519,7 +3517,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             4771172 as core::ffi::c_int as fe_limb_t,
                             33419193 as core::ffi::c_int as fe_limb_t,
@@ -3539,9 +3537,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             7064884 as core::ffi::c_int as fe_limb_t,
                             26013258 as core::ffi::c_int as fe_limb_t,
@@ -3558,7 +3556,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             64810282 as core::ffi::c_int as fe_limb_t,
                             2439669 as core::ffi::c_int as fe_limb_t,
@@ -3575,7 +3573,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             37102324 as core::ffi::c_int as fe_limb_t,
                             10162315 as core::ffi::c_int as fe_limb_t,
@@ -3595,9 +3593,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             33053803 as core::ffi::c_int as fe_limb_t,
                             199357 as core::ffi::c_int as fe_limb_t,
@@ -3614,7 +3612,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             48129987 as core::ffi::c_int as fe_limb_t,
                             3884492 as core::ffi::c_int as fe_limb_t,
@@ -3631,7 +3629,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             39984863 as core::ffi::c_int as fe_limb_t,
                             10659916 as core::ffi::c_int as fe_limb_t,
@@ -3651,9 +3649,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             8894125 as core::ffi::c_int as fe_limb_t,
                             7450974 as core::ffi::c_int as fe_limb_t,
@@ -3670,7 +3668,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             26942781 as core::ffi::c_int as fe_limb_t,
                             31239115 as core::ffi::c_int as fe_limb_t,
@@ -3687,7 +3685,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             19916442 as core::ffi::c_int as fe_limb_t,
                             28726022 as core::ffi::c_int as fe_limb_t,
@@ -3707,9 +3705,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             801428 as core::ffi::c_int as fe_limb_t,
                             31472730 as core::ffi::c_int as fe_limb_t,
@@ -3726,7 +3724,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             19646058 as core::ffi::c_int as fe_limb_t,
                             5720633 as core::ffi::c_int as fe_limb_t,
@@ -3743,7 +3741,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             19299512 as core::ffi::c_int as fe_limb_t,
                             1155910 as core::ffi::c_int as fe_limb_t,
@@ -3765,9 +3763,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
     ],
     [
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             64091413 as core::ffi::c_int as fe_limb_t,
                             10058205 as core::ffi::c_int as fe_limb_t,
@@ -3784,7 +3782,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             32944382 as core::ffi::c_int as fe_limb_t,
                             14922211 as core::ffi::c_int as fe_limb_t,
@@ -3801,7 +3799,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             22865569 as core::ffi::c_int as fe_limb_t,
                             28901697 as core::ffi::c_int as fe_limb_t,
@@ -3821,9 +3819,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             50687877 as core::ffi::c_int as fe_limb_t,
                             32441126 as core::ffi::c_int as fe_limb_t,
@@ -3840,7 +3838,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             55452759 as core::ffi::c_int as fe_limb_t,
                             10087520 as core::ffi::c_int as fe_limb_t,
@@ -3857,7 +3855,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             1382174 as core::ffi::c_int as fe_limb_t,
                             21859713 as core::ffi::c_int as fe_limb_t,
@@ -3877,9 +3875,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             16650902 as core::ffi::c_int as fe_limb_t,
                             22516500 as core::ffi::c_int as fe_limb_t,
@@ -3896,7 +3894,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             45197768 as core::ffi::c_int as fe_limb_t,
                             27626490 as core::ffi::c_int as fe_limb_t,
@@ -3913,7 +3911,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             57172930 as core::ffi::c_int as fe_limb_t,
                             29264984 as core::ffi::c_int as fe_limb_t,
@@ -3933,9 +3931,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             55801235 as core::ffi::c_int as fe_limb_t,
                             6210371 as core::ffi::c_int as fe_limb_t,
@@ -3952,7 +3950,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             14668443 as core::ffi::c_int as fe_limb_t,
                             21284197 as core::ffi::c_int as fe_limb_t,
@@ -3969,7 +3967,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             5974855 as core::ffi::c_int as fe_limb_t,
                             3053895 as core::ffi::c_int as fe_limb_t,
@@ -3989,9 +3987,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             30625386 as core::ffi::c_int as fe_limb_t,
                             28825032 as core::ffi::c_int as fe_limb_t,
@@ -4008,7 +4006,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             63555773 as core::ffi::c_int as fe_limb_t,
                             9865098 as core::ffi::c_int as fe_limb_t,
@@ -4025,7 +4023,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             20093258 as core::ffi::c_int as fe_limb_t,
                             9920966 as core::ffi::c_int as fe_limb_t,
@@ -4045,9 +4043,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             46320040 as core::ffi::c_int as fe_limb_t,
                             14084653 as core::ffi::c_int as fe_limb_t,
@@ -4064,7 +4062,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             40289628 as core::ffi::c_int as fe_limb_t,
                             30270716 as core::ffi::c_int as fe_limb_t,
@@ -4081,7 +4079,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             66045306 as core::ffi::c_int as fe_limb_t,
                             22002608 as core::ffi::c_int as fe_limb_t,
@@ -4101,9 +4099,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             17960970 as core::ffi::c_int as fe_limb_t,
                             21778898 as core::ffi::c_int as fe_limb_t,
@@ -4120,7 +4118,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             23134274 as core::ffi::c_int as fe_limb_t,
                             19275300 as core::ffi::c_int as fe_limb_t,
@@ -4137,7 +4135,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             15308788 as core::ffi::c_int as fe_limb_t,
                             5320727 as core::ffi::c_int as fe_limb_t,
@@ -4157,9 +4155,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             39713153 as core::ffi::c_int as fe_limb_t,
                             8435795 as core::ffi::c_int as fe_limb_t,
@@ -4176,7 +4174,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             53949449 as core::ffi::c_int as fe_limb_t,
                             9197840 as core::ffi::c_int as fe_limb_t,
@@ -4193,7 +4191,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             55321537 as core::ffi::c_int as fe_limb_t,
                             11500837 as core::ffi::c_int as fe_limb_t,
@@ -4215,9 +4213,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
     ],
     [
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             5414091 as core::ffi::c_int as fe_limb_t,
                             18168391 as core::ffi::c_int as fe_limb_t,
@@ -4234,7 +4232,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             40771450 as core::ffi::c_int as fe_limb_t,
                             19788269 as core::ffi::c_int as fe_limb_t,
@@ -4251,7 +4249,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             3296484 as core::ffi::c_int as fe_limb_t,
                             6223048 as core::ffi::c_int as fe_limb_t,
@@ -4271,9 +4269,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             29190469 as core::ffi::c_int as fe_limb_t,
                             18895386 as core::ffi::c_int as fe_limb_t,
@@ -4290,7 +4288,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             52364359 as core::ffi::c_int as fe_limb_t,
                             24245275 as core::ffi::c_int as fe_limb_t,
@@ -4307,7 +4305,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             60180029 as core::ffi::c_int as fe_limb_t,
                             17123636 as core::ffi::c_int as fe_limb_t,
@@ -4327,9 +4325,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             37842897 as core::ffi::c_int as fe_limb_t,
                             19367626 as core::ffi::c_int as fe_limb_t,
@@ -4346,7 +4344,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             44516310 as core::ffi::c_int as fe_limb_t,
                             30409154 as core::ffi::c_int as fe_limb_t,
@@ -4363,7 +4361,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             39688860 as core::ffi::c_int as fe_limb_t,
                             32951110 as core::ffi::c_int as fe_limb_t,
@@ -4383,9 +4381,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             45364466 as core::ffi::c_int as fe_limb_t,
                             19743956 as core::ffi::c_int as fe_limb_t,
@@ -4402,7 +4400,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             29370903 as core::ffi::c_int as fe_limb_t,
                             27500434 as core::ffi::c_int as fe_limb_t,
@@ -4419,7 +4417,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             66172485 as core::ffi::c_int as fe_limb_t,
                             16086690 as core::ffi::c_int as fe_limb_t,
@@ -4439,9 +4437,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             43732429 as core::ffi::c_int as fe_limb_t,
                             1410445 as core::ffi::c_int as fe_limb_t,
@@ -4458,7 +4456,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             31117226 as core::ffi::c_int as fe_limb_t,
                             21338698 as core::ffi::c_int as fe_limb_t,
@@ -4475,7 +4473,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             49707966 as core::ffi::c_int as fe_limb_t,
                             19321222 as core::ffi::c_int as fe_limb_t,
@@ -4495,9 +4493,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             35747106 as core::ffi::c_int as fe_limb_t,
                             22207651 as core::ffi::c_int as fe_limb_t,
@@ -4514,7 +4512,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             50424044 as core::ffi::c_int as fe_limb_t,
                             19110186 as core::ffi::c_int as fe_limb_t,
@@ -4531,7 +4529,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             58349431 as core::ffi::c_int as fe_limb_t,
                             22736595 as core::ffi::c_int as fe_limb_t,
@@ -4551,9 +4549,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             18606113 as core::ffi::c_int as fe_limb_t,
                             1693100 as core::ffi::c_int as fe_limb_t,
@@ -4570,7 +4568,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             9255298 as core::ffi::c_int as fe_limb_t,
                             30423235 as core::ffi::c_int as fe_limb_t,
@@ -4587,7 +4585,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             44379556 as core::ffi::c_int as fe_limb_t,
                             7496159 as core::ffi::c_int as fe_limb_t,
@@ -4607,9 +4605,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             21878571 as core::ffi::c_int as fe_limb_t,
                             28553135 as core::ffi::c_int as fe_limb_t,
@@ -4626,7 +4624,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             27736842 as core::ffi::c_int as fe_limb_t,
                             10103576 as core::ffi::c_int as fe_limb_t,
@@ -4643,7 +4641,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             19492550 as core::ffi::c_int as fe_limb_t,
                             21450067 as core::ffi::c_int as fe_limb_t,
@@ -4665,9 +4663,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
     ],
     [
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             12015105 as core::ffi::c_int as fe_limb_t,
                             2801261 as core::ffi::c_int as fe_limb_t,
@@ -4684,7 +4682,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             2831347 as core::ffi::c_int as fe_limb_t,
                             21062286 as core::ffi::c_int as fe_limb_t,
@@ -4701,7 +4699,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             64578913 as core::ffi::c_int as fe_limb_t,
                             31324785 as core::ffi::c_int as fe_limb_t,
@@ -4721,9 +4719,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             7840923 as core::ffi::c_int as fe_limb_t,
                             14037873 as core::ffi::c_int as fe_limb_t,
@@ -4740,7 +4738,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             915865 as core::ffi::c_int as fe_limb_t,
                             17085158 as core::ffi::c_int as fe_limb_t,
@@ -4757,7 +4755,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             32922597 as core::ffi::c_int as fe_limb_t,
                             32997445 as core::ffi::c_int as fe_limb_t,
@@ -4777,9 +4775,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             32752011 as core::ffi::c_int as fe_limb_t,
                             11232950 as core::ffi::c_int as fe_limb_t,
@@ -4796,7 +4794,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             62419196 as core::ffi::c_int as fe_limb_t,
                             9166775 as core::ffi::c_int as fe_limb_t,
@@ -4813,7 +4811,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             21251203 as core::ffi::c_int as fe_limb_t,
                             16309901 as core::ffi::c_int as fe_limb_t,
@@ -4833,9 +4831,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             8651595 as core::ffi::c_int as fe_limb_t,
                             29077400 as core::ffi::c_int as fe_limb_t,
@@ -4852,7 +4850,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             31486061 as core::ffi::c_int as fe_limb_t,
                             15114593 as core::ffi::c_int as fe_limb_t,
@@ -4869,7 +4867,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             19443825 as core::ffi::c_int as fe_limb_t,
                             11385320 as core::ffi::c_int as fe_limb_t,
@@ -4889,9 +4887,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             38514374 as core::ffi::c_int as fe_limb_t,
                             1193784 as core::ffi::c_int as fe_limb_t,
@@ -4908,7 +4906,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             32382916 as core::ffi::c_int as fe_limb_t,
                             1110093 as core::ffi::c_int as fe_limb_t,
@@ -4925,7 +4923,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             2814918 as core::ffi::c_int as fe_limb_t,
                             7836403 as core::ffi::c_int as fe_limb_t,
@@ -4945,9 +4943,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             47530565 as core::ffi::c_int as fe_limb_t,
                             8085544 as core::ffi::c_int as fe_limb_t,
@@ -4964,7 +4962,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             36703732 as core::ffi::c_int as fe_limb_t,
                             955510 as core::ffi::c_int as fe_limb_t,
@@ -4981,7 +4979,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             51805164 as core::ffi::c_int as fe_limb_t,
                             26720662 as core::ffi::c_int as fe_limb_t,
@@ -5001,9 +4999,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             44357633 as core::ffi::c_int as fe_limb_t,
                             28250434 as core::ffi::c_int as fe_limb_t,
@@ -5020,7 +5018,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             35139535 as core::ffi::c_int as fe_limb_t,
                             2106402 as core::ffi::c_int as fe_limb_t,
@@ -5037,7 +5035,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             49887941 as core::ffi::c_int as fe_limb_t,
                             24009210 as core::ffi::c_int as fe_limb_t,
@@ -5057,9 +5055,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             15100138 as core::ffi::c_int as fe_limb_t,
                             17718680 as core::ffi::c_int as fe_limb_t,
@@ -5076,7 +5074,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             20909212 as core::ffi::c_int as fe_limb_t,
                             13023121 as core::ffi::c_int as fe_limb_t,
@@ -5093,7 +5091,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             32529814 as core::ffi::c_int as fe_limb_t,
                             22479743 as core::ffi::c_int as fe_limb_t,
@@ -5115,9 +5113,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
     ],
     [
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             9923462 as core::ffi::c_int as fe_limb_t,
                             11271500 as core::ffi::c_int as fe_limb_t,
@@ -5134,7 +5132,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             44511638 as core::ffi::c_int as fe_limb_t,
                             26541766 as core::ffi::c_int as fe_limb_t,
@@ -5151,7 +5149,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             5408392 as core::ffi::c_int as fe_limb_t,
                             32417741 as core::ffi::c_int as fe_limb_t,
@@ -5171,9 +5169,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             53114407 as core::ffi::c_int as fe_limb_t,
                             16616820 as core::ffi::c_int as fe_limb_t,
@@ -5190,7 +5188,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             58787919 as core::ffi::c_int as fe_limb_t,
                             21504805 as core::ffi::c_int as fe_limb_t,
@@ -5207,7 +5205,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             64747493 as core::ffi::c_int as fe_limb_t,
                             12678784 as core::ffi::c_int as fe_limb_t,
@@ -5227,9 +5225,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             61839187 as core::ffi::c_int as fe_limb_t,
                             31780545 as core::ffi::c_int as fe_limb_t,
@@ -5246,7 +5244,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             64172210 as core::ffi::c_int as fe_limb_t,
                             22726896 as core::ffi::c_int as fe_limb_t,
@@ -5263,7 +5261,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             580882 as core::ffi::c_int as fe_limb_t,
                             16705327 as core::ffi::c_int as fe_limb_t,
@@ -5283,9 +5281,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             23838809 as core::ffi::c_int as fe_limb_t,
                             1822728 as core::ffi::c_int as fe_limb_t,
@@ -5302,7 +5300,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             13345610 as core::ffi::c_int as fe_limb_t,
                             9759151 as core::ffi::c_int as fe_limb_t,
@@ -5319,7 +5317,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             2286874 as core::ffi::c_int as fe_limb_t,
                             29118501 as core::ffi::c_int as fe_limb_t,
@@ -5339,9 +5337,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             14414067 as core::ffi::c_int as fe_limb_t,
                             25552300 as core::ffi::c_int as fe_limb_t,
@@ -5358,7 +5356,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             39420813 as core::ffi::c_int as fe_limb_t,
                             1585952 as core::ffi::c_int as fe_limb_t,
@@ -5375,7 +5373,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             4368715 as core::ffi::c_int as fe_limb_t,
                             29844802 as core::ffi::c_int as fe_limb_t,
@@ -5395,9 +5393,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             10299591 as core::ffi::c_int as fe_limb_t,
                             13746483 as core::ffi::c_int as fe_limb_t,
@@ -5414,7 +5412,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             27425505 as core::ffi::c_int as fe_limb_t,
                             27835351 as core::ffi::c_int as fe_limb_t,
@@ -5431,7 +5429,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             6744077 as core::ffi::c_int as fe_limb_t,
                             2427284 as core::ffi::c_int as fe_limb_t,
@@ -5451,9 +5449,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             14012502 as core::ffi::c_int as fe_limb_t,
                             28529712 as core::ffi::c_int as fe_limb_t,
@@ -5470,7 +5468,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             16412671 as core::ffi::c_int as fe_limb_t,
                             29047065 as core::ffi::c_int as fe_limb_t,
@@ -5487,7 +5485,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             22397363 as core::ffi::c_int as fe_limb_t,
                             25786748 as core::ffi::c_int as fe_limb_t,
@@ -5507,9 +5505,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             62825557 as core::ffi::c_int as fe_limb_t,
                             5368522 as core::ffi::c_int as fe_limb_t,
@@ -5526,7 +5524,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             51661137 as core::ffi::c_int as fe_limb_t,
                             709326 as core::ffi::c_int as fe_limb_t,
@@ -5543,7 +5541,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             64994094 as core::ffi::c_int as fe_limb_t,
                             19246303 as core::ffi::c_int as fe_limb_t,
@@ -5565,9 +5563,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
     ],
     [
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             48083108 as core::ffi::c_int as fe_limb_t,
                             1632004 as core::ffi::c_int as fe_limb_t,
@@ -5584,7 +5582,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             3065054 as core::ffi::c_int as fe_limb_t,
                             32141671 as core::ffi::c_int as fe_limb_t,
@@ -5601,7 +5599,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             10379208 as core::ffi::c_int as fe_limb_t,
                             27508878 as core::ffi::c_int as fe_limb_t,
@@ -5621,9 +5619,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             15716668 as core::ffi::c_int as fe_limb_t,
                             1254266 as core::ffi::c_int as fe_limb_t,
@@ -5640,7 +5638,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             24158868 as core::ffi::c_int as fe_limb_t,
                             12938817 as core::ffi::c_int as fe_limb_t,
@@ -5657,7 +5655,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             13488534 as core::ffi::c_int as fe_limb_t,
                             7794716 as core::ffi::c_int as fe_limb_t,
@@ -5677,9 +5675,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             16335033 as core::ffi::c_int as fe_limb_t,
                             9132434 as core::ffi::c_int as fe_limb_t,
@@ -5696,7 +5694,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             29004188 as core::ffi::c_int as fe_limb_t,
                             25687351 as core::ffi::c_int as fe_limb_t,
@@ -5713,7 +5711,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             60986784 as core::ffi::c_int as fe_limb_t,
                             18687766 as core::ffi::c_int as fe_limb_t,
@@ -5733,9 +5731,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             27081650 as core::ffi::c_int as fe_limb_t,
                             3463984 as core::ffi::c_int as fe_limb_t,
@@ -5752,7 +5750,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             20263915 as core::ffi::c_int as fe_limb_t,
                             11434237 as core::ffi::c_int as fe_limb_t,
@@ -5769,7 +5767,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             64278047 as core::ffi::c_int as fe_limb_t,
                             18715199 as core::ffi::c_int as fe_limb_t,
@@ -5789,9 +5787,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             9769828 as core::ffi::c_int as fe_limb_t,
                             5202651 as core::ffi::c_int as fe_limb_t,
@@ -5808,7 +5806,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             12286395 as core::ffi::c_int as fe_limb_t,
                             13076066 as core::ffi::c_int as fe_limb_t,
@@ -5825,7 +5823,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             13733362 as core::ffi::c_int as fe_limb_t,
                             5599946 as core::ffi::c_int as fe_limb_t,
@@ -5845,9 +5843,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             4024660 as core::ffi::c_int as fe_limb_t,
                             17416881 as core::ffi::c_int as fe_limb_t,
@@ -5864,7 +5862,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             51229064 as core::ffi::c_int as fe_limb_t,
                             29029191 as core::ffi::c_int as fe_limb_t,
@@ -5881,7 +5879,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             17555920 as core::ffi::c_int as fe_limb_t,
                             28540494 as core::ffi::c_int as fe_limb_t,
@@ -5901,9 +5899,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             66647436 as core::ffi::c_int as fe_limb_t,
                             25724417 as core::ffi::c_int as fe_limb_t,
@@ -5920,7 +5918,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             62038564 as core::ffi::c_int as fe_limb_t,
                             12367916 as core::ffi::c_int as fe_limb_t,
@@ -5937,7 +5935,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             35133562 as core::ffi::c_int as fe_limb_t,
                             5726538 as core::ffi::c_int as fe_limb_t,
@@ -5957,9 +5955,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             21594432 as core::ffi::c_int as fe_limb_t,
                             18590204 as core::ffi::c_int as fe_limb_t,
@@ -5976,7 +5974,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             46458361 as core::ffi::c_int as fe_limb_t,
                             21592935 as core::ffi::c_int as fe_limb_t,
@@ -5993,7 +5991,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             52432215 as core::ffi::c_int as fe_limb_t,
                             17910135 as core::ffi::c_int as fe_limb_t,
@@ -6015,9 +6013,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
     ],
     [
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             12962541 as core::ffi::c_int as fe_limb_t,
                             5311799 as core::ffi::c_int as fe_limb_t,
@@ -6034,7 +6032,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             18512060 as core::ffi::c_int as fe_limb_t,
                             11319350 as core::ffi::c_int as fe_limb_t,
@@ -6051,7 +6049,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             60319844 as core::ffi::c_int as fe_limb_t,
                             30408388 as core::ffi::c_int as fe_limb_t,
@@ -6071,9 +6069,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             30169808 as core::ffi::c_int as fe_limb_t,
                             28236784 as core::ffi::c_int as fe_limb_t,
@@ -6090,7 +6088,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             10342807 as core::ffi::c_int as fe_limb_t,
                             3098505 as core::ffi::c_int as fe_limb_t,
@@ -6107,7 +6105,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             33958735 as core::ffi::c_int as fe_limb_t,
                             3261607 as core::ffi::c_int as fe_limb_t,
@@ -6127,9 +6125,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             32869458 as core::ffi::c_int as fe_limb_t,
                             28145887 as core::ffi::c_int as fe_limb_t,
@@ -6146,7 +6144,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             29506904 as core::ffi::c_int as fe_limb_t,
                             4457497 as core::ffi::c_int as fe_limb_t,
@@ -6163,7 +6161,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             10340844 as core::ffi::c_int as fe_limb_t,
                             26924055 as core::ffi::c_int as fe_limb_t,
@@ -6183,9 +6181,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             25940096 as core::ffi::c_int as fe_limb_t,
                             20896407 as core::ffi::c_int as fe_limb_t,
@@ -6202,7 +6200,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             45343161 as core::ffi::c_int as fe_limb_t,
                             9916822 as core::ffi::c_int as fe_limb_t,
@@ -6219,7 +6217,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             48226577 as core::ffi::c_int as fe_limb_t,
                             21881051 as core::ffi::c_int as fe_limb_t,
@@ -6239,9 +6237,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             12241050 as core::ffi::c_int as fe_limb_t,
                             33128450 as core::ffi::c_int as fe_limb_t,
@@ -6258,7 +6256,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             56758909 as core::ffi::c_int as fe_limb_t,
                             18873868 as core::ffi::c_int as fe_limb_t,
@@ -6275,7 +6273,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             3753511 as core::ffi::c_int as fe_limb_t,
                             30133366 as core::ffi::c_int as fe_limb_t,
@@ -6295,9 +6293,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             52286360 as core::ffi::c_int as fe_limb_t,
                             27757162 as core::ffi::c_int as fe_limb_t,
@@ -6314,7 +6312,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             50331161 as core::ffi::c_int as fe_limb_t,
                             18301130 as core::ffi::c_int as fe_limb_t,
@@ -6331,7 +6329,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             49882601 as core::ffi::c_int as fe_limb_t,
                             1816361 as core::ffi::c_int as fe_limb_t,
@@ -6351,9 +6349,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             29692644 as core::ffi::c_int as fe_limb_t,
                             6829891 as core::ffi::c_int as fe_limb_t,
@@ -6370,7 +6368,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             63627275 as core::ffi::c_int as fe_limb_t,
                             8707080 as core::ffi::c_int as fe_limb_t,
@@ -6387,7 +6385,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             55521375 as core::ffi::c_int as fe_limb_t,
                             14855944 as core::ffi::c_int as fe_limb_t,
@@ -6407,9 +6405,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             62297408 as core::ffi::c_int as fe_limb_t,
                             13761028 as core::ffi::c_int as fe_limb_t,
@@ -6426,7 +6424,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             59366301 as core::ffi::c_int as fe_limb_t,
                             25297669 as core::ffi::c_int as fe_limb_t,
@@ -6443,7 +6441,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             53695440 as core::ffi::c_int as fe_limb_t,
                             21146572 as core::ffi::c_int as fe_limb_t,
@@ -6465,9 +6463,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
     ],
     [
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             64864412 as core::ffi::c_int as fe_limb_t,
                             32799703 as core::ffi::c_int as fe_limb_t,
@@ -6484,7 +6482,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             57202067 as core::ffi::c_int as fe_limb_t,
                             17484121 as core::ffi::c_int as fe_limb_t,
@@ -6501,7 +6499,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             22470984 as core::ffi::c_int as fe_limb_t,
                             12369526 as core::ffi::c_int as fe_limb_t,
@@ -6521,9 +6519,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             41939299 as core::ffi::c_int as fe_limb_t,
                             23500789 as core::ffi::c_int as fe_limb_t,
@@ -6540,7 +6538,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             15854951 as core::ffi::c_int as fe_limb_t,
                             4148314 as core::ffi::c_int as fe_limb_t,
@@ -6557,7 +6555,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             15446137 as core::ffi::c_int as fe_limb_t,
                             17747788 as core::ffi::c_int as fe_limb_t,
@@ -6577,9 +6575,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             62399578 as core::ffi::c_int as fe_limb_t,
                             27940162 as core::ffi::c_int as fe_limb_t,
@@ -6596,7 +6594,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             11933045 as core::ffi::c_int as fe_limb_t,
                             9281483 as core::ffi::c_int as fe_limb_t,
@@ -6613,7 +6611,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             14576810 as core::ffi::c_int as fe_limb_t,
                             379472 as core::ffi::c_int as fe_limb_t,
@@ -6633,9 +6631,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             15995086 as core::ffi::c_int as fe_limb_t,
                             3199873 as core::ffi::c_int as fe_limb_t,
@@ -6652,7 +6650,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             56818250 as core::ffi::c_int as fe_limb_t,
                             29895392 as core::ffi::c_int as fe_limb_t,
@@ -6669,7 +6667,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             29210069 as core::ffi::c_int as fe_limb_t,
                             24135095 as core::ffi::c_int as fe_limb_t,
@@ -6689,9 +6687,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             53946955 as core::ffi::c_int as fe_limb_t,
                             15508587 as core::ffi::c_int as fe_limb_t,
@@ -6708,7 +6706,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             61955989 as core::ffi::c_int as fe_limb_t,
                             29753495 as core::ffi::c_int as fe_limb_t,
@@ -6725,7 +6723,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             10813398 as core::ffi::c_int as fe_limb_t,
                             643330 as core::ffi::c_int as fe_limb_t,
@@ -6745,9 +6743,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             10292079 as core::ffi::c_int as fe_limb_t,
                             9984945 as core::ffi::c_int as fe_limb_t,
@@ -6764,7 +6762,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             35923332 as core::ffi::c_int as fe_limb_t,
                             32741048 as core::ffi::c_int as fe_limb_t,
@@ -6781,7 +6779,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             10202177 as core::ffi::c_int as fe_limb_t,
                             27008593 as core::ffi::c_int as fe_limb_t,
@@ -6801,9 +6799,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             51293224 as core::ffi::c_int as fe_limb_t,
                             22953365 as core::ffi::c_int as fe_limb_t,
@@ -6820,7 +6818,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             14465486 as core::ffi::c_int as fe_limb_t,
                             19721101 as core::ffi::c_int as fe_limb_t,
@@ -6837,7 +6835,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             30924398 as core::ffi::c_int as fe_limb_t,
                             25274812 as core::ffi::c_int as fe_limb_t,
@@ -6857,9 +6855,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             12274201 as core::ffi::c_int as fe_limb_t,
                             20378885 as core::ffi::c_int as fe_limb_t,
@@ -6876,7 +6874,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             64157555 as core::ffi::c_int as fe_limb_t,
                             8903984 as core::ffi::c_int as fe_limb_t,
@@ -6893,7 +6891,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             50192582 as core::ffi::c_int as fe_limb_t,
                             28601458 as core::ffi::c_int as fe_limb_t,
@@ -6915,9 +6913,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
     ],
     [
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             58249865 as core::ffi::c_int as fe_limb_t,
                             31335375 as core::ffi::c_int as fe_limb_t,
@@ -6934,7 +6932,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             10226222 as core::ffi::c_int as fe_limb_t,
                             27625730 as core::ffi::c_int as fe_limb_t,
@@ -6951,7 +6949,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             17932739 as core::ffi::c_int as fe_limb_t,
                             21117156 as core::ffi::c_int as fe_limb_t,
@@ -6971,9 +6969,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             7749907 as core::ffi::c_int as fe_limb_t,
                             32584865 as core::ffi::c_int as fe_limb_t,
@@ -6990,7 +6988,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             26958440 as core::ffi::c_int as fe_limb_t,
                             18896406 as core::ffi::c_int as fe_limb_t,
@@ -7007,7 +7005,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             54942968 as core::ffi::c_int as fe_limb_t,
                             9166946 as core::ffi::c_int as fe_limb_t,
@@ -7027,9 +7025,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             42758936 as core::ffi::c_int as fe_limb_t,
                             7778774 as core::ffi::c_int as fe_limb_t,
@@ -7046,7 +7044,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             9681908 as core::ffi::c_int as fe_limb_t,
                             26817309 as core::ffi::c_int as fe_limb_t,
@@ -7063,7 +7061,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             58682418 as core::ffi::c_int as fe_limb_t,
                             1470726 as core::ffi::c_int as fe_limb_t,
@@ -7083,9 +7081,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             5269168 as core::ffi::c_int as fe_limb_t,
                             26694706 as core::ffi::c_int as fe_limb_t,
@@ -7102,7 +7100,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             32264008 as core::ffi::c_int as fe_limb_t,
                             18146780 as core::ffi::c_int as fe_limb_t,
@@ -7119,7 +7117,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             14609104 as core::ffi::c_int as fe_limb_t,
                             24599962 as core::ffi::c_int as fe_limb_t,
@@ -7139,9 +7137,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             20513481 as core::ffi::c_int as fe_limb_t,
                             5557931 as core::ffi::c_int as fe_limb_t,
@@ -7158,7 +7156,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             41534488 as core::ffi::c_int as fe_limb_t,
                             11967825 as core::ffi::c_int as fe_limb_t,
@@ -7175,7 +7173,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             41452044 as core::ffi::c_int as fe_limb_t,
                             3393630 as core::ffi::c_int as fe_limb_t,
@@ -7195,9 +7193,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             11630004 as core::ffi::c_int as fe_limb_t,
                             12144454 as core::ffi::c_int as fe_limb_t,
@@ -7214,7 +7212,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             27117677 as core::ffi::c_int as fe_limb_t,
                             23547054 as core::ffi::c_int as fe_limb_t,
@@ -7231,7 +7229,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             10637467 as core::ffi::c_int as fe_limb_t,
                             27866368 as core::ffi::c_int as fe_limb_t,
@@ -7251,9 +7249,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             20525126 as core::ffi::c_int as fe_limb_t,
                             10892566 as core::ffi::c_int as fe_limb_t,
@@ -7270,7 +7268,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             37084402 as core::ffi::c_int as fe_limb_t,
                             5626925 as core::ffi::c_int as fe_limb_t,
@@ -7287,7 +7285,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             43356201 as core::ffi::c_int as fe_limb_t,
                             2636869 as core::ffi::c_int as fe_limb_t,
@@ -7307,9 +7305,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             65177046 as core::ffi::c_int as fe_limb_t,
                             28146973 as core::ffi::c_int as fe_limb_t,
@@ -7326,7 +7324,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             20239939 as core::ffi::c_int as fe_limb_t,
                             6607058 as core::ffi::c_int as fe_limb_t,
@@ -7343,7 +7341,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             27406023 as core::ffi::c_int as fe_limb_t,
                             27512775 as core::ffi::c_int as fe_limb_t,
@@ -7365,9 +7363,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
     ],
     [
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             11374242 as core::ffi::c_int as fe_limb_t,
                             12660715 as core::ffi::c_int as fe_limb_t,
@@ -7384,7 +7382,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             54378055 as core::ffi::c_int as fe_limb_t,
                             10311866 as core::ffi::c_int as fe_limb_t,
@@ -7401,7 +7399,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             48012542 as core::ffi::c_int as fe_limb_t,
                             341146 as core::ffi::c_int as fe_limb_t,
@@ -7421,9 +7419,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             6490062 as core::ffi::c_int as fe_limb_t,
                             11940286 as core::ffi::c_int as fe_limb_t,
@@ -7440,7 +7438,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             1656478 as core::ffi::c_int as fe_limb_t,
                             13457317 as core::ffi::c_int as fe_limb_t,
@@ -7457,7 +7455,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             44835530 as core::ffi::c_int as fe_limb_t,
                             20030007 as core::ffi::c_int as fe_limb_t,
@@ -7477,9 +7475,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             17747446 as core::ffi::c_int as fe_limb_t,
                             10039260 as core::ffi::c_int as fe_limb_t,
@@ -7496,7 +7494,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             31932008 as core::ffi::c_int as fe_limb_t,
                             28568291 as core::ffi::c_int as fe_limb_t,
@@ -7513,7 +7511,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             29796488 as core::ffi::c_int as fe_limb_t,
                             37186 as core::ffi::c_int as fe_limb_t,
@@ -7533,9 +7531,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             12501267 as core::ffi::c_int as fe_limb_t,
                             4044383 as core::ffi::c_int as fe_limb_t,
@@ -7552,7 +7550,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             6384877 as core::ffi::c_int as fe_limb_t,
                             2899513 as core::ffi::c_int as fe_limb_t,
@@ -7569,7 +7567,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             58743349 as core::ffi::c_int as fe_limb_t,
                             29511910 as core::ffi::c_int as fe_limb_t,
@@ -7589,9 +7587,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             28425966 as core::ffi::c_int as fe_limb_t,
                             27718999 as core::ffi::c_int as fe_limb_t,
@@ -7608,7 +7606,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             56041645 as core::ffi::c_int as fe_limb_t,
                             11871230 as core::ffi::c_int as fe_limb_t,
@@ -7625,7 +7623,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             45911060 as core::ffi::c_int as fe_limb_t,
                             17158396 as core::ffi::c_int as fe_limb_t,
@@ -7645,9 +7643,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             13537262 as core::ffi::c_int as fe_limb_t,
                             25794942 as core::ffi::c_int as fe_limb_t,
@@ -7664,7 +7662,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             49686272 as core::ffi::c_int as fe_limb_t,
                             15157789 as core::ffi::c_int as fe_limb_t,
@@ -7681,7 +7679,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             42063564 as core::ffi::c_int as fe_limb_t,
                             23362465 as core::ffi::c_int as fe_limb_t,
@@ -7701,9 +7699,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             24579768 as core::ffi::c_int as fe_limb_t,
                             3711570 as core::ffi::c_int as fe_limb_t,
@@ -7720,7 +7718,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             60580251 as core::ffi::c_int as fe_limb_t,
                             31142934 as core::ffi::c_int as fe_limb_t,
@@ -7737,7 +7735,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             50803946 as core::ffi::c_int as fe_limb_t,
                             19949172 as core::ffi::c_int as fe_limb_t,
@@ -7757,9 +7755,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             54244920 as core::ffi::c_int as fe_limb_t,
                             20334445 as core::ffi::c_int as fe_limb_t,
@@ -7776,7 +7774,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             11423316 as core::ffi::c_int as fe_limb_t,
                             28086373 as core::ffi::c_int as fe_limb_t,
@@ -7793,7 +7791,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             65699196 as core::ffi::c_int as fe_limb_t,
                             12530727 as core::ffi::c_int as fe_limb_t,
@@ -7815,9 +7813,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
     ],
     [
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             38137966 as core::ffi::c_int as fe_limb_t,
                             5271446 as core::ffi::c_int as fe_limb_t,
@@ -7834,7 +7832,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             51914908 as core::ffi::c_int as fe_limb_t,
                             5362277 as core::ffi::c_int as fe_limb_t,
@@ -7851,7 +7849,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             54476394 as core::ffi::c_int as fe_limb_t,
                             11257345 as core::ffi::c_int as fe_limb_t,
@@ -7871,9 +7869,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             3877321 as core::ffi::c_int as fe_limb_t,
                             23981693 as core::ffi::c_int as fe_limb_t,
@@ -7890,7 +7888,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             50833043 as core::ffi::c_int as fe_limb_t,
                             14667796 as core::ffi::c_int as fe_limb_t,
@@ -7907,7 +7905,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             43320746 as core::ffi::c_int as fe_limb_t,
                             25300131 as core::ffi::c_int as fe_limb_t,
@@ -7927,9 +7925,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             42515238 as core::ffi::c_int as fe_limb_t,
                             17415546 as core::ffi::c_int as fe_limb_t,
@@ -7946,7 +7944,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             8884438 as core::ffi::c_int as fe_limb_t,
                             27670423 as core::ffi::c_int as fe_limb_t,
@@ -7963,7 +7961,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             34388281 as core::ffi::c_int as fe_limb_t,
                             17265135 as core::ffi::c_int as fe_limb_t,
@@ -7983,9 +7981,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             2901328 as core::ffi::c_int as fe_limb_t,
                             32436745 as core::ffi::c_int as fe_limb_t,
@@ -8002,7 +8000,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             27019610 as core::ffi::c_int as fe_limb_t,
                             12299467 as core::ffi::c_int as fe_limb_t,
@@ -8019,7 +8017,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             21536104 as core::ffi::c_int as fe_limb_t,
                             26928012 as core::ffi::c_int as fe_limb_t,
@@ -8039,9 +8037,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             30279725 as core::ffi::c_int as fe_limb_t,
                             14648750 as core::ffi::c_int as fe_limb_t,
@@ -8058,7 +8056,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             26572828 as core::ffi::c_int as fe_limb_t,
                             3405927 as core::ffi::c_int as fe_limb_t,
@@ -8075,7 +8073,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             44392139 as core::ffi::c_int as fe_limb_t,
                             3489069 as core::ffi::c_int as fe_limb_t,
@@ -8095,9 +8093,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             62052362 as core::ffi::c_int as fe_limb_t,
                             16566550 as core::ffi::c_int as fe_limb_t,
@@ -8114,7 +8112,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             48635543 as core::ffi::c_int as fe_limb_t,
                             16596774 as core::ffi::c_int as fe_limb_t,
@@ -8131,7 +8129,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             34628313 as core::ffi::c_int as fe_limb_t,
                             15707274 as core::ffi::c_int as fe_limb_t,
@@ -8151,9 +8149,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             47546773 as core::ffi::c_int as fe_limb_t,
                             19467038 as core::ffi::c_int as fe_limb_t,
@@ -8170,7 +8168,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             38643965 as core::ffi::c_int as fe_limb_t,
                             1553204 as core::ffi::c_int as fe_limb_t,
@@ -8187,7 +8185,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             21877890 as core::ffi::c_int as fe_limb_t,
                             3230008 as core::ffi::c_int as fe_limb_t,
@@ -8207,9 +8205,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             8832269 as core::ffi::c_int as fe_limb_t,
                             19058947 as core::ffi::c_int as fe_limb_t,
@@ -8226,7 +8224,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             29306751 as core::ffi::c_int as fe_limb_t,
                             5123106 as core::ffi::c_int as fe_limb_t,
@@ -8243,7 +8241,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             46429108 as core::ffi::c_int as fe_limb_t,
                             7004546 as core::ffi::c_int as fe_limb_t,
@@ -8265,9 +8263,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
     ],
     [
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             33852691 as core::ffi::c_int as fe_limb_t,
                             4144781 as core::ffi::c_int as fe_limb_t,
@@ -8284,7 +8282,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             2756062 as core::ffi::c_int as fe_limb_t,
                             8598110 as core::ffi::c_int as fe_limb_t,
@@ -8301,7 +8299,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             42463153 as core::ffi::c_int as fe_limb_t,
                             13317461 as core::ffi::c_int as fe_limb_t,
@@ -8321,9 +8319,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             40676061 as core::ffi::c_int as fe_limb_t,
                             6148328 as core::ffi::c_int as fe_limb_t,
@@ -8340,7 +8338,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             65784982 as core::ffi::c_int as fe_limb_t,
                             3911312 as core::ffi::c_int as fe_limb_t,
@@ -8357,7 +8355,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             53958991 as core::ffi::c_int as fe_limb_t,
                             27125364 as core::ffi::c_int as fe_limb_t,
@@ -8377,9 +8375,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             9987761 as core::ffi::c_int as fe_limb_t,
                             30149673 as core::ffi::c_int as fe_limb_t,
@@ -8396,7 +8394,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             18155857 as core::ffi::c_int as fe_limb_t,
                             17049442 as core::ffi::c_int as fe_limb_t,
@@ -8413,7 +8411,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             2986088 as core::ffi::c_int as fe_limb_t,
                             28642539 as core::ffi::c_int as fe_limb_t,
@@ -8433,9 +8431,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             4377737 as core::ffi::c_int as fe_limb_t,
                             8115836 as core::ffi::c_int as fe_limb_t,
@@ -8452,7 +8450,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             47766460 as core::ffi::c_int as fe_limb_t,
                             867879 as core::ffi::c_int as fe_limb_t,
@@ -8469,7 +8467,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             7895007 as core::ffi::c_int as fe_limb_t,
                             4057113 as core::ffi::c_int as fe_limb_t,
@@ -8489,9 +8487,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             59371282 as core::ffi::c_int as fe_limb_t,
                             27685029 as core::ffi::c_int as fe_limb_t,
@@ -8508,7 +8506,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             10188286 as core::ffi::c_int as fe_limb_t,
                             17783598 as core::ffi::c_int as fe_limb_t,
@@ -8525,7 +8523,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             696102 as core::ffi::c_int as fe_limb_t,
                             13206899 as core::ffi::c_int as fe_limb_t,
@@ -8545,9 +8543,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             55879425 as core::ffi::c_int as fe_limb_t,
                             11243795 as core::ffi::c_int as fe_limb_t,
@@ -8564,7 +8562,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             17800790 as core::ffi::c_int as fe_limb_t,
                             19518253 as core::ffi::c_int as fe_limb_t,
@@ -8581,7 +8579,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             26246234 as core::ffi::c_int as fe_limb_t,
                             11968874 as core::ffi::c_int as fe_limb_t,
@@ -8601,9 +8599,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             35743198 as core::ffi::c_int as fe_limb_t,
                             10271362 as core::ffi::c_int as fe_limb_t,
@@ -8620,7 +8618,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             66522290 as core::ffi::c_int as fe_limb_t,
                             10376443 as core::ffi::c_int as fe_limb_t,
@@ -8637,7 +8635,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             57226037 as core::ffi::c_int as fe_limb_t,
                             29044064 as core::ffi::c_int as fe_limb_t,
@@ -8657,9 +8655,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             32988917 as core::ffi::c_int as fe_limb_t,
                             23951020 as core::ffi::c_int as fe_limb_t,
@@ -8676,7 +8674,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             58253184 as core::ffi::c_int as fe_limb_t,
                             15927860 as core::ffi::c_int as fe_limb_t,
@@ -8693,7 +8691,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             64604801 as core::ffi::c_int as fe_limb_t,
                             33117465 as core::ffi::c_int as fe_limb_t,
@@ -8715,9 +8713,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
     ],
     [
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             55883280 as core::ffi::c_int as fe_limb_t,
                             2320284 as core::ffi::c_int as fe_limb_t,
@@ -8734,7 +8732,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             57475529 as core::ffi::c_int as fe_limb_t,
                             116425 as core::ffi::c_int as fe_limb_t,
@@ -8751,7 +8749,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             39351007 as core::ffi::c_int as fe_limb_t,
                             247743 as core::ffi::c_int as fe_limb_t,
@@ -8771,9 +8769,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             39519059 as core::ffi::c_int as fe_limb_t,
                             15456423 as core::ffi::c_int as fe_limb_t,
@@ -8790,7 +8788,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             51801891 as core::ffi::c_int as fe_limb_t,
                             2839643 as core::ffi::c_int as fe_limb_t,
@@ -8807,7 +8805,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             20807691 as core::ffi::c_int as fe_limb_t,
                             26283607 as core::ffi::c_int as fe_limb_t,
@@ -8827,9 +8825,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             12076880 as core::ffi::c_int as fe_limb_t,
                             19253146 as core::ffi::c_int as fe_limb_t,
@@ -8846,7 +8844,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             34747315 as core::ffi::c_int as fe_limb_t,
                             5457596 as core::ffi::c_int as fe_limb_t,
@@ -8863,7 +8861,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             45719598 as core::ffi::c_int as fe_limb_t,
                             421931 as core::ffi::c_int as fe_limb_t,
@@ -8883,9 +8881,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             46924223 as core::ffi::c_int as fe_limb_t,
                             2338215 as core::ffi::c_int as fe_limb_t,
@@ -8902,7 +8900,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             6120100 as core::ffi::c_int as fe_limb_t,
                             814863 as core::ffi::c_int as fe_limb_t,
@@ -8919,7 +8917,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             30069250 as core::ffi::c_int as fe_limb_t,
                             22119100 as core::ffi::c_int as fe_limb_t,
@@ -8939,9 +8937,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             32705413 as core::ffi::c_int as fe_limb_t,
                             32003455 as core::ffi::c_int as fe_limb_t,
@@ -8958,7 +8956,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             17219846 as core::ffi::c_int as fe_limb_t,
                             2375039 as core::ffi::c_int as fe_limb_t,
@@ -8975,7 +8973,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             65935918 as core::ffi::c_int as fe_limb_t,
                             25995736 as core::ffi::c_int as fe_limb_t,
@@ -8995,9 +8993,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             14312609 as core::ffi::c_int as fe_limb_t,
                             1221556 as core::ffi::c_int as fe_limb_t,
@@ -9014,7 +9012,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             65680039 as core::ffi::c_int as fe_limb_t,
                             23875441 as core::ffi::c_int as fe_limb_t,
@@ -9031,7 +9029,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             18510781 as core::ffi::c_int as fe_limb_t,
                             15337574 as core::ffi::c_int as fe_limb_t,
@@ -9051,9 +9049,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             10141598 as core::ffi::c_int as fe_limb_t,
                             6082907 as core::ffi::c_int as fe_limb_t,
@@ -9070,7 +9068,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             33114149 as core::ffi::c_int as fe_limb_t,
                             17665080 as core::ffi::c_int as fe_limb_t,
@@ -9087,7 +9085,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             34169699 as core::ffi::c_int as fe_limb_t,
                             29298616 as core::ffi::c_int as fe_limb_t,
@@ -9107,9 +9105,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             30374239 as core::ffi::c_int as fe_limb_t,
                             1595580 as core::ffi::c_int as fe_limb_t,
@@ -9126,7 +9124,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             52738210 as core::ffi::c_int as fe_limb_t,
                             25781902 as core::ffi::c_int as fe_limb_t,
@@ -9143,7 +9141,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             18171223 as core::ffi::c_int as fe_limb_t,
                             21619806 as core::ffi::c_int as fe_limb_t,
@@ -9165,9 +9163,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
     ],
     [
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             5975889 as core::ffi::c_int as fe_limb_t,
                             28311244 as core::ffi::c_int as fe_limb_t,
@@ -9184,7 +9182,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             5811932 as core::ffi::c_int as fe_limb_t,
                             31839139 as core::ffi::c_int as fe_limb_t,
@@ -9201,7 +9199,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             35709185 as core::ffi::c_int as fe_limb_t,
                             11407554 as core::ffi::c_int as fe_limb_t,
@@ -9221,9 +9219,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             54433560 as core::ffi::c_int as fe_limb_t,
                             694025 as core::ffi::c_int as fe_limb_t,
@@ -9240,7 +9238,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             8247747 as core::ffi::c_int as fe_limb_t,
                             26843490 as core::ffi::c_int as fe_limb_t,
@@ -9257,7 +9255,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             17294297 as core::ffi::c_int as fe_limb_t,
                             29765994 as core::ffi::c_int as fe_limb_t,
@@ -9277,9 +9275,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             16091066 as core::ffi::c_int as fe_limb_t,
                             17300506 as core::ffi::c_int as fe_limb_t,
@@ -9296,7 +9294,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             62198760 as core::ffi::c_int as fe_limb_t,
                             20221544 as core::ffi::c_int as fe_limb_t,
@@ -9313,7 +9311,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             58534169 as core::ffi::c_int as fe_limb_t,
                             16099414 as core::ffi::c_int as fe_limb_t,
@@ -9333,9 +9331,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             14763057 as core::ffi::c_int as fe_limb_t,
                             17650824 as core::ffi::c_int as fe_limb_t,
@@ -9352,7 +9350,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             8894987 as core::ffi::c_int as fe_limb_t,
                             30108338 as core::ffi::c_int as fe_limb_t,
@@ -9369,7 +9367,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             15214943 as core::ffi::c_int as fe_limb_t,
                             3537601 as core::ffi::c_int as fe_limb_t,
@@ -9389,9 +9387,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             64570558 as core::ffi::c_int as fe_limb_t,
                             7682792 as core::ffi::c_int as fe_limb_t,
@@ -9408,7 +9406,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             54642373 as core::ffi::c_int as fe_limb_t,
                             4195083 as core::ffi::c_int as fe_limb_t,
@@ -9425,7 +9423,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             31788442 as core::ffi::c_int as fe_limb_t,
                             19046775 as core::ffi::c_int as fe_limb_t,
@@ -9445,9 +9443,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             41428258 as core::ffi::c_int as fe_limb_t,
                             5260743 as core::ffi::c_int as fe_limb_t,
@@ -9464,7 +9462,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             842132 as core::ffi::c_int as fe_limb_t,
                             30759739 as core::ffi::c_int as fe_limb_t,
@@ -9481,7 +9479,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             62261602 as core::ffi::c_int as fe_limb_t,
                             25585100 as core::ffi::c_int as fe_limb_t,
@@ -9501,9 +9499,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             51890212 as core::ffi::c_int as fe_limb_t,
                             14667095 as core::ffi::c_int as fe_limb_t,
@@ -9520,7 +9518,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             47820798 as core::ffi::c_int as fe_limb_t,
                             4453151 as core::ffi::c_int as fe_limb_t,
@@ -9537,7 +9535,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             57549981 as core::ffi::c_int as fe_limb_t,
                             17035596 as core::ffi::c_int as fe_limb_t,
@@ -9557,9 +9555,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             38910324 as core::ffi::c_int as fe_limb_t,
                             10744107 as core::ffi::c_int as fe_limb_t,
@@ -9576,7 +9574,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             43547042 as core::ffi::c_int as fe_limb_t,
                             6230155 as core::ffi::c_int as fe_limb_t,
@@ -9593,7 +9591,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             12966261 as core::ffi::c_int as fe_limb_t,
                             15550616 as core::ffi::c_int as fe_limb_t,
@@ -9615,9 +9613,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
     ],
     [
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             14741879 as core::ffi::c_int as fe_limb_t,
                             18607545 as core::ffi::c_int as fe_limb_t,
@@ -9634,7 +9632,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             10758205 as core::ffi::c_int as fe_limb_t,
                             15755439 as core::ffi::c_int as fe_limb_t,
@@ -9651,7 +9649,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             64654951 as core::ffi::c_int as fe_limb_t,
                             15725972 as core::ffi::c_int as fe_limb_t,
@@ -9671,9 +9669,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             41935844 as core::ffi::c_int as fe_limb_t,
                             22247266 as core::ffi::c_int as fe_limb_t,
@@ -9690,7 +9688,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             21987233 as core::ffi::c_int as fe_limb_t,
                             700364 as core::ffi::c_int as fe_limb_t,
@@ -9707,7 +9705,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             41540495 as core::ffi::c_int as fe_limb_t,
                             454462 as core::ffi::c_int as fe_limb_t,
@@ -9727,9 +9725,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             6028163 as core::ffi::c_int as fe_limb_t,
                             6263078 as core::ffi::c_int as fe_limb_t,
@@ -9746,7 +9744,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             54829870 as core::ffi::c_int as fe_limb_t,
                             16624276 as core::ffi::c_int as fe_limb_t,
@@ -9763,7 +9761,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             56750770 as core::ffi::c_int as fe_limb_t,
                             25316602 as core::ffi::c_int as fe_limb_t,
@@ -9783,9 +9781,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             36602878 as core::ffi::c_int as fe_limb_t,
                             29732664 as core::ffi::c_int as fe_limb_t,
@@ -9802,7 +9800,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             30528792 as core::ffi::c_int as fe_limb_t,
                             3601899 as core::ffi::c_int as fe_limb_t,
@@ -9819,7 +9817,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             9402385 as core::ffi::c_int as fe_limb_t,
                             19597367 as core::ffi::c_int as fe_limb_t,
@@ -9839,9 +9837,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             22190590 as core::ffi::c_int as fe_limb_t,
                             1118029 as core::ffi::c_int as fe_limb_t,
@@ -9858,7 +9856,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             58798126 as core::ffi::c_int as fe_limb_t,
                             30600981 as core::ffi::c_int as fe_limb_t,
@@ -9875,7 +9873,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             35867026 as core::ffi::c_int as fe_limb_t,
                             18138731 as core::ffi::c_int as fe_limb_t,
@@ -9895,9 +9893,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             1866042 as core::ffi::c_int as fe_limb_t,
                             25604943 as core::ffi::c_int as fe_limb_t,
@@ -9914,7 +9912,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             66660290 as core::ffi::c_int as fe_limb_t,
                             31776765 as core::ffi::c_int as fe_limb_t,
@@ -9931,7 +9929,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             42818486 as core::ffi::c_int as fe_limb_t,
                             4759344 as core::ffi::c_int as fe_limb_t,
@@ -9951,9 +9949,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             57967561 as core::ffi::c_int as fe_limb_t,
                             6049713 as core::ffi::c_int as fe_limb_t,
@@ -9970,7 +9968,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             50547351 as core::ffi::c_int as fe_limb_t,
                             14112679 as core::ffi::c_int as fe_limb_t,
@@ -9987,7 +9985,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             22759470 as core::ffi::c_int as fe_limb_t,
                             23480998 as core::ffi::c_int as fe_limb_t,
@@ -10007,9 +10005,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             29875063 as core::ffi::c_int as fe_limb_t,
                             12493613 as core::ffi::c_int as fe_limb_t,
@@ -10026,7 +10024,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             40903181 as core::ffi::c_int as fe_limb_t,
                             11014232 as core::ffi::c_int as fe_limb_t,
@@ -10043,7 +10041,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             56139269 as core::ffi::c_int as fe_limb_t,
                             27150720 as core::ffi::c_int as fe_limb_t,
@@ -10065,9 +10063,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
     ],
     [
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             22092954 as core::ffi::c_int as fe_limb_t,
                             20363309 as core::ffi::c_int as fe_limb_t,
@@ -10084,7 +10082,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             56051142 as core::ffi::c_int as fe_limb_t,
                             3042015 as core::ffi::c_int as fe_limb_t,
@@ -10101,7 +10099,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             6314156 as core::ffi::c_int as fe_limb_t,
                             23289540 as core::ffi::c_int as fe_limb_t,
@@ -10121,9 +10119,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             58522267 as core::ffi::c_int as fe_limb_t,
                             26383465 as core::ffi::c_int as fe_limb_t,
@@ -10140,7 +10138,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             22833421 as core::ffi::c_int as fe_limb_t,
                             9293594 as core::ffi::c_int as fe_limb_t,
@@ -10157,7 +10155,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             59340277 as core::ffi::c_int as fe_limb_t,
                             3326785 as core::ffi::c_int as fe_limb_t,
@@ -10177,9 +10175,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             21721337 as core::ffi::c_int as fe_limb_t,
                             29341686 as core::ffi::c_int as fe_limb_t,
@@ -10196,7 +10194,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             9209251 as core::ffi::c_int as fe_limb_t,
                             18419377 as core::ffi::c_int as fe_limb_t,
@@ -10213,7 +10211,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             7392013 as core::ffi::c_int as fe_limb_t,
                             16618386 as core::ffi::c_int as fe_limb_t,
@@ -10233,9 +10231,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             57807776 as core::ffi::c_int as fe_limb_t,
                             19360604 as core::ffi::c_int as fe_limb_t,
@@ -10252,7 +10250,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             49550191 as core::ffi::c_int as fe_limb_t,
                             1763593 as core::ffi::c_int as fe_limb_t,
@@ -10269,7 +10267,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             47219164 as core::ffi::c_int as fe_limb_t,
                             27577423 as core::ffi::c_int as fe_limb_t,
@@ -10289,9 +10287,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             34252636 as core::ffi::c_int as fe_limb_t,
                             25680474 as core::ffi::c_int as fe_limb_t,
@@ -10308,7 +10306,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             63335436 as core::ffi::c_int as fe_limb_t,
                             31988495 as core::ffi::c_int as fe_limb_t,
@@ -10325,7 +10323,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             62726958 as core::ffi::c_int as fe_limb_t,
                             8508651 as core::ffi::c_int as fe_limb_t,
@@ -10345,9 +10343,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             2281448 as core::ffi::c_int as fe_limb_t,
                             20067377 as core::ffi::c_int as fe_limb_t,
@@ -10364,7 +10362,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             31727126 as core::ffi::c_int as fe_limb_t,
                             26374577 as core::ffi::c_int as fe_limb_t,
@@ -10381,7 +10379,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             4100401 as core::ffi::c_int as fe_limb_t,
                             27594980 as core::ffi::c_int as fe_limb_t,
@@ -10401,9 +10399,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             57675240 as core::ffi::c_int as fe_limb_t,
                             6123112 as core::ffi::c_int as fe_limb_t,
@@ -10420,7 +10418,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             40304287 as core::ffi::c_int as fe_limb_t,
                             4260918 as core::ffi::c_int as fe_limb_t,
@@ -10437,7 +10435,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             26180377 as core::ffi::c_int as fe_limb_t,
                             10015009 as core::ffi::c_int as fe_limb_t,
@@ -10457,9 +10455,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             15121094 as core::ffi::c_int as fe_limb_t,
                             28352561 as core::ffi::c_int as fe_limb_t,
@@ -10476,7 +10474,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             16166467 as core::ffi::c_int as fe_limb_t,
                             24070699 as core::ffi::c_int as fe_limb_t,
@@ -10493,7 +10491,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             28042865 as core::ffi::c_int as fe_limb_t,
                             29997343 as core::ffi::c_int as fe_limb_t,
@@ -10515,9 +10513,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
     ],
     [
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             66291264 as core::ffi::c_int as fe_limb_t,
                             6763911 as core::ffi::c_int as fe_limb_t,
@@ -10534,7 +10532,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             36077558 as core::ffi::c_int as fe_limb_t,
                             19298237 as core::ffi::c_int as fe_limb_t,
@@ -10551,7 +10549,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             66514282 as core::ffi::c_int as fe_limb_t,
                             31040148 as core::ffi::c_int as fe_limb_t,
@@ -10571,9 +10569,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             30464590 as core::ffi::c_int as fe_limb_t,
                             22291560 as core::ffi::c_int as fe_limb_t,
@@ -10590,7 +10588,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             18357166 as core::ffi::c_int as fe_limb_t,
                             26559999 as core::ffi::c_int as fe_limb_t,
@@ -10607,7 +10605,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             19598397 as core::ffi::c_int as fe_limb_t,
                             10334610 as core::ffi::c_int as fe_limb_t,
@@ -10627,9 +10625,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             36884939 as core::ffi::c_int as fe_limb_t,
                             5145195 as core::ffi::c_int as fe_limb_t,
@@ -10646,7 +10644,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             14187449 as core::ffi::c_int as fe_limb_t,
                             3448569 as core::ffi::c_int as fe_limb_t,
@@ -10663,7 +10661,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             19695742 as core::ffi::c_int as fe_limb_t,
                             16087646 as core::ffi::c_int as fe_limb_t,
@@ -10683,9 +10681,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             30860084 as core::ffi::c_int as fe_limb_t,
                             12735208 as core::ffi::c_int as fe_limb_t,
@@ -10702,7 +10700,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             61389038 as core::ffi::c_int as fe_limb_t,
                             22309106 as core::ffi::c_int as fe_limb_t,
@@ -10719,7 +10717,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             64260450 as core::ffi::c_int as fe_limb_t,
                             9953420 as core::ffi::c_int as fe_limb_t,
@@ -10739,9 +10737,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             42389405 as core::ffi::c_int as fe_limb_t,
                             1894650 as core::ffi::c_int as fe_limb_t,
@@ -10758,7 +10756,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             18860224 as core::ffi::c_int as fe_limb_t,
                             15980149 as core::ffi::c_int as fe_limb_t,
@@ -10775,7 +10773,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             51604604 as core::ffi::c_int as fe_limb_t,
                             4970267 as core::ffi::c_int as fe_limb_t,
@@ -10795,9 +10793,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             31490433 as core::ffi::c_int as fe_limb_t,
                             5568061 as core::ffi::c_int as fe_limb_t,
@@ -10814,7 +10812,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             49800177 as core::ffi::c_int as fe_limb_t,
                             17674491 as core::ffi::c_int as fe_limb_t,
@@ -10831,7 +10829,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             38981977 as core::ffi::c_int as fe_limb_t,
                             27866340 as core::ffi::c_int as fe_limb_t,
@@ -10851,9 +10849,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             21890435 as core::ffi::c_int as fe_limb_t,
                             20281525 as core::ffi::c_int as fe_limb_t,
@@ -10870,7 +10868,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             33972757 as core::ffi::c_int as fe_limb_t,
                             23041680 as core::ffi::c_int as fe_limb_t,
@@ -10887,7 +10885,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             65599446 as core::ffi::c_int as fe_limb_t,
                             18066246 as core::ffi::c_int as fe_limb_t,
@@ -10907,9 +10905,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             3960804 as core::ffi::c_int as fe_limb_t,
                             19286629 as core::ffi::c_int as fe_limb_t,
@@ -10926,7 +10924,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             24740822 as core::ffi::c_int as fe_limb_t,
                             5052253 as core::ffi::c_int as fe_limb_t,
@@ -10943,7 +10941,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             38220480 as core::ffi::c_int as fe_limb_t,
                             3510802 as core::ffi::c_int as fe_limb_t,
@@ -10965,9 +10963,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
     ],
     [
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             793280 as core::ffi::c_int as fe_limb_t,
                             24323954 as core::ffi::c_int as fe_limb_t,
@@ -10984,7 +10982,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             5666214 as core::ffi::c_int as fe_limb_t,
                             525582 as core::ffi::c_int as fe_limb_t,
@@ -11001,7 +10999,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             62249590 as core::ffi::c_int as fe_limb_t,
                             29775088 as core::ffi::c_int as fe_limb_t,
@@ -11021,9 +11019,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             10896313 as core::ffi::c_int as fe_limb_t,
                             25834728 as core::ffi::c_int as fe_limb_t,
@@ -11040,7 +11038,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             10566929 as core::ffi::c_int as fe_limb_t,
                             12612572 as core::ffi::c_int as fe_limb_t,
@@ -11057,7 +11055,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             27713843 as core::ffi::c_int as fe_limb_t,
                             26198459 as core::ffi::c_int as fe_limb_t,
@@ -11077,9 +11075,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             43627235 as core::ffi::c_int as fe_limb_t,
                             4867225 as core::ffi::c_int as fe_limb_t,
@@ -11096,7 +11094,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             4646495 as core::ffi::c_int as fe_limb_t,
                             25543308 as core::ffi::c_int as fe_limb_t,
@@ -11113,7 +11111,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             49838347 as core::ffi::c_int as fe_limb_t,
                             12723031 as core::ffi::c_int as fe_limb_t,
@@ -11133,9 +11131,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             58043933 as core::ffi::c_int as fe_limb_t,
                             2103171 as core::ffi::c_int as fe_limb_t,
@@ -11152,7 +11150,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             55051311 as core::ffi::c_int as fe_limb_t,
                             22376525 as core::ffi::c_int as fe_limb_t,
@@ -11169,7 +11167,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             61162478 as core::ffi::c_int as fe_limb_t,
                             10645102 as core::ffi::c_int as fe_limb_t,
@@ -11189,9 +11187,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             49773116 as core::ffi::c_int as fe_limb_t,
                             24447374 as core::ffi::c_int as fe_limb_t,
@@ -11208,7 +11206,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             13669229 as core::ffi::c_int as fe_limb_t,
                             17458950 as core::ffi::c_int as fe_limb_t,
@@ -11225,7 +11223,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             28497909 as core::ffi::c_int as fe_limb_t,
                             6272777 as core::ffi::c_int as fe_limb_t,
@@ -11245,9 +11243,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             50901822 as core::ffi::c_int as fe_limb_t,
                             13517195 as core::ffi::c_int as fe_limb_t,
@@ -11264,7 +11262,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             24191359 as core::ffi::c_int as fe_limb_t,
                             16712145 as core::ffi::c_int as fe_limb_t,
@@ -11281,7 +11279,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             17902668 as core::ffi::c_int as fe_limb_t,
                             4518229 as core::ffi::c_int as fe_limb_t,
@@ -11301,9 +11299,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             38476072 as core::ffi::c_int as fe_limb_t,
                             12763727 as core::ffi::c_int as fe_limb_t,
@@ -11320,7 +11318,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             47103464 as core::ffi::c_int as fe_limb_t,
                             21542479 as core::ffi::c_int as fe_limb_t,
@@ -11337,7 +11335,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             28816026 as core::ffi::c_int as fe_limb_t,
                             298879 as core::ffi::c_int as fe_limb_t,
@@ -11357,9 +11355,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             16000882 as core::ffi::c_int as fe_limb_t,
                             33209536 as core::ffi::c_int as fe_limb_t,
@@ -11376,7 +11374,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             10151868 as core::ffi::c_int as fe_limb_t,
                             10572098 as core::ffi::c_int as fe_limb_t,
@@ -11393,7 +11391,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             55678375 as core::ffi::c_int as fe_limb_t,
                             15697595 as core::ffi::c_int as fe_limb_t,
@@ -11415,9 +11413,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
     ],
     [
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             41609129 as core::ffi::c_int as fe_limb_t,
                             29175637 as core::ffi::c_int as fe_limb_t,
@@ -11434,7 +11432,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             15683501 as core::ffi::c_int as fe_limb_t,
                             27551389 as core::ffi::c_int as fe_limb_t,
@@ -11451,7 +11449,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             43939021 as core::ffi::c_int as fe_limb_t,
                             22773182 as core::ffi::c_int as fe_limb_t,
@@ -11471,9 +11469,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             23190676 as core::ffi::c_int as fe_limb_t,
                             2384583 as core::ffi::c_int as fe_limb_t,
@@ -11490,7 +11488,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             21374101 as core::ffi::c_int as fe_limb_t,
                             30000182 as core::ffi::c_int as fe_limb_t,
@@ -11507,7 +11505,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             67101132 as core::ffi::c_int as fe_limb_t,
                             30575573 as core::ffi::c_int as fe_limb_t,
@@ -11527,9 +11525,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             37607694 as core::ffi::c_int as fe_limb_t,
                             22809559 as core::ffi::c_int as fe_limb_t,
@@ -11546,7 +11544,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             45136504 as core::ffi::c_int as fe_limb_t,
                             21783052 as core::ffi::c_int as fe_limb_t,
@@ -11563,7 +11561,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             49592363 as core::ffi::c_int as fe_limb_t,
                             5352193 as core::ffi::c_int as fe_limb_t,
@@ -11583,9 +11581,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             41291507 as core::ffi::c_int as fe_limb_t,
                             30447119 as core::ffi::c_int as fe_limb_t,
@@ -11602,7 +11600,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             43500868 as core::ffi::c_int as fe_limb_t,
                             30888657 as core::ffi::c_int as fe_limb_t,
@@ -11619,7 +11617,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             42278406 as core::ffi::c_int as fe_limb_t,
                             20820711 as core::ffi::c_int as fe_limb_t,
@@ -11639,9 +11637,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             43525589 as core::ffi::c_int as fe_limb_t,
                             6564960 as core::ffi::c_int as fe_limb_t,
@@ -11658,7 +11656,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             56482264 as core::ffi::c_int as fe_limb_t,
                             29068029 as core::ffi::c_int as fe_limb_t,
@@ -11675,7 +11673,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             15030958 as core::ffi::c_int as fe_limb_t,
                             5768825 as core::ffi::c_int as fe_limb_t,
@@ -11695,9 +11693,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             63746541 as core::ffi::c_int as fe_limb_t,
                             26315059 as core::ffi::c_int as fe_limb_t,
@@ -11714,7 +11712,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             4577067 as core::ffi::c_int as fe_limb_t,
                             16802144 as core::ffi::c_int as fe_limb_t,
@@ -11731,7 +11729,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             38702534 as core::ffi::c_int as fe_limb_t,
                             32502850 as core::ffi::c_int as fe_limb_t,
@@ -11751,9 +11749,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             41346370 as core::ffi::c_int as fe_limb_t,
                             6524721 as core::ffi::c_int as fe_limb_t,
@@ -11770,7 +11768,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             56688388 as core::ffi::c_int as fe_limb_t,
                             29436320 as core::ffi::c_int as fe_limb_t,
@@ -11787,7 +11785,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             2839082 as core::ffi::c_int as fe_limb_t,
                             14284142 as core::ffi::c_int as fe_limb_t,
@@ -11807,9 +11805,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             62269556 as core::ffi::c_int as fe_limb_t,
                             30018987 as core::ffi::c_int as fe_limb_t,
@@ -11826,7 +11824,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             18164541 as core::ffi::c_int as fe_limb_t,
                             22959256 as core::ffi::c_int as fe_limb_t,
@@ -11843,7 +11841,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             36843994 as core::ffi::c_int as fe_limb_t,
                             25906566 as core::ffi::c_int as fe_limb_t,
@@ -11865,9 +11863,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
     ],
     [
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             60209940 as core::ffi::c_int as fe_limb_t,
                             9824393 as core::ffi::c_int as fe_limb_t,
@@ -11884,7 +11882,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             39765323 as core::ffi::c_int as fe_limb_t,
                             17038963 as core::ffi::c_int as fe_limb_t,
@@ -11901,7 +11899,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             21260942 as core::ffi::c_int as fe_limb_t,
                             25129680 as core::ffi::c_int as fe_limb_t,
@@ -11921,9 +11919,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             16544735 as core::ffi::c_int as fe_limb_t,
                             13250366 as core::ffi::c_int as fe_limb_t,
@@ -11940,7 +11938,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             64693606 as core::ffi::c_int as fe_limb_t,
                             17976703 as core::ffi::c_int as fe_limb_t,
@@ -11957,7 +11955,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             41964155 as core::ffi::c_int as fe_limb_t,
                             11425019 as core::ffi::c_int as fe_limb_t,
@@ -11977,9 +11975,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             44004212 as core::ffi::c_int as fe_limb_t,
                             6253475 as core::ffi::c_int as fe_limb_t,
@@ -11996,7 +11994,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             36775618 as core::ffi::c_int as fe_limb_t,
                             13979674 as core::ffi::c_int as fe_limb_t,
@@ -12013,7 +12011,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             4364628 as core::ffi::c_int as fe_limb_t,
                             5930691 as core::ffi::c_int as fe_limb_t,
@@ -12033,9 +12031,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             31879134 as core::ffi::c_int as fe_limb_t,
                             24635739 as core::ffi::c_int as fe_limb_t,
@@ -12052,7 +12050,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             19073683 as core::ffi::c_int as fe_limb_t,
                             14851414 as core::ffi::c_int as fe_limb_t,
@@ -12069,7 +12067,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             24483648 as core::ffi::c_int as fe_limb_t,
                             21618865 as core::ffi::c_int as fe_limb_t,
@@ -12089,9 +12087,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             17597607 as core::ffi::c_int as fe_limb_t,
                             8340603 as core::ffi::c_int as fe_limb_t,
@@ -12108,7 +12106,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             510886 as core::ffi::c_int as fe_limb_t,
                             14337390 as core::ffi::c_int as fe_limb_t,
@@ -12125,7 +12123,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             18606791 as core::ffi::c_int as fe_limb_t,
                             11874196 as core::ffi::c_int as fe_limb_t,
@@ -12145,9 +12143,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             13609624 as core::ffi::c_int as fe_limb_t,
                             13069022 as core::ffi::c_int as fe_limb_t,
@@ -12164,7 +12162,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             9922506 as core::ffi::c_int as fe_limb_t,
                             33035038 as core::ffi::c_int as fe_limb_t,
@@ -12181,7 +12179,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             12719997 as core::ffi::c_int as fe_limb_t,
                             11937594 as core::ffi::c_int as fe_limb_t,
@@ -12201,9 +12199,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             15961858 as core::ffi::c_int as fe_limb_t,
                             14150409 as core::ffi::c_int as fe_limb_t,
@@ -12220,7 +12218,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             11038231 as core::ffi::c_int as fe_limb_t,
                             21972036 as core::ffi::c_int as fe_limb_t,
@@ -12237,7 +12235,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             20017144 as core::ffi::c_int as fe_limb_t,
                             29231206 as core::ffi::c_int as fe_limb_t,
@@ -12257,9 +12255,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             50749986 as core::ffi::c_int as fe_limb_t,
                             20890520 as core::ffi::c_int as fe_limb_t,
@@ -12276,7 +12274,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             65377275 as core::ffi::c_int as fe_limb_t,
                             18398561 as core::ffi::c_int as fe_limb_t,
@@ -12293,7 +12291,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             24536016 as core::ffi::c_int as fe_limb_t,
                             17039225 as core::ffi::c_int as fe_limb_t,
@@ -12315,9 +12313,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
     ],
     [
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             54486638 as core::ffi::c_int as fe_limb_t,
                             27349611 as core::ffi::c_int as fe_limb_t,
@@ -12334,7 +12332,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             40630742 as core::ffi::c_int as fe_limb_t,
                             22450567 as core::ffi::c_int as fe_limb_t,
@@ -12351,7 +12349,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             35114656 as core::ffi::c_int as fe_limb_t,
                             30646970 as core::ffi::c_int as fe_limb_t,
@@ -12371,9 +12369,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             31429803 as core::ffi::c_int as fe_limb_t,
                             19595316 as core::ffi::c_int as fe_limb_t,
@@ -12390,7 +12388,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             22648882 as core::ffi::c_int as fe_limb_t,
                             1402143 as core::ffi::c_int as fe_limb_t,
@@ -12407,7 +12405,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             51616947 as core::ffi::c_int as fe_limb_t,
                             8012312 as core::ffi::c_int as fe_limb_t,
@@ -12427,9 +12425,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             27338066 as core::ffi::c_int as fe_limb_t,
                             26047012 as core::ffi::c_int as fe_limb_t,
@@ -12446,7 +12444,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             26287105 as core::ffi::c_int as fe_limb_t,
                             4821776 as core::ffi::c_int as fe_limb_t,
@@ -12463,7 +12461,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             59937691 as core::ffi::c_int as fe_limb_t,
                             3178079 as core::ffi::c_int as fe_limb_t,
@@ -12483,9 +12481,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             50451143 as core::ffi::c_int as fe_limb_t,
                             2817642 as core::ffi::c_int as fe_limb_t,
@@ -12502,7 +12500,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             15941010 as core::ffi::c_int as fe_limb_t,
                             24148500 as core::ffi::c_int as fe_limb_t,
@@ -12519,7 +12517,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             8934485 as core::ffi::c_int as fe_limb_t,
                             20068965 as core::ffi::c_int as fe_limb_t,
@@ -12539,9 +12537,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             48751602 as core::ffi::c_int as fe_limb_t,
                             31397940 as core::ffi::c_int as fe_limb_t,
@@ -12558,7 +12556,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             65161459 as core::ffi::c_int as fe_limb_t,
                             16013772 as core::ffi::c_int as fe_limb_t,
@@ -12575,7 +12573,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             21426636 as core::ffi::c_int as fe_limb_t,
                             27904214 as core::ffi::c_int as fe_limb_t,
@@ -12595,9 +12593,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             11293895 as core::ffi::c_int as fe_limb_t,
                             12478086 as core::ffi::c_int as fe_limb_t,
@@ -12614,7 +12612,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             41213962 as core::ffi::c_int as fe_limb_t,
                             15323293 as core::ffi::c_int as fe_limb_t,
@@ -12631,7 +12629,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             51184079 as core::ffi::c_int as fe_limb_t,
                             28324551 as core::ffi::c_int as fe_limb_t,
@@ -12651,9 +12649,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             60017550 as core::ffi::c_int as fe_limb_t,
                             12556207 as core::ffi::c_int as fe_limb_t,
@@ -12670,7 +12668,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             4565804 as core::ffi::c_int as fe_limb_t,
                             17528778 as core::ffi::c_int as fe_limb_t,
@@ -12687,7 +12685,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             366633 as core::ffi::c_int as fe_limb_t,
                             21577626 as core::ffi::c_int as fe_limb_t,
@@ -12707,9 +12705,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             43107073 as core::ffi::c_int as fe_limb_t,
                             7690285 as core::ffi::c_int as fe_limb_t,
@@ -12726,7 +12724,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             18289503 as core::ffi::c_int as fe_limb_t,
                             18829478 as core::ffi::c_int as fe_limb_t,
@@ -12743,7 +12741,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             476239 as core::ffi::c_int as fe_limb_t,
                             6601091 as core::ffi::c_int as fe_limb_t,
@@ -12765,9 +12763,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
     ],
     [
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             20678527 as core::ffi::c_int as fe_limb_t,
                             25178694 as core::ffi::c_int as fe_limb_t,
@@ -12784,7 +12782,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             53464795 as core::ffi::c_int as fe_limb_t,
                             23204192 as core::ffi::c_int as fe_limb_t,
@@ -12801,7 +12799,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             24900749 as core::ffi::c_int as fe_limb_t,
                             14435722 as core::ffi::c_int as fe_limb_t,
@@ -12821,9 +12819,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             63990690 as core::ffi::c_int as fe_limb_t,
                             22159237 as core::ffi::c_int as fe_limb_t,
@@ -12840,7 +12838,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             51449703 as core::ffi::c_int as fe_limb_t,
                             16736705 as core::ffi::c_int as fe_limb_t,
@@ -12857,7 +12855,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             43708233 as core::ffi::c_int as fe_limb_t,
                             8348506 as core::ffi::c_int as fe_limb_t,
@@ -12877,9 +12875,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             46921872 as core::ffi::c_int as fe_limb_t,
                             28586496 as core::ffi::c_int as fe_limb_t,
@@ -12896,7 +12894,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             60160060 as core::ffi::c_int as fe_limb_t,
                             31759219 as core::ffi::c_int as fe_limb_t,
@@ -12913,7 +12911,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             43547083 as core::ffi::c_int as fe_limb_t,
                             30755372 as core::ffi::c_int as fe_limb_t,
@@ -12933,9 +12931,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             38872266 as core::ffi::c_int as fe_limb_t,
                             30164383 as core::ffi::c_int as fe_limb_t,
@@ -12952,7 +12950,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             59865506 as core::ffi::c_int as fe_limb_t,
                             30307471 as core::ffi::c_int as fe_limb_t,
@@ -12969,7 +12967,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             36898293 as core::ffi::c_int as fe_limb_t,
                             5124042 as core::ffi::c_int as fe_limb_t,
@@ -12989,9 +12987,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             59231455 as core::ffi::c_int as fe_limb_t,
                             32054473 as core::ffi::c_int as fe_limb_t,
@@ -13008,7 +13006,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             25008885 as core::ffi::c_int as fe_limb_t,
                             22782833 as core::ffi::c_int as fe_limb_t,
@@ -13025,7 +13023,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             57448220 as core::ffi::c_int as fe_limb_t,
                             12374378 as core::ffi::c_int as fe_limb_t,
@@ -13045,9 +13043,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             22258397 as core::ffi::c_int as fe_limb_t,
                             17222199 as core::ffi::c_int as fe_limb_t,
@@ -13064,7 +13062,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             59027556 as core::ffi::c_int as fe_limb_t,
                             25089834 as core::ffi::c_int as fe_limb_t,
@@ -13081,7 +13079,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             45409620 as core::ffi::c_int as fe_limb_t,
                             9220968 as core::ffi::c_int as fe_limb_t,
@@ -13101,9 +13099,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             26047201 as core::ffi::c_int as fe_limb_t,
                             21802961 as core::ffi::c_int as fe_limb_t,
@@ -13120,7 +13118,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             17510331 as core::ffi::c_int as fe_limb_t,
                             33231575 as core::ffi::c_int as fe_limb_t,
@@ -13137,7 +13135,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             56796096 as core::ffi::c_int as fe_limb_t,
                             3936951 as core::ffi::c_int as fe_limb_t,
@@ -13157,9 +13155,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             30322361 as core::ffi::c_int as fe_limb_t,
                             26590322 as core::ffi::c_int as fe_limb_t,
@@ -13176,7 +13174,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             13054543 as core::ffi::c_int as fe_limb_t,
                             30774935 as core::ffi::c_int as fe_limb_t,
@@ -13193,7 +13191,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             47868616 as core::ffi::c_int as fe_limb_t,
                             22299832 as core::ffi::c_int as fe_limb_t,
@@ -13215,9 +13213,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
     ],
     [
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             19852015 as core::ffi::c_int as fe_limb_t,
                             7027924 as core::ffi::c_int as fe_limb_t,
@@ -13234,7 +13232,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             31395515 as core::ffi::c_int as fe_limb_t,
                             15098109 as core::ffi::c_int as fe_limb_t,
@@ -13251,7 +13249,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             57916680 as core::ffi::c_int as fe_limb_t,
                             31207054 as core::ffi::c_int as fe_limb_t,
@@ -13271,9 +13269,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             64664349 as core::ffi::c_int as fe_limb_t,
                             33404494 as core::ffi::c_int as fe_limb_t,
@@ -13290,7 +13288,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             51872508 as core::ffi::c_int as fe_limb_t,
                             18120922 as core::ffi::c_int as fe_limb_t,
@@ -13307,7 +13305,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             31834314 as core::ffi::c_int as fe_limb_t,
                             14135496 as core::ffi::c_int as fe_limb_t,
@@ -13327,9 +13325,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             57502122 as core::ffi::c_int as fe_limb_t,
                             21680191 as core::ffi::c_int as fe_limb_t,
@@ -13346,7 +13344,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             54445282 as core::ffi::c_int as fe_limb_t,
                             31372712 as core::ffi::c_int as fe_limb_t,
@@ -13363,7 +13361,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             33184999 as core::ffi::c_int as fe_limb_t,
                             11180355 as core::ffi::c_int as fe_limb_t,
@@ -13383,9 +13381,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             31308717 as core::ffi::c_int as fe_limb_t,
                             27934434 as core::ffi::c_int as fe_limb_t,
@@ -13402,7 +13400,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             46790012 as core::ffi::c_int as fe_limb_t,
                             18404192 as core::ffi::c_int as fe_limb_t,
@@ -13419,7 +13417,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             22644435 as core::ffi::c_int as fe_limb_t,
                             24792703 as core::ffi::c_int as fe_limb_t,
@@ -13439,9 +13437,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             39091017 as core::ffi::c_int as fe_limb_t,
                             9834844 as core::ffi::c_int as fe_limb_t,
@@ -13458,7 +13456,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             23711543 as core::ffi::c_int as fe_limb_t,
                             32881517 as core::ffi::c_int as fe_limb_t,
@@ -13475,7 +13473,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             43198286 as core::ffi::c_int as fe_limb_t,
                             20038905 as core::ffi::c_int as fe_limb_t,
@@ -13495,9 +13493,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             2101372 as core::ffi::c_int as fe_limb_t,
                             28624378 as core::ffi::c_int as fe_limb_t,
@@ -13514,7 +13512,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             3096359 as core::ffi::c_int as fe_limb_t,
                             9271816 as core::ffi::c_int as fe_limb_t,
@@ -13531,7 +13529,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             34493015 as core::ffi::c_int as fe_limb_t,
                             338662 as core::ffi::c_int as fe_limb_t,
@@ -13551,9 +13549,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             44042215 as core::ffi::c_int as fe_limb_t,
                             19568808 as core::ffi::c_int as fe_limb_t,
@@ -13570,7 +13568,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             21691500 as core::ffi::c_int as fe_limb_t,
                             19929806 as core::ffi::c_int as fe_limb_t,
@@ -13587,7 +13585,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             18445390 as core::ffi::c_int as fe_limb_t,
                             29352196 as core::ffi::c_int as fe_limb_t,
@@ -13607,9 +13605,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             30098034 as core::ffi::c_int as fe_limb_t,
                             3089662 as core::ffi::c_int as fe_limb_t,
@@ -13626,7 +13624,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             9734894 as core::ffi::c_int as fe_limb_t,
                             18977602 as core::ffi::c_int as fe_limb_t,
@@ -13643,7 +13641,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             40730762 as core::ffi::c_int as fe_limb_t,
                             25589224 as core::ffi::c_int as fe_limb_t,
@@ -13665,9 +13663,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
     ],
     [
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             41091971 as core::ffi::c_int as fe_limb_t,
                             33334488 as core::ffi::c_int as fe_limb_t,
@@ -13684,7 +13682,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             54031477 as core::ffi::c_int as fe_limb_t,
                             1184227 as core::ffi::c_int as fe_limb_t,
@@ -13701,7 +13699,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             57077370 as core::ffi::c_int as fe_limb_t,
                             11262625 as core::ffi::c_int as fe_limb_t,
@@ -13721,9 +13719,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             45675257 as core::ffi::c_int as fe_limb_t,
                             21132610 as core::ffi::c_int as fe_limb_t,
@@ -13740,7 +13738,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             62992557 as core::ffi::c_int as fe_limb_t,
                             22282898 as core::ffi::c_int as fe_limb_t,
@@ -13757,7 +13755,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             18200138 as core::ffi::c_int as fe_limb_t,
                             19078521 as core::ffi::c_int as fe_limb_t,
@@ -13777,9 +13775,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             26656189 as core::ffi::c_int as fe_limb_t,
                             6075253 as core::ffi::c_int as fe_limb_t,
@@ -13796,7 +13794,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             49939907 as core::ffi::c_int as fe_limb_t,
                             18700334 as core::ffi::c_int as fe_limb_t,
@@ -13813,7 +13811,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             53785524 as core::ffi::c_int as fe_limb_t,
                             13325348 as core::ffi::c_int as fe_limb_t,
@@ -13833,9 +13831,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             43248326 as core::ffi::c_int as fe_limb_t,
                             22321272 as core::ffi::c_int as fe_limb_t,
@@ -13852,7 +13850,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             25089769 as core::ffi::c_int as fe_limb_t,
                             6742589 as core::ffi::c_int as fe_limb_t,
@@ -13869,7 +13867,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             31883658 as core::ffi::c_int as fe_limb_t,
                             25593331 as core::ffi::c_int as fe_limb_t,
@@ -13889,9 +13887,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             24244947 as core::ffi::c_int as fe_limb_t,
                             18504025 as core::ffi::c_int as fe_limb_t,
@@ -13908,7 +13906,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             41468082 as core::ffi::c_int as fe_limb_t,
                             30136590 as core::ffi::c_int as fe_limb_t,
@@ -13925,7 +13923,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             46701865 as core::ffi::c_int as fe_limb_t,
                             13990230 as core::ffi::c_int as fe_limb_t,
@@ -13945,9 +13943,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             30157899 as core::ffi::c_int as fe_limb_t,
                             12924066 as core::ffi::c_int as fe_limb_t,
@@ -13964,7 +13962,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             2041139 as core::ffi::c_int as fe_limb_t,
                             19298082 as core::ffi::c_int as fe_limb_t,
@@ -13981,7 +13979,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             33338218 as core::ffi::c_int as fe_limb_t,
                             25048699 as core::ffi::c_int as fe_limb_t,
@@ -14001,9 +13999,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             47063583 as core::ffi::c_int as fe_limb_t,
                             5454096 as core::ffi::c_int as fe_limb_t,
@@ -14020,7 +14018,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             23208049 as core::ffi::c_int as fe_limb_t,
                             7979712 as core::ffi::c_int as fe_limb_t,
@@ -14037,7 +14035,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             1439939 as core::ffi::c_int as fe_limb_t,
                             17283952 as core::ffi::c_int as fe_limb_t,
@@ -14057,9 +14055,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             62071265 as core::ffi::c_int as fe_limb_t,
                             20526136 as core::ffi::c_int as fe_limb_t,
@@ -14076,7 +14074,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             13908495 as core::ffi::c_int as fe_limb_t,
                             30005160 as core::ffi::c_int as fe_limb_t,
@@ -14093,7 +14091,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             37445433 as core::ffi::c_int as fe_limb_t,
                             18440821 as core::ffi::c_int as fe_limb_t,
@@ -14115,9 +14113,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
     ],
     [
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             9661008 as core::ffi::c_int as fe_limb_t,
                             705443 as core::ffi::c_int as fe_limb_t,
@@ -14134,7 +14132,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             43269631 as core::ffi::c_int as fe_limb_t,
                             25243016 as core::ffi::c_int as fe_limb_t,
@@ -14151,7 +14149,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             29262576 as core::ffi::c_int as fe_limb_t,
                             16756590 as core::ffi::c_int as fe_limb_t,
@@ -14171,9 +14169,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             41615764 as core::ffi::c_int as fe_limb_t,
                             26591503 as core::ffi::c_int as fe_limb_t,
@@ -14190,7 +14188,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             46724414 as core::ffi::c_int as fe_limb_t,
                             19206718 as core::ffi::c_int as fe_limb_t,
@@ -14207,7 +14205,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             42612143 as core::ffi::c_int as fe_limb_t,
                             21838415 as core::ffi::c_int as fe_limb_t,
@@ -14227,9 +14225,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             49357223 as core::ffi::c_int as fe_limb_t,
                             31456605 as core::ffi::c_int as fe_limb_t,
@@ -14246,7 +14244,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             33879670 as core::ffi::c_int as fe_limb_t,
                             2553287 as core::ffi::c_int as fe_limb_t,
@@ -14263,7 +14261,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             16660737 as core::ffi::c_int as fe_limb_t,
                             7281060 as core::ffi::c_int as fe_limb_t,
@@ -14283,9 +14281,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             47343357 as core::ffi::c_int as fe_limb_t,
                             2390525 as core::ffi::c_int as fe_limb_t,
@@ -14302,7 +14300,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             65754325 as core::ffi::c_int as fe_limb_t,
                             14736940 as core::ffi::c_int as fe_limb_t,
@@ -14319,7 +14317,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             31665558 as core::ffi::c_int as fe_limb_t,
                             21373968 as core::ffi::c_int as fe_limb_t,
@@ -14339,9 +14337,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             52641566 as core::ffi::c_int as fe_limb_t,
                             32870716 as core::ffi::c_int as fe_limb_t,
@@ -14358,7 +14356,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             15121312 as core::ffi::c_int as fe_limb_t,
                             17758270 as core::ffi::c_int as fe_limb_t,
@@ -14375,7 +14373,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             64471568 as core::ffi::c_int as fe_limb_t,
                             20071356 as core::ffi::c_int as fe_limb_t,
@@ -14395,9 +14393,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             16918416 as core::ffi::c_int as fe_limb_t,
                             11729663 as core::ffi::c_int as fe_limb_t,
@@ -14414,7 +14412,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             11166615 as core::ffi::c_int as fe_limb_t,
                             7338049 as core::ffi::c_int as fe_limb_t,
@@ -14431,7 +14429,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             66923210 as core::ffi::c_int as fe_limb_t,
                             9921304 as core::ffi::c_int as fe_limb_t,
@@ -14451,9 +14449,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             34648249 as core::ffi::c_int as fe_limb_t,
                             11266711 as core::ffi::c_int as fe_limb_t,
@@ -14470,7 +14468,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             49102387 as core::ffi::c_int as fe_limb_t,
                             12709067 as core::ffi::c_int as fe_limb_t,
@@ -14487,7 +14485,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             60151107 as core::ffi::c_int as fe_limb_t,
                             17960094 as core::ffi::c_int as fe_limb_t,
@@ -14507,9 +14505,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
             init
         },
         {
-            let init = ge_precomp {
+            let mut init = ge_precomp {
                 yplusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             44660220 as core::ffi::c_int as fe_limb_t,
                             15655568 as core::ffi::c_int as fe_limb_t,
@@ -14526,7 +14524,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 yminusx: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             29701166 as core::ffi::c_int as fe_limb_t,
                             19180498 as core::ffi::c_int as fe_limb_t,
@@ -14543,7 +14541,7 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
                     init
                 },
                 xy2d: {
-                    let init = fe_loose {
+                    let mut init = fe_loose {
                         v: [
                             46678630 as core::ffi::c_int as fe_limb_t,
                             14955536 as core::ffi::c_int as fe_limb_t,
@@ -14566,9 +14564,9 @@ static mut k25519Precomp: [[ge_precomp; 8]; 32] = [
 ];
 static mut Bi: [ge_precomp; 8] = [
     {
-        let init = ge_precomp {
+        let mut init = ge_precomp {
             yplusx: {
-                let init = fe_loose {
+                let mut init = fe_loose {
                     v: [
                         25967493 as core::ffi::c_int as fe_limb_t,
                         19198397 as core::ffi::c_int as fe_limb_t,
@@ -14585,7 +14583,7 @@ static mut Bi: [ge_precomp; 8] = [
                 init
             },
             yminusx: {
-                let init = fe_loose {
+                let mut init = fe_loose {
                     v: [
                         54563134 as core::ffi::c_int as fe_limb_t,
                         934261 as core::ffi::c_int as fe_limb_t,
@@ -14602,7 +14600,7 @@ static mut Bi: [ge_precomp; 8] = [
                 init
             },
             xy2d: {
-                let init = fe_loose {
+                let mut init = fe_loose {
                     v: [
                         58370664 as core::ffi::c_int as fe_limb_t,
                         4489569 as core::ffi::c_int as fe_limb_t,
@@ -14622,9 +14620,9 @@ static mut Bi: [ge_precomp; 8] = [
         init
     },
     {
-        let init = ge_precomp {
+        let mut init = ge_precomp {
             yplusx: {
-                let init = fe_loose {
+                let mut init = fe_loose {
                     v: [
                         15636272 as core::ffi::c_int as fe_limb_t,
                         23865875 as core::ffi::c_int as fe_limb_t,
@@ -14641,7 +14639,7 @@ static mut Bi: [ge_precomp; 8] = [
                 init
             },
             yminusx: {
-                let init = fe_loose {
+                let mut init = fe_loose {
                     v: [
                         16568933 as core::ffi::c_int as fe_limb_t,
                         4717097 as core::ffi::c_int as fe_limb_t,
@@ -14658,7 +14656,7 @@ static mut Bi: [ge_precomp; 8] = [
                 init
             },
             xy2d: {
-                let init = fe_loose {
+                let mut init = fe_loose {
                     v: [
                         30464137 as core::ffi::c_int as fe_limb_t,
                         27578307 as core::ffi::c_int as fe_limb_t,
@@ -14678,9 +14676,9 @@ static mut Bi: [ge_precomp; 8] = [
         init
     },
     {
-        let init = ge_precomp {
+        let mut init = ge_precomp {
             yplusx: {
-                let init = fe_loose {
+                let mut init = fe_loose {
                     v: [
                         10861363 as core::ffi::c_int as fe_limb_t,
                         11473154 as core::ffi::c_int as fe_limb_t,
@@ -14697,7 +14695,7 @@ static mut Bi: [ge_precomp; 8] = [
                 init
             },
             yminusx: {
-                let init = fe_loose {
+                let mut init = fe_loose {
                     v: [
                         4708026 as core::ffi::c_int as fe_limb_t,
                         6336745 as core::ffi::c_int as fe_limb_t,
@@ -14714,7 +14712,7 @@ static mut Bi: [ge_precomp; 8] = [
                 init
             },
             xy2d: {
-                let init = fe_loose {
+                let mut init = fe_loose {
                     v: [
                         19563141 as core::ffi::c_int as fe_limb_t,
                         16186464 as core::ffi::c_int as fe_limb_t,
@@ -14734,9 +14732,9 @@ static mut Bi: [ge_precomp; 8] = [
         init
     },
     {
-        let init = ge_precomp {
+        let mut init = ge_precomp {
             yplusx: {
-                let init = fe_loose {
+                let mut init = fe_loose {
                     v: [
                         5153727 as core::ffi::c_int as fe_limb_t,
                         9909285 as core::ffi::c_int as fe_limb_t,
@@ -14753,7 +14751,7 @@ static mut Bi: [ge_precomp; 8] = [
                 init
             },
             yminusx: {
-                let init = fe_loose {
+                let mut init = fe_loose {
                     v: [
                         36839857 as core::ffi::c_int as fe_limb_t,
                         30090922 as core::ffi::c_int as fe_limb_t,
@@ -14770,7 +14768,7 @@ static mut Bi: [ge_precomp; 8] = [
                 init
             },
             xy2d: {
-                let init = fe_loose {
+                let mut init = fe_loose {
                     v: [
                         28881826 as core::ffi::c_int as fe_limb_t,
                         14381568 as core::ffi::c_int as fe_limb_t,
@@ -14790,9 +14788,9 @@ static mut Bi: [ge_precomp; 8] = [
         init
     },
     {
-        let init = ge_precomp {
+        let mut init = ge_precomp {
             yplusx: {
-                let init = fe_loose {
+                let mut init = fe_loose {
                     v: [
                         44589871 as core::ffi::c_int as fe_limb_t,
                         26862249 as core::ffi::c_int as fe_limb_t,
@@ -14809,7 +14807,7 @@ static mut Bi: [ge_precomp; 8] = [
                 init
             },
             yminusx: {
-                let init = fe_loose {
+                let mut init = fe_loose {
                     v: [
                         60653668 as core::ffi::c_int as fe_limb_t,
                         25714560 as core::ffi::c_int as fe_limb_t,
@@ -14826,7 +14824,7 @@ static mut Bi: [ge_precomp; 8] = [
                 init
             },
             xy2d: {
-                let init = fe_loose {
+                let mut init = fe_loose {
                     v: [
                         4566811 as core::ffi::c_int as fe_limb_t,
                         20590564 as core::ffi::c_int as fe_limb_t,
@@ -14846,9 +14844,9 @@ static mut Bi: [ge_precomp; 8] = [
         init
     },
     {
-        let init = ge_precomp {
+        let mut init = ge_precomp {
             yplusx: {
-                let init = fe_loose {
+                let mut init = fe_loose {
                     v: [
                         41954014 as core::ffi::c_int as fe_limb_t,
                         29368610 as core::ffi::c_int as fe_limb_t,
@@ -14865,7 +14863,7 @@ static mut Bi: [ge_precomp; 8] = [
                 init
             },
             yminusx: {
-                let init = fe_loose {
+                let mut init = fe_loose {
                     v: [
                         25576264 as core::ffi::c_int as fe_limb_t,
                         30851218 as core::ffi::c_int as fe_limb_t,
@@ -14882,7 +14880,7 @@ static mut Bi: [ge_precomp; 8] = [
                 init
             },
             xy2d: {
-                let init = fe_loose {
+                let mut init = fe_loose {
                     v: [
                         23103977 as core::ffi::c_int as fe_limb_t,
                         13316479 as core::ffi::c_int as fe_limb_t,
@@ -14902,9 +14900,9 @@ static mut Bi: [ge_precomp; 8] = [
         init
     },
     {
-        let init = ge_precomp {
+        let mut init = ge_precomp {
             yplusx: {
-                let init = fe_loose {
+                let mut init = fe_loose {
                     v: [
                         33587053 as core::ffi::c_int as fe_limb_t,
                         3180712 as core::ffi::c_int as fe_limb_t,
@@ -14921,7 +14919,7 @@ static mut Bi: [ge_precomp; 8] = [
                 init
             },
             yminusx: {
-                let init = fe_loose {
+                let mut init = fe_loose {
                     v: [
                         41926547 as core::ffi::c_int as fe_limb_t,
                         29380300 as core::ffi::c_int as fe_limb_t,
@@ -14938,7 +14936,7 @@ static mut Bi: [ge_precomp; 8] = [
                 init
             },
             xy2d: {
-                let init = fe_loose {
+                let mut init = fe_loose {
                     v: [
                         53388152 as core::ffi::c_int as fe_limb_t,
                         2639452 as core::ffi::c_int as fe_limb_t,
@@ -14958,9 +14956,9 @@ static mut Bi: [ge_precomp; 8] = [
         init
     },
     {
-        let init = ge_precomp {
+        let mut init = ge_precomp {
             yplusx: {
-                let init = fe_loose {
+                let mut init = fe_loose {
                     v: [
                         63957664 as core::ffi::c_int as fe_limb_t,
                         28508356 as core::ffi::c_int as fe_limb_t,
@@ -14977,7 +14975,7 @@ static mut Bi: [ge_precomp; 8] = [
                 init
             },
             yminusx: {
-                let init = fe_loose {
+                let mut init = fe_loose {
                     v: [
                         42782475 as core::ffi::c_int as fe_limb_t,
                         15950225 as core::ffi::c_int as fe_limb_t,
@@ -14994,7 +14992,7 @@ static mut Bi: [ge_precomp; 8] = [
                 init
             },
             xy2d: {
-                let init = fe_loose {
+                let mut init = fe_loose {
                     v: [
                         64009494 as core::ffi::c_int as fe_limb_t,
                         10324966 as core::ffi::c_int as fe_limb_t,
@@ -15015,522 +15013,522 @@ static mut Bi: [ge_precomp; 8] = [
     },
 ];
 unsafe extern "C" fn fiat_25519_addcarryx_u26(
-    out1: *mut uint32_t,
-    out2: *mut fiat_25519_uint1,
-    arg1: fiat_25519_uint1,
-    arg2: uint32_t,
-    arg3: uint32_t,
+    mut out1: *mut uint32_t,
+    mut out2: *mut fiat_25519_uint1,
+    mut arg1: fiat_25519_uint1,
+    mut arg2: uint32_t,
+    mut arg3: uint32_t,
 ) {
-    let x1: uint32_t = (arg1 as core::ffi::c_uint)
+    let mut x1: uint32_t = (arg1 as core::ffi::c_uint)
         .wrapping_add(arg2)
         .wrapping_add(arg3);
-    let x2: uint32_t = x1 & 0x3ffffff as core::ffi::c_uint;
-    let x3: fiat_25519_uint1 = (x1 >> 26 as core::ffi::c_int) as fiat_25519_uint1;
+    let mut x2: uint32_t = x1 & 0x3ffffff as core::ffi::c_uint;
+    let mut x3: fiat_25519_uint1 = (x1 >> 26 as core::ffi::c_int) as fiat_25519_uint1;
     *out1 = x2;
     *out2 = x3;
 }
 unsafe extern "C" fn fiat_25519_subborrowx_u26(
-    out1: *mut uint32_t,
-    out2: *mut fiat_25519_uint1,
-    arg1: fiat_25519_uint1,
-    arg2: uint32_t,
-    arg3: uint32_t,
+    mut out1: *mut uint32_t,
+    mut out2: *mut fiat_25519_uint1,
+    mut arg1: fiat_25519_uint1,
+    mut arg2: uint32_t,
+    mut arg3: uint32_t,
 ) {
-    let x1: int32_t = arg2.wrapping_sub(arg1 as core::ffi::c_uint) as int32_t - arg3 as int32_t;
-    let x2: fiat_25519_int1 = (x1 >> 26 as core::ffi::c_int) as fiat_25519_int1;
-    let x3: uint32_t = x1 as core::ffi::c_uint & 0x3ffffff as core::ffi::c_uint;
+    let mut x1: int32_t = arg2.wrapping_sub(arg1 as core::ffi::c_uint) as int32_t - arg3 as int32_t;
+    let mut x2: fiat_25519_int1 = (x1 >> 26 as core::ffi::c_int) as fiat_25519_int1;
+    let mut x3: uint32_t = x1 as core::ffi::c_uint & 0x3ffffff as core::ffi::c_uint;
     *out1 = x3;
     *out2 = (0 as core::ffi::c_int - x2 as core::ffi::c_int) as fiat_25519_uint1;
 }
 unsafe extern "C" fn fiat_25519_addcarryx_u25(
-    out1: *mut uint32_t,
-    out2: *mut fiat_25519_uint1,
-    arg1: fiat_25519_uint1,
-    arg2: uint32_t,
-    arg3: uint32_t,
+    mut out1: *mut uint32_t,
+    mut out2: *mut fiat_25519_uint1,
+    mut arg1: fiat_25519_uint1,
+    mut arg2: uint32_t,
+    mut arg3: uint32_t,
 ) {
-    let x1: uint32_t = (arg1 as core::ffi::c_uint)
+    let mut x1: uint32_t = (arg1 as core::ffi::c_uint)
         .wrapping_add(arg2)
         .wrapping_add(arg3);
-    let x2: uint32_t = x1 & 0x1ffffff as core::ffi::c_uint;
-    let x3: fiat_25519_uint1 = (x1 >> 25 as core::ffi::c_int) as fiat_25519_uint1;
+    let mut x2: uint32_t = x1 & 0x1ffffff as core::ffi::c_uint;
+    let mut x3: fiat_25519_uint1 = (x1 >> 25 as core::ffi::c_int) as fiat_25519_uint1;
     *out1 = x2;
     *out2 = x3;
 }
 unsafe extern "C" fn fiat_25519_subborrowx_u25(
-    out1: *mut uint32_t,
-    out2: *mut fiat_25519_uint1,
-    arg1: fiat_25519_uint1,
-    arg2: uint32_t,
-    arg3: uint32_t,
+    mut out1: *mut uint32_t,
+    mut out2: *mut fiat_25519_uint1,
+    mut arg1: fiat_25519_uint1,
+    mut arg2: uint32_t,
+    mut arg3: uint32_t,
 ) {
-    let x1: int32_t = arg2.wrapping_sub(arg1 as core::ffi::c_uint) as int32_t - arg3 as int32_t;
-    let x2: fiat_25519_int1 = (x1 >> 25 as core::ffi::c_int) as fiat_25519_int1;
-    let x3: uint32_t = x1 as core::ffi::c_uint & 0x1ffffff as core::ffi::c_uint;
+    let mut x1: int32_t = arg2.wrapping_sub(arg1 as core::ffi::c_uint) as int32_t - arg3 as int32_t;
+    let mut x2: fiat_25519_int1 = (x1 >> 25 as core::ffi::c_int) as fiat_25519_int1;
+    let mut x3: uint32_t = x1 as core::ffi::c_uint & 0x1ffffff as core::ffi::c_uint;
     *out1 = x3;
     *out2 = (0 as core::ffi::c_int - x2 as core::ffi::c_int) as fiat_25519_uint1;
 }
 unsafe extern "C" fn fiat_25519_cmovznz_u32(
-    out1: *mut uint32_t,
-    arg1: fiat_25519_uint1,
-    arg2: uint32_t,
-    arg3: uint32_t,
+    mut out1: *mut uint32_t,
+    mut arg1: fiat_25519_uint1,
+    mut arg2: uint32_t,
+    mut arg3: uint32_t,
 ) {
-    let x1: fiat_25519_uint1 = (arg1 != 0) as core::ffi::c_int as fiat_25519_uint1;
-    let x2: uint32_t = (0 as core::ffi::c_int - x1 as core::ffi::c_int) as fiat_25519_int1
+    let mut x1: fiat_25519_uint1 = (arg1 != 0) as core::ffi::c_int as fiat_25519_uint1;
+    let mut x2: uint32_t = (0 as core::ffi::c_int - x1 as core::ffi::c_int) as fiat_25519_int1
         as core::ffi::c_uint
         & 0xffffffff as core::ffi::c_uint;
-    let x3: uint32_t = value_barrier_u32(x2) & arg3 | value_barrier_u32(!x2) & arg2;
+    let mut x3: uint32_t = value_barrier_u32(x2) & arg3 | value_barrier_u32(!x2) & arg2;
     *out1 = x3;
 }
 unsafe extern "C" fn fiat_25519_carry_mul(
-    out1: *mut uint32_t,
-    arg1: *const uint32_t,
-    arg2: *const uint32_t,
+    mut out1: *mut uint32_t,
+    mut arg1: *const uint32_t,
+    mut arg2: *const uint32_t,
 ) {
-    let x1: uint64_t = (*arg1.offset(9 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(
+    let mut x1: uint64_t = (*arg1.offset(9 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(
         (*arg2.offset(9 as core::ffi::c_int as isize))
             .wrapping_mul(0x26 as core::ffi::c_int as core::ffi::c_uint) as u64,
     );
-    let x2: uint64_t = (*arg1.offset(9 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(
+    let mut x2: uint64_t = (*arg1.offset(9 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(
         (*arg2.offset(8 as core::ffi::c_int as isize))
             .wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint) as u64,
     );
-    let x3: uint64_t = (*arg1.offset(9 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(
+    let mut x3: uint64_t = (*arg1.offset(9 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(
         (*arg2.offset(7 as core::ffi::c_int as isize))
             .wrapping_mul(0x26 as core::ffi::c_int as core::ffi::c_uint) as u64,
     );
-    let x4: uint64_t = (*arg1.offset(9 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(
+    let mut x4: uint64_t = (*arg1.offset(9 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(
         (*arg2.offset(6 as core::ffi::c_int as isize))
             .wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint) as u64,
     );
-    let x5: uint64_t = (*arg1.offset(9 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(
+    let mut x5: uint64_t = (*arg1.offset(9 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(
         (*arg2.offset(5 as core::ffi::c_int as isize))
             .wrapping_mul(0x26 as core::ffi::c_int as core::ffi::c_uint) as u64,
     );
-    let x6: uint64_t = (*arg1.offset(9 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(
+    let mut x6: uint64_t = (*arg1.offset(9 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(
         (*arg2.offset(4 as core::ffi::c_int as isize))
             .wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint) as u64,
     );
-    let x7: uint64_t = (*arg1.offset(9 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(
+    let mut x7: uint64_t = (*arg1.offset(9 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(
         (*arg2.offset(3 as core::ffi::c_int as isize))
             .wrapping_mul(0x26 as core::ffi::c_int as core::ffi::c_uint) as u64,
     );
-    let x8: uint64_t = (*arg1.offset(9 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(
+    let mut x8: uint64_t = (*arg1.offset(9 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(
         (*arg2.offset(2 as core::ffi::c_int as isize))
             .wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint) as u64,
     );
-    let x9: uint64_t = (*arg1.offset(9 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(
+    let mut x9: uint64_t = (*arg1.offset(9 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(
         (*arg2.offset(1 as core::ffi::c_int as isize))
             .wrapping_mul(0x26 as core::ffi::c_int as core::ffi::c_uint) as u64,
     );
-    let x10: uint64_t = (*arg1.offset(8 as core::ffi::c_int as isize) as uint64_t)
+    let mut x10: uint64_t = (*arg1.offset(8 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(9 as core::ffi::c_int as isize))
                 .wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x11: uint64_t = (*arg1.offset(8 as core::ffi::c_int as isize) as uint64_t)
+    let mut x11: uint64_t = (*arg1.offset(8 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(8 as core::ffi::c_int as isize))
                 .wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x12: uint64_t = (*arg1.offset(8 as core::ffi::c_int as isize) as uint64_t)
+    let mut x12: uint64_t = (*arg1.offset(8 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(7 as core::ffi::c_int as isize))
                 .wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x13: uint64_t = (*arg1.offset(8 as core::ffi::c_int as isize) as uint64_t)
+    let mut x13: uint64_t = (*arg1.offset(8 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(6 as core::ffi::c_int as isize))
                 .wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x14: uint64_t = (*arg1.offset(8 as core::ffi::c_int as isize) as uint64_t)
+    let mut x14: uint64_t = (*arg1.offset(8 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(5 as core::ffi::c_int as isize))
                 .wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x15: uint64_t = (*arg1.offset(8 as core::ffi::c_int as isize) as uint64_t)
+    let mut x15: uint64_t = (*arg1.offset(8 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(4 as core::ffi::c_int as isize))
                 .wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x16: uint64_t = (*arg1.offset(8 as core::ffi::c_int as isize) as uint64_t)
+    let mut x16: uint64_t = (*arg1.offset(8 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(3 as core::ffi::c_int as isize))
                 .wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x17: uint64_t = (*arg1.offset(8 as core::ffi::c_int as isize) as uint64_t)
+    let mut x17: uint64_t = (*arg1.offset(8 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(2 as core::ffi::c_int as isize))
                 .wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x18: uint64_t = (*arg1.offset(7 as core::ffi::c_int as isize) as uint64_t)
+    let mut x18: uint64_t = (*arg1.offset(7 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(9 as core::ffi::c_int as isize))
                 .wrapping_mul(0x26 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x19: uint64_t = (*arg1.offset(7 as core::ffi::c_int as isize) as uint64_t)
+    let mut x19: uint64_t = (*arg1.offset(7 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(8 as core::ffi::c_int as isize))
                 .wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x20: uint64_t = (*arg1.offset(7 as core::ffi::c_int as isize) as uint64_t)
+    let mut x20: uint64_t = (*arg1.offset(7 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(7 as core::ffi::c_int as isize))
                 .wrapping_mul(0x26 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x21: uint64_t = (*arg1.offset(7 as core::ffi::c_int as isize) as uint64_t)
+    let mut x21: uint64_t = (*arg1.offset(7 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(6 as core::ffi::c_int as isize))
                 .wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x22: uint64_t = (*arg1.offset(7 as core::ffi::c_int as isize) as uint64_t)
+    let mut x22: uint64_t = (*arg1.offset(7 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(5 as core::ffi::c_int as isize))
                 .wrapping_mul(0x26 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x23: uint64_t = (*arg1.offset(7 as core::ffi::c_int as isize) as uint64_t)
+    let mut x23: uint64_t = (*arg1.offset(7 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(4 as core::ffi::c_int as isize))
                 .wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x24: uint64_t = (*arg1.offset(7 as core::ffi::c_int as isize) as uint64_t)
+    let mut x24: uint64_t = (*arg1.offset(7 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(3 as core::ffi::c_int as isize))
                 .wrapping_mul(0x26 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x25: uint64_t = (*arg1.offset(6 as core::ffi::c_int as isize) as uint64_t)
+    let mut x25: uint64_t = (*arg1.offset(6 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(9 as core::ffi::c_int as isize))
                 .wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x26: uint64_t = (*arg1.offset(6 as core::ffi::c_int as isize) as uint64_t)
+    let mut x26: uint64_t = (*arg1.offset(6 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(8 as core::ffi::c_int as isize))
                 .wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x27: uint64_t = (*arg1.offset(6 as core::ffi::c_int as isize) as uint64_t)
+    let mut x27: uint64_t = (*arg1.offset(6 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(7 as core::ffi::c_int as isize))
                 .wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x28: uint64_t = (*arg1.offset(6 as core::ffi::c_int as isize) as uint64_t)
+    let mut x28: uint64_t = (*arg1.offset(6 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(6 as core::ffi::c_int as isize))
                 .wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x29: uint64_t = (*arg1.offset(6 as core::ffi::c_int as isize) as uint64_t)
+    let mut x29: uint64_t = (*arg1.offset(6 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(5 as core::ffi::c_int as isize))
                 .wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x30: uint64_t = (*arg1.offset(6 as core::ffi::c_int as isize) as uint64_t)
+    let mut x30: uint64_t = (*arg1.offset(6 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(4 as core::ffi::c_int as isize))
                 .wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x31: uint64_t = (*arg1.offset(5 as core::ffi::c_int as isize) as uint64_t)
+    let mut x31: uint64_t = (*arg1.offset(5 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(9 as core::ffi::c_int as isize))
                 .wrapping_mul(0x26 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x32: uint64_t = (*arg1.offset(5 as core::ffi::c_int as isize) as uint64_t)
+    let mut x32: uint64_t = (*arg1.offset(5 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(8 as core::ffi::c_int as isize))
                 .wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x33: uint64_t = (*arg1.offset(5 as core::ffi::c_int as isize) as uint64_t)
+    let mut x33: uint64_t = (*arg1.offset(5 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(7 as core::ffi::c_int as isize))
                 .wrapping_mul(0x26 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x34: uint64_t = (*arg1.offset(5 as core::ffi::c_int as isize) as uint64_t)
+    let mut x34: uint64_t = (*arg1.offset(5 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(6 as core::ffi::c_int as isize))
                 .wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x35: uint64_t = (*arg1.offset(5 as core::ffi::c_int as isize) as uint64_t)
+    let mut x35: uint64_t = (*arg1.offset(5 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(5 as core::ffi::c_int as isize))
                 .wrapping_mul(0x26 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x36: uint64_t = (*arg1.offset(4 as core::ffi::c_int as isize) as uint64_t)
+    let mut x36: uint64_t = (*arg1.offset(4 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(9 as core::ffi::c_int as isize))
                 .wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x37: uint64_t = (*arg1.offset(4 as core::ffi::c_int as isize) as uint64_t)
+    let mut x37: uint64_t = (*arg1.offset(4 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(8 as core::ffi::c_int as isize))
                 .wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x38: uint64_t = (*arg1.offset(4 as core::ffi::c_int as isize) as uint64_t)
+    let mut x38: uint64_t = (*arg1.offset(4 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(7 as core::ffi::c_int as isize))
                 .wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x39: uint64_t = (*arg1.offset(4 as core::ffi::c_int as isize) as uint64_t)
+    let mut x39: uint64_t = (*arg1.offset(4 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(6 as core::ffi::c_int as isize))
                 .wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x40: uint64_t = (*arg1.offset(3 as core::ffi::c_int as isize) as uint64_t)
+    let mut x40: uint64_t = (*arg1.offset(3 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(9 as core::ffi::c_int as isize))
                 .wrapping_mul(0x26 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x41: uint64_t = (*arg1.offset(3 as core::ffi::c_int as isize) as uint64_t)
+    let mut x41: uint64_t = (*arg1.offset(3 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(8 as core::ffi::c_int as isize))
                 .wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x42: uint64_t = (*arg1.offset(3 as core::ffi::c_int as isize) as uint64_t)
+    let mut x42: uint64_t = (*arg1.offset(3 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(7 as core::ffi::c_int as isize))
                 .wrapping_mul(0x26 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x43: uint64_t = (*arg1.offset(2 as core::ffi::c_int as isize) as uint64_t)
+    let mut x43: uint64_t = (*arg1.offset(2 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(9 as core::ffi::c_int as isize))
                 .wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x44: uint64_t = (*arg1.offset(2 as core::ffi::c_int as isize) as uint64_t)
+    let mut x44: uint64_t = (*arg1.offset(2 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(8 as core::ffi::c_int as isize))
                 .wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x45: uint64_t = (*arg1.offset(1 as core::ffi::c_int as isize) as uint64_t)
+    let mut x45: uint64_t = (*arg1.offset(1 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(9 as core::ffi::c_int as isize))
                 .wrapping_mul(0x26 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x46: uint64_t = (*arg1.offset(9 as core::ffi::c_int as isize) as uint64_t)
+    let mut x46: uint64_t = (*arg1.offset(9 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(0 as core::ffi::c_int as isize) as u64);
-    let x47: uint64_t = (*arg1.offset(8 as core::ffi::c_int as isize) as uint64_t)
+    let mut x47: uint64_t = (*arg1.offset(8 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(1 as core::ffi::c_int as isize) as u64);
-    let x48: uint64_t = (*arg1.offset(8 as core::ffi::c_int as isize) as uint64_t)
+    let mut x48: uint64_t = (*arg1.offset(8 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(0 as core::ffi::c_int as isize) as u64);
-    let x49: uint64_t = (*arg1.offset(7 as core::ffi::c_int as isize) as uint64_t)
+    let mut x49: uint64_t = (*arg1.offset(7 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(2 as core::ffi::c_int as isize) as u64);
-    let x50: uint64_t = (*arg1.offset(7 as core::ffi::c_int as isize) as uint64_t)
+    let mut x50: uint64_t = (*arg1.offset(7 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(1 as core::ffi::c_int as isize))
                 .wrapping_mul(0x2 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x51: uint64_t = (*arg1.offset(7 as core::ffi::c_int as isize) as uint64_t)
+    let mut x51: uint64_t = (*arg1.offset(7 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(0 as core::ffi::c_int as isize) as u64);
-    let x52: uint64_t = (*arg1.offset(6 as core::ffi::c_int as isize) as uint64_t)
+    let mut x52: uint64_t = (*arg1.offset(6 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(3 as core::ffi::c_int as isize) as u64);
-    let x53: uint64_t = (*arg1.offset(6 as core::ffi::c_int as isize) as uint64_t)
+    let mut x53: uint64_t = (*arg1.offset(6 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(2 as core::ffi::c_int as isize) as u64);
-    let x54: uint64_t = (*arg1.offset(6 as core::ffi::c_int as isize) as uint64_t)
+    let mut x54: uint64_t = (*arg1.offset(6 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(1 as core::ffi::c_int as isize) as u64);
-    let x55: uint64_t = (*arg1.offset(6 as core::ffi::c_int as isize) as uint64_t)
+    let mut x55: uint64_t = (*arg1.offset(6 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(0 as core::ffi::c_int as isize) as u64);
-    let x56: uint64_t = (*arg1.offset(5 as core::ffi::c_int as isize) as uint64_t)
+    let mut x56: uint64_t = (*arg1.offset(5 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(4 as core::ffi::c_int as isize) as u64);
-    let x57: uint64_t = (*arg1.offset(5 as core::ffi::c_int as isize) as uint64_t)
+    let mut x57: uint64_t = (*arg1.offset(5 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(3 as core::ffi::c_int as isize))
                 .wrapping_mul(0x2 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x58: uint64_t = (*arg1.offset(5 as core::ffi::c_int as isize) as uint64_t)
+    let mut x58: uint64_t = (*arg1.offset(5 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(2 as core::ffi::c_int as isize) as u64);
-    let x59: uint64_t = (*arg1.offset(5 as core::ffi::c_int as isize) as uint64_t)
+    let mut x59: uint64_t = (*arg1.offset(5 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(1 as core::ffi::c_int as isize))
                 .wrapping_mul(0x2 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x60: uint64_t = (*arg1.offset(5 as core::ffi::c_int as isize) as uint64_t)
+    let mut x60: uint64_t = (*arg1.offset(5 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(0 as core::ffi::c_int as isize) as u64);
-    let x61: uint64_t = (*arg1.offset(4 as core::ffi::c_int as isize) as uint64_t)
+    let mut x61: uint64_t = (*arg1.offset(4 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(5 as core::ffi::c_int as isize) as u64);
-    let x62: uint64_t = (*arg1.offset(4 as core::ffi::c_int as isize) as uint64_t)
+    let mut x62: uint64_t = (*arg1.offset(4 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(4 as core::ffi::c_int as isize) as u64);
-    let x63: uint64_t = (*arg1.offset(4 as core::ffi::c_int as isize) as uint64_t)
+    let mut x63: uint64_t = (*arg1.offset(4 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(3 as core::ffi::c_int as isize) as u64);
-    let x64: uint64_t = (*arg1.offset(4 as core::ffi::c_int as isize) as uint64_t)
+    let mut x64: uint64_t = (*arg1.offset(4 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(2 as core::ffi::c_int as isize) as u64);
-    let x65: uint64_t = (*arg1.offset(4 as core::ffi::c_int as isize) as uint64_t)
+    let mut x65: uint64_t = (*arg1.offset(4 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(1 as core::ffi::c_int as isize) as u64);
-    let x66: uint64_t = (*arg1.offset(4 as core::ffi::c_int as isize) as uint64_t)
+    let mut x66: uint64_t = (*arg1.offset(4 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(0 as core::ffi::c_int as isize) as u64);
-    let x67: uint64_t = (*arg1.offset(3 as core::ffi::c_int as isize) as uint64_t)
+    let mut x67: uint64_t = (*arg1.offset(3 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(6 as core::ffi::c_int as isize) as u64);
-    let x68: uint64_t = (*arg1.offset(3 as core::ffi::c_int as isize) as uint64_t)
+    let mut x68: uint64_t = (*arg1.offset(3 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(5 as core::ffi::c_int as isize))
                 .wrapping_mul(0x2 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x69: uint64_t = (*arg1.offset(3 as core::ffi::c_int as isize) as uint64_t)
+    let mut x69: uint64_t = (*arg1.offset(3 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(4 as core::ffi::c_int as isize) as u64);
-    let x70: uint64_t = (*arg1.offset(3 as core::ffi::c_int as isize) as uint64_t)
+    let mut x70: uint64_t = (*arg1.offset(3 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(3 as core::ffi::c_int as isize))
                 .wrapping_mul(0x2 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x71: uint64_t = (*arg1.offset(3 as core::ffi::c_int as isize) as uint64_t)
+    let mut x71: uint64_t = (*arg1.offset(3 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(2 as core::ffi::c_int as isize) as u64);
-    let x72: uint64_t = (*arg1.offset(3 as core::ffi::c_int as isize) as uint64_t)
+    let mut x72: uint64_t = (*arg1.offset(3 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(1 as core::ffi::c_int as isize))
                 .wrapping_mul(0x2 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x73: uint64_t = (*arg1.offset(3 as core::ffi::c_int as isize) as uint64_t)
+    let mut x73: uint64_t = (*arg1.offset(3 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(0 as core::ffi::c_int as isize) as u64);
-    let x74: uint64_t = (*arg1.offset(2 as core::ffi::c_int as isize) as uint64_t)
+    let mut x74: uint64_t = (*arg1.offset(2 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(7 as core::ffi::c_int as isize) as u64);
-    let x75: uint64_t = (*arg1.offset(2 as core::ffi::c_int as isize) as uint64_t)
+    let mut x75: uint64_t = (*arg1.offset(2 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(6 as core::ffi::c_int as isize) as u64);
-    let x76: uint64_t = (*arg1.offset(2 as core::ffi::c_int as isize) as uint64_t)
+    let mut x76: uint64_t = (*arg1.offset(2 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(5 as core::ffi::c_int as isize) as u64);
-    let x77: uint64_t = (*arg1.offset(2 as core::ffi::c_int as isize) as uint64_t)
+    let mut x77: uint64_t = (*arg1.offset(2 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(4 as core::ffi::c_int as isize) as u64);
-    let x78: uint64_t = (*arg1.offset(2 as core::ffi::c_int as isize) as uint64_t)
+    let mut x78: uint64_t = (*arg1.offset(2 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(3 as core::ffi::c_int as isize) as u64);
-    let x79: uint64_t = (*arg1.offset(2 as core::ffi::c_int as isize) as uint64_t)
+    let mut x79: uint64_t = (*arg1.offset(2 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(2 as core::ffi::c_int as isize) as u64);
-    let x80: uint64_t = (*arg1.offset(2 as core::ffi::c_int as isize) as uint64_t)
+    let mut x80: uint64_t = (*arg1.offset(2 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(1 as core::ffi::c_int as isize) as u64);
-    let x81: uint64_t = (*arg1.offset(2 as core::ffi::c_int as isize) as uint64_t)
+    let mut x81: uint64_t = (*arg1.offset(2 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(0 as core::ffi::c_int as isize) as u64);
-    let x82: uint64_t = (*arg1.offset(1 as core::ffi::c_int as isize) as uint64_t)
+    let mut x82: uint64_t = (*arg1.offset(1 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(8 as core::ffi::c_int as isize) as u64);
-    let x83: uint64_t = (*arg1.offset(1 as core::ffi::c_int as isize) as uint64_t)
+    let mut x83: uint64_t = (*arg1.offset(1 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(7 as core::ffi::c_int as isize))
                 .wrapping_mul(0x2 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x84: uint64_t = (*arg1.offset(1 as core::ffi::c_int as isize) as uint64_t)
+    let mut x84: uint64_t = (*arg1.offset(1 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(6 as core::ffi::c_int as isize) as u64);
-    let x85: uint64_t = (*arg1.offset(1 as core::ffi::c_int as isize) as uint64_t)
+    let mut x85: uint64_t = (*arg1.offset(1 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(5 as core::ffi::c_int as isize))
                 .wrapping_mul(0x2 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x86: uint64_t = (*arg1.offset(1 as core::ffi::c_int as isize) as uint64_t)
+    let mut x86: uint64_t = (*arg1.offset(1 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(4 as core::ffi::c_int as isize) as u64);
-    let x87: uint64_t = (*arg1.offset(1 as core::ffi::c_int as isize) as uint64_t)
+    let mut x87: uint64_t = (*arg1.offset(1 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(3 as core::ffi::c_int as isize))
                 .wrapping_mul(0x2 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x88: uint64_t = (*arg1.offset(1 as core::ffi::c_int as isize) as uint64_t)
+    let mut x88: uint64_t = (*arg1.offset(1 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(2 as core::ffi::c_int as isize) as u64);
-    let x89: uint64_t = (*arg1.offset(1 as core::ffi::c_int as isize) as uint64_t)
+    let mut x89: uint64_t = (*arg1.offset(1 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg2.offset(1 as core::ffi::c_int as isize))
                 .wrapping_mul(0x2 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x90: uint64_t = (*arg1.offset(1 as core::ffi::c_int as isize) as uint64_t)
+    let mut x90: uint64_t = (*arg1.offset(1 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(0 as core::ffi::c_int as isize) as u64);
-    let x91: uint64_t = (*arg1.offset(0 as core::ffi::c_int as isize) as uint64_t)
+    let mut x91: uint64_t = (*arg1.offset(0 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(9 as core::ffi::c_int as isize) as u64);
-    let x92: uint64_t = (*arg1.offset(0 as core::ffi::c_int as isize) as uint64_t)
+    let mut x92: uint64_t = (*arg1.offset(0 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(8 as core::ffi::c_int as isize) as u64);
-    let x93: uint64_t = (*arg1.offset(0 as core::ffi::c_int as isize) as uint64_t)
+    let mut x93: uint64_t = (*arg1.offset(0 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(7 as core::ffi::c_int as isize) as u64);
-    let x94: uint64_t = (*arg1.offset(0 as core::ffi::c_int as isize) as uint64_t)
+    let mut x94: uint64_t = (*arg1.offset(0 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(6 as core::ffi::c_int as isize) as u64);
-    let x95: uint64_t = (*arg1.offset(0 as core::ffi::c_int as isize) as uint64_t)
+    let mut x95: uint64_t = (*arg1.offset(0 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(5 as core::ffi::c_int as isize) as u64);
-    let x96: uint64_t = (*arg1.offset(0 as core::ffi::c_int as isize) as uint64_t)
+    let mut x96: uint64_t = (*arg1.offset(0 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(4 as core::ffi::c_int as isize) as u64);
-    let x97: uint64_t = (*arg1.offset(0 as core::ffi::c_int as isize) as uint64_t)
+    let mut x97: uint64_t = (*arg1.offset(0 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(3 as core::ffi::c_int as isize) as u64);
-    let x98: uint64_t = (*arg1.offset(0 as core::ffi::c_int as isize) as uint64_t)
+    let mut x98: uint64_t = (*arg1.offset(0 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(2 as core::ffi::c_int as isize) as u64);
-    let x99: uint64_t = (*arg1.offset(0 as core::ffi::c_int as isize) as uint64_t)
+    let mut x99: uint64_t = (*arg1.offset(0 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(1 as core::ffi::c_int as isize) as u64);
-    let x100: uint64_t = (*arg1.offset(0 as core::ffi::c_int as isize) as uint64_t)
+    let mut x100: uint64_t = (*arg1.offset(0 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg2.offset(0 as core::ffi::c_int as isize) as u64);
-    let x101: uint64_t = x100.wrapping_add(x45.wrapping_add(x44.wrapping_add(
+    let mut x101: uint64_t = x100.wrapping_add(x45.wrapping_add(x44.wrapping_add(
         x42.wrapping_add(x39.wrapping_add(
             x35.wrapping_add(x30.wrapping_add(x24.wrapping_add(x17.wrapping_add(x9)))),
         )),
     )));
-    let x102: uint64_t = x101 >> 26 as core::ffi::c_int;
-    let x103: uint32_t = (x101 & 0x3ffffff as core::ffi::c_uint as u64) as uint32_t;
-    let x104: uint64_t = x91.wrapping_add(x82.wrapping_add(x74.wrapping_add(
+    let mut x102: uint64_t = x101 >> 26 as core::ffi::c_int;
+    let mut x103: uint32_t = (x101 & 0x3ffffff as core::ffi::c_uint as u64) as uint32_t;
+    let mut x104: uint64_t = x91.wrapping_add(x82.wrapping_add(x74.wrapping_add(
         x67.wrapping_add(x61.wrapping_add(
             x56.wrapping_add(x52.wrapping_add(x49.wrapping_add(x47.wrapping_add(x46)))),
         )),
     )));
-    let x105: uint64_t = x92.wrapping_add(x83.wrapping_add(x75.wrapping_add(
+    let mut x105: uint64_t = x92.wrapping_add(x83.wrapping_add(x75.wrapping_add(
         x68.wrapping_add(x62.wrapping_add(
             x57.wrapping_add(x53.wrapping_add(x50.wrapping_add(x48.wrapping_add(x1)))),
         )),
     )));
-    let x106: uint64_t = x93.wrapping_add(x84.wrapping_add(x76.wrapping_add(
+    let mut x106: uint64_t = x93.wrapping_add(x84.wrapping_add(x76.wrapping_add(
         x69.wrapping_add(x63.wrapping_add(
             x58.wrapping_add(x54.wrapping_add(x51.wrapping_add(x10.wrapping_add(x2)))),
         )),
     )));
-    let x107: uint64_t = x94.wrapping_add(x85.wrapping_add(x77.wrapping_add(
+    let mut x107: uint64_t = x94.wrapping_add(x85.wrapping_add(x77.wrapping_add(
         x70.wrapping_add(x64.wrapping_add(
             x59.wrapping_add(x55.wrapping_add(x18.wrapping_add(x11.wrapping_add(x3)))),
         )),
     )));
-    let x108: uint64_t = x95.wrapping_add(x86.wrapping_add(x78.wrapping_add(
+    let mut x108: uint64_t = x95.wrapping_add(x86.wrapping_add(x78.wrapping_add(
         x71.wrapping_add(x65.wrapping_add(
             x60.wrapping_add(x25.wrapping_add(x19.wrapping_add(x12.wrapping_add(x4)))),
         )),
     )));
-    let x109: uint64_t = x96.wrapping_add(x87.wrapping_add(x79.wrapping_add(
+    let mut x109: uint64_t = x96.wrapping_add(x87.wrapping_add(x79.wrapping_add(
         x72.wrapping_add(x66.wrapping_add(
             x31.wrapping_add(x26.wrapping_add(x20.wrapping_add(x13.wrapping_add(x5)))),
         )),
     )));
-    let x110: uint64_t = x97.wrapping_add(x88.wrapping_add(x80.wrapping_add(
+    let mut x110: uint64_t = x97.wrapping_add(x88.wrapping_add(x80.wrapping_add(
         x73.wrapping_add(x36.wrapping_add(
             x32.wrapping_add(x27.wrapping_add(x21.wrapping_add(x14.wrapping_add(x6)))),
         )),
     )));
-    let x111: uint64_t = x98.wrapping_add(x89.wrapping_add(x81.wrapping_add(
+    let mut x111: uint64_t = x98.wrapping_add(x89.wrapping_add(x81.wrapping_add(
         x40.wrapping_add(x37.wrapping_add(
             x33.wrapping_add(x28.wrapping_add(x22.wrapping_add(x15.wrapping_add(x7)))),
         )),
     )));
-    let x112: uint64_t = x99.wrapping_add(x90.wrapping_add(x43.wrapping_add(
+    let mut x112: uint64_t = x99.wrapping_add(x90.wrapping_add(x43.wrapping_add(
         x41.wrapping_add(x38.wrapping_add(
             x34.wrapping_add(x29.wrapping_add(x23.wrapping_add(x16.wrapping_add(x8)))),
         )),
     )));
-    let x113: uint64_t = x102.wrapping_add(x112);
-    let x114: uint64_t = x113 >> 25 as core::ffi::c_int;
-    let x115: uint32_t = (x113 & 0x1ffffff as core::ffi::c_uint as u64) as uint32_t;
-    let x116: uint64_t = x114.wrapping_add(x111);
-    let x117: uint64_t = x116 >> 26 as core::ffi::c_int;
-    let x118: uint32_t = (x116 & 0x3ffffff as core::ffi::c_uint as u64) as uint32_t;
-    let x119: uint64_t = x117.wrapping_add(x110);
-    let x120: uint64_t = x119 >> 25 as core::ffi::c_int;
-    let x121: uint32_t = (x119 & 0x1ffffff as core::ffi::c_uint as u64) as uint32_t;
-    let x122: uint64_t = x120.wrapping_add(x109);
-    let x123: uint64_t = x122 >> 26 as core::ffi::c_int;
-    let x124: uint32_t = (x122 & 0x3ffffff as core::ffi::c_uint as u64) as uint32_t;
-    let x125: uint64_t = x123.wrapping_add(x108);
-    let x126: uint64_t = x125 >> 25 as core::ffi::c_int;
-    let x127: uint32_t = (x125 & 0x1ffffff as core::ffi::c_uint as u64) as uint32_t;
-    let x128: uint64_t = x126.wrapping_add(x107);
-    let x129: uint64_t = x128 >> 26 as core::ffi::c_int;
-    let x130: uint32_t = (x128 & 0x3ffffff as core::ffi::c_uint as u64) as uint32_t;
-    let x131: uint64_t = x129.wrapping_add(x106);
-    let x132: uint64_t = x131 >> 25 as core::ffi::c_int;
-    let x133: uint32_t = (x131 & 0x1ffffff as core::ffi::c_uint as u64) as uint32_t;
-    let x134: uint64_t = x132.wrapping_add(x105);
-    let x135: uint64_t = x134 >> 26 as core::ffi::c_int;
-    let x136: uint32_t = (x134 & 0x3ffffff as core::ffi::c_uint as u64) as uint32_t;
-    let x137: uint64_t = x135.wrapping_add(x104);
-    let x138: uint64_t = x137 >> 25 as core::ffi::c_int;
-    let x139: uint32_t = (x137 & 0x1ffffff as core::ffi::c_uint as u64) as uint32_t;
-    let x140: uint64_t = x138.wrapping_mul(0x13 as core::ffi::c_int as u64);
-    let x141: uint64_t = (x103 as u64).wrapping_add(x140);
-    let x142: uint32_t = (x141 >> 26 as core::ffi::c_int) as uint32_t;
-    let x143: uint32_t = (x141 & 0x3ffffff as core::ffi::c_uint as u64) as uint32_t;
-    let x144: uint32_t = x142.wrapping_add(x115);
-    let x145: fiat_25519_uint1 = (x144 >> 25 as core::ffi::c_int) as fiat_25519_uint1;
-    let x146: uint32_t = x144 & 0x1ffffff as core::ffi::c_uint;
-    let x147: uint32_t = (x145 as core::ffi::c_uint).wrapping_add(x118);
+    let mut x113: uint64_t = x102.wrapping_add(x112);
+    let mut x114: uint64_t = x113 >> 25 as core::ffi::c_int;
+    let mut x115: uint32_t = (x113 & 0x1ffffff as core::ffi::c_uint as u64) as uint32_t;
+    let mut x116: uint64_t = x114.wrapping_add(x111);
+    let mut x117: uint64_t = x116 >> 26 as core::ffi::c_int;
+    let mut x118: uint32_t = (x116 & 0x3ffffff as core::ffi::c_uint as u64) as uint32_t;
+    let mut x119: uint64_t = x117.wrapping_add(x110);
+    let mut x120: uint64_t = x119 >> 25 as core::ffi::c_int;
+    let mut x121: uint32_t = (x119 & 0x1ffffff as core::ffi::c_uint as u64) as uint32_t;
+    let mut x122: uint64_t = x120.wrapping_add(x109);
+    let mut x123: uint64_t = x122 >> 26 as core::ffi::c_int;
+    let mut x124: uint32_t = (x122 & 0x3ffffff as core::ffi::c_uint as u64) as uint32_t;
+    let mut x125: uint64_t = x123.wrapping_add(x108);
+    let mut x126: uint64_t = x125 >> 25 as core::ffi::c_int;
+    let mut x127: uint32_t = (x125 & 0x1ffffff as core::ffi::c_uint as u64) as uint32_t;
+    let mut x128: uint64_t = x126.wrapping_add(x107);
+    let mut x129: uint64_t = x128 >> 26 as core::ffi::c_int;
+    let mut x130: uint32_t = (x128 & 0x3ffffff as core::ffi::c_uint as u64) as uint32_t;
+    let mut x131: uint64_t = x129.wrapping_add(x106);
+    let mut x132: uint64_t = x131 >> 25 as core::ffi::c_int;
+    let mut x133: uint32_t = (x131 & 0x1ffffff as core::ffi::c_uint as u64) as uint32_t;
+    let mut x134: uint64_t = x132.wrapping_add(x105);
+    let mut x135: uint64_t = x134 >> 26 as core::ffi::c_int;
+    let mut x136: uint32_t = (x134 & 0x3ffffff as core::ffi::c_uint as u64) as uint32_t;
+    let mut x137: uint64_t = x135.wrapping_add(x104);
+    let mut x138: uint64_t = x137 >> 25 as core::ffi::c_int;
+    let mut x139: uint32_t = (x137 & 0x1ffffff as core::ffi::c_uint as u64) as uint32_t;
+    let mut x140: uint64_t = x138.wrapping_mul(0x13 as core::ffi::c_int as u64);
+    let mut x141: uint64_t = (x103 as u64).wrapping_add(x140);
+    let mut x142: uint32_t = (x141 >> 26 as core::ffi::c_int) as uint32_t;
+    let mut x143: uint32_t = (x141 & 0x3ffffff as core::ffi::c_uint as u64) as uint32_t;
+    let mut x144: uint32_t = x142.wrapping_add(x115);
+    let mut x145: fiat_25519_uint1 = (x144 >> 25 as core::ffi::c_int) as fiat_25519_uint1;
+    let mut x146: uint32_t = x144 & 0x1ffffff as core::ffi::c_uint;
+    let mut x147: uint32_t = (x145 as core::ffi::c_uint).wrapping_add(x118);
     *out1.offset(0 as core::ffi::c_int as isize) = x143;
     *out1.offset(1 as core::ffi::c_int as isize) = x146;
     *out1.offset(2 as core::ffi::c_int as isize) = x147;
@@ -15542,204 +15540,204 @@ unsafe extern "C" fn fiat_25519_carry_mul(
     *out1.offset(8 as core::ffi::c_int as isize) = x136;
     *out1.offset(9 as core::ffi::c_int as isize) = x139;
 }
-unsafe extern "C" fn fiat_25519_carry_square(out1: *mut uint32_t, arg1: *const uint32_t) {
-    let x1: uint32_t = (*arg1.offset(9 as core::ffi::c_int as isize))
+unsafe extern "C" fn fiat_25519_carry_square(mut out1: *mut uint32_t, mut arg1: *const uint32_t) {
+    let mut x1: uint32_t = (*arg1.offset(9 as core::ffi::c_int as isize))
         .wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint);
-    let x2: uint32_t = x1.wrapping_mul(0x2 as core::ffi::c_int as core::ffi::c_uint);
-    let x3: uint32_t = (*arg1.offset(9 as core::ffi::c_int as isize))
+    let mut x2: uint32_t = x1.wrapping_mul(0x2 as core::ffi::c_int as core::ffi::c_uint);
+    let mut x3: uint32_t = (*arg1.offset(9 as core::ffi::c_int as isize))
         .wrapping_mul(0x2 as core::ffi::c_int as core::ffi::c_uint);
-    let x4: uint32_t = (*arg1.offset(8 as core::ffi::c_int as isize))
+    let mut x4: uint32_t = (*arg1.offset(8 as core::ffi::c_int as isize))
         .wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint);
-    let x5: uint64_t = (x4 as uint64_t).wrapping_mul(0x2 as core::ffi::c_int as u64);
-    let x6: uint32_t = (*arg1.offset(8 as core::ffi::c_int as isize))
+    let mut x5: uint64_t = (x4 as uint64_t).wrapping_mul(0x2 as core::ffi::c_int as u64);
+    let mut x6: uint32_t = (*arg1.offset(8 as core::ffi::c_int as isize))
         .wrapping_mul(0x2 as core::ffi::c_int as core::ffi::c_uint);
-    let x7: uint32_t = (*arg1.offset(7 as core::ffi::c_int as isize))
+    let mut x7: uint32_t = (*arg1.offset(7 as core::ffi::c_int as isize))
         .wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint);
-    let x8: uint32_t = x7.wrapping_mul(0x2 as core::ffi::c_int as core::ffi::c_uint);
-    let x9: uint32_t = (*arg1.offset(7 as core::ffi::c_int as isize))
+    let mut x8: uint32_t = x7.wrapping_mul(0x2 as core::ffi::c_int as core::ffi::c_uint);
+    let mut x9: uint32_t = (*arg1.offset(7 as core::ffi::c_int as isize))
         .wrapping_mul(0x2 as core::ffi::c_int as core::ffi::c_uint);
-    let x10: uint32_t = (*arg1.offset(6 as core::ffi::c_int as isize))
+    let mut x10: uint32_t = (*arg1.offset(6 as core::ffi::c_int as isize))
         .wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint);
-    let x11: uint64_t = (x10 as uint64_t).wrapping_mul(0x2 as core::ffi::c_int as u64);
-    let x12: uint32_t = (*arg1.offset(6 as core::ffi::c_int as isize))
+    let mut x11: uint64_t = (x10 as uint64_t).wrapping_mul(0x2 as core::ffi::c_int as u64);
+    let mut x12: uint32_t = (*arg1.offset(6 as core::ffi::c_int as isize))
         .wrapping_mul(0x2 as core::ffi::c_int as core::ffi::c_uint);
-    let x13: uint32_t = (*arg1.offset(5 as core::ffi::c_int as isize))
+    let mut x13: uint32_t = (*arg1.offset(5 as core::ffi::c_int as isize))
         .wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint);
-    let x14: uint32_t = (*arg1.offset(5 as core::ffi::c_int as isize))
+    let mut x14: uint32_t = (*arg1.offset(5 as core::ffi::c_int as isize))
         .wrapping_mul(0x2 as core::ffi::c_int as core::ffi::c_uint);
-    let x15: uint32_t = (*arg1.offset(4 as core::ffi::c_int as isize))
+    let mut x15: uint32_t = (*arg1.offset(4 as core::ffi::c_int as isize))
         .wrapping_mul(0x2 as core::ffi::c_int as core::ffi::c_uint);
-    let x16: uint32_t = (*arg1.offset(3 as core::ffi::c_int as isize))
+    let mut x16: uint32_t = (*arg1.offset(3 as core::ffi::c_int as isize))
         .wrapping_mul(0x2 as core::ffi::c_int as core::ffi::c_uint);
-    let x17: uint32_t = (*arg1.offset(2 as core::ffi::c_int as isize))
+    let mut x17: uint32_t = (*arg1.offset(2 as core::ffi::c_int as isize))
         .wrapping_mul(0x2 as core::ffi::c_int as core::ffi::c_uint);
-    let x18: uint32_t = (*arg1.offset(1 as core::ffi::c_int as isize))
+    let mut x18: uint32_t = (*arg1.offset(1 as core::ffi::c_int as isize))
         .wrapping_mul(0x2 as core::ffi::c_int as core::ffi::c_uint);
-    let x19: uint64_t = (*arg1.offset(9 as core::ffi::c_int as isize) as uint64_t)
+    let mut x19: uint64_t = (*arg1.offset(9 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(x1.wrapping_mul(0x2 as core::ffi::c_int as core::ffi::c_uint) as u64);
-    let x20: uint64_t =
+    let mut x20: uint64_t =
         (*arg1.offset(8 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(x2 as u64);
-    let x21: uint64_t =
+    let mut x21: uint64_t =
         (*arg1.offset(8 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(x4 as u64);
-    let x22: uint64_t = (*arg1.offset(7 as core::ffi::c_int as isize) as u64)
+    let mut x22: uint64_t = (*arg1.offset(7 as core::ffi::c_int as isize) as u64)
         .wrapping_mul((x2 as uint64_t).wrapping_mul(0x2 as core::ffi::c_int as u64));
-    let x23: uint64_t = (*arg1.offset(7 as core::ffi::c_int as isize) as u64).wrapping_mul(x5);
-    let x24: uint64_t = (*arg1.offset(7 as core::ffi::c_int as isize) as uint64_t)
+    let mut x23: uint64_t = (*arg1.offset(7 as core::ffi::c_int as isize) as u64).wrapping_mul(x5);
+    let mut x24: uint64_t = (*arg1.offset(7 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(x7.wrapping_mul(0x2 as core::ffi::c_int as core::ffi::c_uint) as u64);
-    let x25: uint64_t =
+    let mut x25: uint64_t =
         (*arg1.offset(6 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(x2 as u64);
-    let x26: uint64_t = (*arg1.offset(6 as core::ffi::c_int as isize) as u64).wrapping_mul(x5);
-    let x27: uint64_t =
+    let mut x26: uint64_t = (*arg1.offset(6 as core::ffi::c_int as isize) as u64).wrapping_mul(x5);
+    let mut x27: uint64_t =
         (*arg1.offset(6 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(x8 as u64);
-    let x28: uint64_t =
+    let mut x28: uint64_t =
         (*arg1.offset(6 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(x10 as u64);
-    let x29: uint64_t = (*arg1.offset(5 as core::ffi::c_int as isize) as u64)
+    let mut x29: uint64_t = (*arg1.offset(5 as core::ffi::c_int as isize) as u64)
         .wrapping_mul((x2 as uint64_t).wrapping_mul(0x2 as core::ffi::c_int as u64));
-    let x30: uint64_t = (*arg1.offset(5 as core::ffi::c_int as isize) as u64).wrapping_mul(x5);
-    let x31: uint64_t = (*arg1.offset(5 as core::ffi::c_int as isize) as u64)
+    let mut x30: uint64_t = (*arg1.offset(5 as core::ffi::c_int as isize) as u64).wrapping_mul(x5);
+    let mut x31: uint64_t = (*arg1.offset(5 as core::ffi::c_int as isize) as u64)
         .wrapping_mul((x8 as uint64_t).wrapping_mul(0x2 as core::ffi::c_int as u64));
-    let x32: uint64_t = (*arg1.offset(5 as core::ffi::c_int as isize) as u64).wrapping_mul(x11);
-    let x33: uint64_t = (*arg1.offset(5 as core::ffi::c_int as isize) as uint64_t)
+    let mut x32: uint64_t = (*arg1.offset(5 as core::ffi::c_int as isize) as u64).wrapping_mul(x11);
+    let mut x33: uint64_t = (*arg1.offset(5 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(x13.wrapping_mul(0x2 as core::ffi::c_int as core::ffi::c_uint) as u64);
-    let x34: uint64_t =
+    let mut x34: uint64_t =
         (*arg1.offset(4 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(x2 as u64);
-    let x35: uint64_t = (*arg1.offset(4 as core::ffi::c_int as isize) as u64).wrapping_mul(x5);
-    let x36: uint64_t =
+    let mut x35: uint64_t = (*arg1.offset(4 as core::ffi::c_int as isize) as u64).wrapping_mul(x5);
+    let mut x36: uint64_t =
         (*arg1.offset(4 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(x8 as u64);
-    let x37: uint64_t = (*arg1.offset(4 as core::ffi::c_int as isize) as u64).wrapping_mul(x11);
-    let x38: uint64_t =
+    let mut x37: uint64_t = (*arg1.offset(4 as core::ffi::c_int as isize) as u64).wrapping_mul(x11);
+    let mut x38: uint64_t =
         (*arg1.offset(4 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(x14 as u64);
-    let x39: uint64_t = (*arg1.offset(4 as core::ffi::c_int as isize) as uint64_t)
+    let mut x39: uint64_t = (*arg1.offset(4 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg1.offset(4 as core::ffi::c_int as isize) as u64);
-    let x40: uint64_t = (*arg1.offset(3 as core::ffi::c_int as isize) as u64)
+    let mut x40: uint64_t = (*arg1.offset(3 as core::ffi::c_int as isize) as u64)
         .wrapping_mul((x2 as uint64_t).wrapping_mul(0x2 as core::ffi::c_int as u64));
-    let x41: uint64_t = (*arg1.offset(3 as core::ffi::c_int as isize) as u64).wrapping_mul(x5);
-    let x42: uint64_t = (*arg1.offset(3 as core::ffi::c_int as isize) as u64)
+    let mut x41: uint64_t = (*arg1.offset(3 as core::ffi::c_int as isize) as u64).wrapping_mul(x5);
+    let mut x42: uint64_t = (*arg1.offset(3 as core::ffi::c_int as isize) as u64)
         .wrapping_mul((x8 as uint64_t).wrapping_mul(0x2 as core::ffi::c_int as u64));
-    let x43: uint64_t =
+    let mut x43: uint64_t =
         (*arg1.offset(3 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(x12 as u64);
-    let x44: uint64_t = (*arg1.offset(3 as core::ffi::c_int as isize) as uint64_t)
+    let mut x44: uint64_t = (*arg1.offset(3 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(x14.wrapping_mul(0x2 as core::ffi::c_int as core::ffi::c_uint) as u64);
-    let x45: uint64_t =
+    let mut x45: uint64_t =
         (*arg1.offset(3 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(x15 as u64);
-    let x46: uint64_t = (*arg1.offset(3 as core::ffi::c_int as isize) as uint64_t)
+    let mut x46: uint64_t = (*arg1.offset(3 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg1.offset(3 as core::ffi::c_int as isize))
                 .wrapping_mul(0x2 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x47: uint64_t =
+    let mut x47: uint64_t =
         (*arg1.offset(2 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(x2 as u64);
-    let x48: uint64_t = (*arg1.offset(2 as core::ffi::c_int as isize) as u64).wrapping_mul(x5);
-    let x49: uint64_t =
+    let mut x48: uint64_t = (*arg1.offset(2 as core::ffi::c_int as isize) as u64).wrapping_mul(x5);
+    let mut x49: uint64_t =
         (*arg1.offset(2 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(x9 as u64);
-    let x50: uint64_t =
+    let mut x50: uint64_t =
         (*arg1.offset(2 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(x12 as u64);
-    let x51: uint64_t =
+    let mut x51: uint64_t =
         (*arg1.offset(2 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(x14 as u64);
-    let x52: uint64_t =
+    let mut x52: uint64_t =
         (*arg1.offset(2 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(x15 as u64);
-    let x53: uint64_t =
+    let mut x53: uint64_t =
         (*arg1.offset(2 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(x16 as u64);
-    let x54: uint64_t = (*arg1.offset(2 as core::ffi::c_int as isize) as uint64_t)
+    let mut x54: uint64_t = (*arg1.offset(2 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg1.offset(2 as core::ffi::c_int as isize) as u64);
-    let x55: uint64_t = (*arg1.offset(1 as core::ffi::c_int as isize) as u64)
+    let mut x55: uint64_t = (*arg1.offset(1 as core::ffi::c_int as isize) as u64)
         .wrapping_mul((x2 as uint64_t).wrapping_mul(0x2 as core::ffi::c_int as u64));
-    let x56: uint64_t =
+    let mut x56: uint64_t =
         (*arg1.offset(1 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(x6 as u64);
-    let x57: uint64_t = (*arg1.offset(1 as core::ffi::c_int as isize) as uint64_t)
+    let mut x57: uint64_t = (*arg1.offset(1 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(x9.wrapping_mul(0x2 as core::ffi::c_int as core::ffi::c_uint) as u64);
-    let x58: uint64_t =
+    let mut x58: uint64_t =
         (*arg1.offset(1 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(x12 as u64);
-    let x59: uint64_t = (*arg1.offset(1 as core::ffi::c_int as isize) as uint64_t)
+    let mut x59: uint64_t = (*arg1.offset(1 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(x14.wrapping_mul(0x2 as core::ffi::c_int as core::ffi::c_uint) as u64);
-    let x60: uint64_t =
+    let mut x60: uint64_t =
         (*arg1.offset(1 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(x15 as u64);
-    let x61: uint64_t = (*arg1.offset(1 as core::ffi::c_int as isize) as uint64_t)
+    let mut x61: uint64_t = (*arg1.offset(1 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(x16.wrapping_mul(0x2 as core::ffi::c_int as core::ffi::c_uint) as u64);
-    let x62: uint64_t =
+    let mut x62: uint64_t =
         (*arg1.offset(1 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(x17 as u64);
-    let x63: uint64_t = (*arg1.offset(1 as core::ffi::c_int as isize) as uint64_t)
+    let mut x63: uint64_t = (*arg1.offset(1 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(
             (*arg1.offset(1 as core::ffi::c_int as isize))
                 .wrapping_mul(0x2 as core::ffi::c_int as core::ffi::c_uint) as u64,
         );
-    let x64: uint64_t =
+    let mut x64: uint64_t =
         (*arg1.offset(0 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(x3 as u64);
-    let x65: uint64_t =
+    let mut x65: uint64_t =
         (*arg1.offset(0 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(x6 as u64);
-    let x66: uint64_t =
+    let mut x66: uint64_t =
         (*arg1.offset(0 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(x9 as u64);
-    let x67: uint64_t =
+    let mut x67: uint64_t =
         (*arg1.offset(0 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(x12 as u64);
-    let x68: uint64_t =
+    let mut x68: uint64_t =
         (*arg1.offset(0 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(x14 as u64);
-    let x69: uint64_t =
+    let mut x69: uint64_t =
         (*arg1.offset(0 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(x15 as u64);
-    let x70: uint64_t =
+    let mut x70: uint64_t =
         (*arg1.offset(0 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(x16 as u64);
-    let x71: uint64_t =
+    let mut x71: uint64_t =
         (*arg1.offset(0 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(x17 as u64);
-    let x72: uint64_t =
+    let mut x72: uint64_t =
         (*arg1.offset(0 as core::ffi::c_int as isize) as uint64_t).wrapping_mul(x18 as u64);
-    let x73: uint64_t = (*arg1.offset(0 as core::ffi::c_int as isize) as uint64_t)
+    let mut x73: uint64_t = (*arg1.offset(0 as core::ffi::c_int as isize) as uint64_t)
         .wrapping_mul(*arg1.offset(0 as core::ffi::c_int as isize) as u64);
-    let x74: uint64_t = x73
+    let mut x74: uint64_t = x73
         .wrapping_add(x55.wrapping_add(x48.wrapping_add(x42.wrapping_add(x37.wrapping_add(x33)))));
-    let x75: uint64_t = x74 >> 26 as core::ffi::c_int;
-    let x76: uint32_t = (x74 & 0x3ffffff as core::ffi::c_uint as u64) as uint32_t;
-    let x77: uint64_t =
+    let mut x75: uint64_t = x74 >> 26 as core::ffi::c_int;
+    let mut x76: uint32_t = (x74 & 0x3ffffff as core::ffi::c_uint as u64) as uint32_t;
+    let mut x77: uint64_t =
         x64.wrapping_add(x56.wrapping_add(x49.wrapping_add(x43.wrapping_add(x38))));
-    let x78: uint64_t = x65
+    let mut x78: uint64_t = x65
         .wrapping_add(x57.wrapping_add(x50.wrapping_add(x44.wrapping_add(x39.wrapping_add(x19)))));
-    let x79: uint64_t =
+    let mut x79: uint64_t =
         x66.wrapping_add(x58.wrapping_add(x51.wrapping_add(x45.wrapping_add(x20))));
-    let x80: uint64_t = x67
+    let mut x80: uint64_t = x67
         .wrapping_add(x59.wrapping_add(x52.wrapping_add(x46.wrapping_add(x22.wrapping_add(x21)))));
-    let x81: uint64_t =
+    let mut x81: uint64_t =
         x68.wrapping_add(x60.wrapping_add(x53.wrapping_add(x25.wrapping_add(x23))));
-    let x82: uint64_t = x69
+    let mut x82: uint64_t = x69
         .wrapping_add(x61.wrapping_add(x54.wrapping_add(x29.wrapping_add(x26.wrapping_add(x24)))));
-    let x83: uint64_t =
+    let mut x83: uint64_t =
         x70.wrapping_add(x62.wrapping_add(x34.wrapping_add(x30.wrapping_add(x27))));
-    let x84: uint64_t = x71
+    let mut x84: uint64_t = x71
         .wrapping_add(x63.wrapping_add(x40.wrapping_add(x35.wrapping_add(x31.wrapping_add(x28)))));
-    let x85: uint64_t =
+    let mut x85: uint64_t =
         x72.wrapping_add(x47.wrapping_add(x41.wrapping_add(x36.wrapping_add(x32))));
-    let x86: uint64_t = x75.wrapping_add(x85);
-    let x87: uint64_t = x86 >> 25 as core::ffi::c_int;
-    let x88: uint32_t = (x86 & 0x1ffffff as core::ffi::c_uint as u64) as uint32_t;
-    let x89: uint64_t = x87.wrapping_add(x84);
-    let x90: uint64_t = x89 >> 26 as core::ffi::c_int;
-    let x91: uint32_t = (x89 & 0x3ffffff as core::ffi::c_uint as u64) as uint32_t;
-    let x92: uint64_t = x90.wrapping_add(x83);
-    let x93: uint64_t = x92 >> 25 as core::ffi::c_int;
-    let x94: uint32_t = (x92 & 0x1ffffff as core::ffi::c_uint as u64) as uint32_t;
-    let x95: uint64_t = x93.wrapping_add(x82);
-    let x96: uint64_t = x95 >> 26 as core::ffi::c_int;
-    let x97: uint32_t = (x95 & 0x3ffffff as core::ffi::c_uint as u64) as uint32_t;
-    let x98: uint64_t = x96.wrapping_add(x81);
-    let x99: uint64_t = x98 >> 25 as core::ffi::c_int;
-    let x100: uint32_t = (x98 & 0x1ffffff as core::ffi::c_uint as u64) as uint32_t;
-    let x101: uint64_t = x99.wrapping_add(x80);
-    let x102: uint64_t = x101 >> 26 as core::ffi::c_int;
-    let x103: uint32_t = (x101 & 0x3ffffff as core::ffi::c_uint as u64) as uint32_t;
-    let x104: uint64_t = x102.wrapping_add(x79);
-    let x105: uint64_t = x104 >> 25 as core::ffi::c_int;
-    let x106: uint32_t = (x104 & 0x1ffffff as core::ffi::c_uint as u64) as uint32_t;
-    let x107: uint64_t = x105.wrapping_add(x78);
-    let x108: uint64_t = x107 >> 26 as core::ffi::c_int;
-    let x109: uint32_t = (x107 & 0x3ffffff as core::ffi::c_uint as u64) as uint32_t;
-    let x110: uint64_t = x108.wrapping_add(x77);
-    let x111: uint64_t = x110 >> 25 as core::ffi::c_int;
-    let x112: uint32_t = (x110 & 0x1ffffff as core::ffi::c_uint as u64) as uint32_t;
-    let x113: uint64_t = x111.wrapping_mul(0x13 as core::ffi::c_int as u64);
-    let x114: uint64_t = (x76 as u64).wrapping_add(x113);
-    let x115: uint32_t = (x114 >> 26 as core::ffi::c_int) as uint32_t;
-    let x116: uint32_t = (x114 & 0x3ffffff as core::ffi::c_uint as u64) as uint32_t;
-    let x117: uint32_t = x115.wrapping_add(x88);
-    let x118: fiat_25519_uint1 = (x117 >> 25 as core::ffi::c_int) as fiat_25519_uint1;
-    let x119: uint32_t = x117 & 0x1ffffff as core::ffi::c_uint;
-    let x120: uint32_t = (x118 as core::ffi::c_uint).wrapping_add(x91);
+    let mut x86: uint64_t = x75.wrapping_add(x85);
+    let mut x87: uint64_t = x86 >> 25 as core::ffi::c_int;
+    let mut x88: uint32_t = (x86 & 0x1ffffff as core::ffi::c_uint as u64) as uint32_t;
+    let mut x89: uint64_t = x87.wrapping_add(x84);
+    let mut x90: uint64_t = x89 >> 26 as core::ffi::c_int;
+    let mut x91: uint32_t = (x89 & 0x3ffffff as core::ffi::c_uint as u64) as uint32_t;
+    let mut x92: uint64_t = x90.wrapping_add(x83);
+    let mut x93: uint64_t = x92 >> 25 as core::ffi::c_int;
+    let mut x94: uint32_t = (x92 & 0x1ffffff as core::ffi::c_uint as u64) as uint32_t;
+    let mut x95: uint64_t = x93.wrapping_add(x82);
+    let mut x96: uint64_t = x95 >> 26 as core::ffi::c_int;
+    let mut x97: uint32_t = (x95 & 0x3ffffff as core::ffi::c_uint as u64) as uint32_t;
+    let mut x98: uint64_t = x96.wrapping_add(x81);
+    let mut x99: uint64_t = x98 >> 25 as core::ffi::c_int;
+    let mut x100: uint32_t = (x98 & 0x1ffffff as core::ffi::c_uint as u64) as uint32_t;
+    let mut x101: uint64_t = x99.wrapping_add(x80);
+    let mut x102: uint64_t = x101 >> 26 as core::ffi::c_int;
+    let mut x103: uint32_t = (x101 & 0x3ffffff as core::ffi::c_uint as u64) as uint32_t;
+    let mut x104: uint64_t = x102.wrapping_add(x79);
+    let mut x105: uint64_t = x104 >> 25 as core::ffi::c_int;
+    let mut x106: uint32_t = (x104 & 0x1ffffff as core::ffi::c_uint as u64) as uint32_t;
+    let mut x107: uint64_t = x105.wrapping_add(x78);
+    let mut x108: uint64_t = x107 >> 26 as core::ffi::c_int;
+    let mut x109: uint32_t = (x107 & 0x3ffffff as core::ffi::c_uint as u64) as uint32_t;
+    let mut x110: uint64_t = x108.wrapping_add(x77);
+    let mut x111: uint64_t = x110 >> 25 as core::ffi::c_int;
+    let mut x112: uint32_t = (x110 & 0x1ffffff as core::ffi::c_uint as u64) as uint32_t;
+    let mut x113: uint64_t = x111.wrapping_mul(0x13 as core::ffi::c_int as u64);
+    let mut x114: uint64_t = (x76 as u64).wrapping_add(x113);
+    let mut x115: uint32_t = (x114 >> 26 as core::ffi::c_int) as uint32_t;
+    let mut x116: uint32_t = (x114 & 0x3ffffff as core::ffi::c_uint as u64) as uint32_t;
+    let mut x117: uint32_t = x115.wrapping_add(x88);
+    let mut x118: fiat_25519_uint1 = (x117 >> 25 as core::ffi::c_int) as fiat_25519_uint1;
+    let mut x119: uint32_t = x117 & 0x1ffffff as core::ffi::c_uint;
+    let mut x120: uint32_t = (x118 as core::ffi::c_uint).wrapping_add(x91);
     *out1.offset(0 as core::ffi::c_int as isize) = x116;
     *out1.offset(1 as core::ffi::c_int as isize) = x119;
     *out1.offset(2 as core::ffi::c_int as isize) = x120;
@@ -15751,44 +15749,44 @@ unsafe extern "C" fn fiat_25519_carry_square(out1: *mut uint32_t, arg1: *const u
     *out1.offset(8 as core::ffi::c_int as isize) = x109;
     *out1.offset(9 as core::ffi::c_int as isize) = x112;
 }
-unsafe extern "C" fn fiat_25519_carry(out1: *mut uint32_t, arg1: *const uint32_t) {
-    let x1: uint32_t = *arg1.offset(0 as core::ffi::c_int as isize);
-    let x2: uint32_t =
+unsafe extern "C" fn fiat_25519_carry(mut out1: *mut uint32_t, mut arg1: *const uint32_t) {
+    let mut x1: uint32_t = *arg1.offset(0 as core::ffi::c_int as isize);
+    let mut x2: uint32_t =
         (x1 >> 26 as core::ffi::c_int).wrapping_add(*arg1.offset(1 as core::ffi::c_int as isize));
-    let x3: uint32_t =
+    let mut x3: uint32_t =
         (x2 >> 25 as core::ffi::c_int).wrapping_add(*arg1.offset(2 as core::ffi::c_int as isize));
-    let x4: uint32_t =
+    let mut x4: uint32_t =
         (x3 >> 26 as core::ffi::c_int).wrapping_add(*arg1.offset(3 as core::ffi::c_int as isize));
-    let x5: uint32_t =
+    let mut x5: uint32_t =
         (x4 >> 25 as core::ffi::c_int).wrapping_add(*arg1.offset(4 as core::ffi::c_int as isize));
-    let x6: uint32_t =
+    let mut x6: uint32_t =
         (x5 >> 26 as core::ffi::c_int).wrapping_add(*arg1.offset(5 as core::ffi::c_int as isize));
-    let x7: uint32_t =
+    let mut x7: uint32_t =
         (x6 >> 25 as core::ffi::c_int).wrapping_add(*arg1.offset(6 as core::ffi::c_int as isize));
-    let x8: uint32_t =
+    let mut x8: uint32_t =
         (x7 >> 26 as core::ffi::c_int).wrapping_add(*arg1.offset(7 as core::ffi::c_int as isize));
-    let x9: uint32_t =
+    let mut x9: uint32_t =
         (x8 >> 25 as core::ffi::c_int).wrapping_add(*arg1.offset(8 as core::ffi::c_int as isize));
-    let x10: uint32_t =
+    let mut x10: uint32_t =
         (x9 >> 26 as core::ffi::c_int).wrapping_add(*arg1.offset(9 as core::ffi::c_int as isize));
-    let x11: uint32_t = (x1 & 0x3ffffff as core::ffi::c_uint).wrapping_add(
+    let mut x11: uint32_t = (x1 & 0x3ffffff as core::ffi::c_uint).wrapping_add(
         (x10 >> 25 as core::ffi::c_int).wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint),
     );
-    let x12: uint32_t = ((x11 >> 26 as core::ffi::c_int) as fiat_25519_uint1
+    let mut x12: uint32_t = ((x11 >> 26 as core::ffi::c_int) as fiat_25519_uint1
         as core::ffi::c_uint)
         .wrapping_add(x2 & 0x1ffffff as core::ffi::c_uint);
-    let x13: uint32_t = x11 & 0x3ffffff as core::ffi::c_uint;
-    let x14: uint32_t = x12 & 0x1ffffff as core::ffi::c_uint;
-    let x15: uint32_t = ((x12 >> 25 as core::ffi::c_int) as fiat_25519_uint1
+    let mut x13: uint32_t = x11 & 0x3ffffff as core::ffi::c_uint;
+    let mut x14: uint32_t = x12 & 0x1ffffff as core::ffi::c_uint;
+    let mut x15: uint32_t = ((x12 >> 25 as core::ffi::c_int) as fiat_25519_uint1
         as core::ffi::c_uint)
         .wrapping_add(x3 & 0x3ffffff as core::ffi::c_uint);
-    let x16: uint32_t = x4 & 0x1ffffff as core::ffi::c_uint;
-    let x17: uint32_t = x5 & 0x3ffffff as core::ffi::c_uint;
-    let x18: uint32_t = x6 & 0x1ffffff as core::ffi::c_uint;
-    let x19: uint32_t = x7 & 0x3ffffff as core::ffi::c_uint;
-    let x20: uint32_t = x8 & 0x1ffffff as core::ffi::c_uint;
-    let x21: uint32_t = x9 & 0x3ffffff as core::ffi::c_uint;
-    let x22: uint32_t = x10 & 0x1ffffff as core::ffi::c_uint;
+    let mut x16: uint32_t = x4 & 0x1ffffff as core::ffi::c_uint;
+    let mut x17: uint32_t = x5 & 0x3ffffff as core::ffi::c_uint;
+    let mut x18: uint32_t = x6 & 0x1ffffff as core::ffi::c_uint;
+    let mut x19: uint32_t = x7 & 0x3ffffff as core::ffi::c_uint;
+    let mut x20: uint32_t = x8 & 0x1ffffff as core::ffi::c_uint;
+    let mut x21: uint32_t = x9 & 0x3ffffff as core::ffi::c_uint;
+    let mut x22: uint32_t = x10 & 0x1ffffff as core::ffi::c_uint;
     *out1.offset(0 as core::ffi::c_int as isize) = x13;
     *out1.offset(1 as core::ffi::c_int as isize) = x14;
     *out1.offset(2 as core::ffi::c_int as isize) = x15;
@@ -15801,29 +15799,29 @@ unsafe extern "C" fn fiat_25519_carry(out1: *mut uint32_t, arg1: *const uint32_t
     *out1.offset(9 as core::ffi::c_int as isize) = x22;
 }
 unsafe extern "C" fn fiat_25519_add(
-    out1: *mut uint32_t,
-    arg1: *const uint32_t,
-    arg2: *const uint32_t,
+    mut out1: *mut uint32_t,
+    mut arg1: *const uint32_t,
+    mut arg2: *const uint32_t,
 ) {
-    let x1: uint32_t = (*arg1.offset(0 as core::ffi::c_int as isize))
+    let mut x1: uint32_t = (*arg1.offset(0 as core::ffi::c_int as isize))
         .wrapping_add(*arg2.offset(0 as core::ffi::c_int as isize));
-    let x2: uint32_t = (*arg1.offset(1 as core::ffi::c_int as isize))
+    let mut x2: uint32_t = (*arg1.offset(1 as core::ffi::c_int as isize))
         .wrapping_add(*arg2.offset(1 as core::ffi::c_int as isize));
-    let x3: uint32_t = (*arg1.offset(2 as core::ffi::c_int as isize))
+    let mut x3: uint32_t = (*arg1.offset(2 as core::ffi::c_int as isize))
         .wrapping_add(*arg2.offset(2 as core::ffi::c_int as isize));
-    let x4: uint32_t = (*arg1.offset(3 as core::ffi::c_int as isize))
+    let mut x4: uint32_t = (*arg1.offset(3 as core::ffi::c_int as isize))
         .wrapping_add(*arg2.offset(3 as core::ffi::c_int as isize));
-    let x5: uint32_t = (*arg1.offset(4 as core::ffi::c_int as isize))
+    let mut x5: uint32_t = (*arg1.offset(4 as core::ffi::c_int as isize))
         .wrapping_add(*arg2.offset(4 as core::ffi::c_int as isize));
-    let x6: uint32_t = (*arg1.offset(5 as core::ffi::c_int as isize))
+    let mut x6: uint32_t = (*arg1.offset(5 as core::ffi::c_int as isize))
         .wrapping_add(*arg2.offset(5 as core::ffi::c_int as isize));
-    let x7: uint32_t = (*arg1.offset(6 as core::ffi::c_int as isize))
+    let mut x7: uint32_t = (*arg1.offset(6 as core::ffi::c_int as isize))
         .wrapping_add(*arg2.offset(6 as core::ffi::c_int as isize));
-    let x8: uint32_t = (*arg1.offset(7 as core::ffi::c_int as isize))
+    let mut x8: uint32_t = (*arg1.offset(7 as core::ffi::c_int as isize))
         .wrapping_add(*arg2.offset(7 as core::ffi::c_int as isize));
-    let x9: uint32_t = (*arg1.offset(8 as core::ffi::c_int as isize))
+    let mut x9: uint32_t = (*arg1.offset(8 as core::ffi::c_int as isize))
         .wrapping_add(*arg2.offset(8 as core::ffi::c_int as isize));
-    let x10: uint32_t = (*arg1.offset(9 as core::ffi::c_int as isize))
+    let mut x10: uint32_t = (*arg1.offset(9 as core::ffi::c_int as isize))
         .wrapping_add(*arg2.offset(9 as core::ffi::c_int as isize));
     *out1.offset(0 as core::ffi::c_int as isize) = x1;
     *out1.offset(1 as core::ffi::c_int as isize) = x2;
@@ -15837,38 +15835,38 @@ unsafe extern "C" fn fiat_25519_add(
     *out1.offset(9 as core::ffi::c_int as isize) = x10;
 }
 unsafe extern "C" fn fiat_25519_sub(
-    out1: *mut uint32_t,
-    arg1: *const uint32_t,
-    arg2: *const uint32_t,
+    mut out1: *mut uint32_t,
+    mut arg1: *const uint32_t,
+    mut arg2: *const uint32_t,
 ) {
-    let x1: uint32_t = (0x7ffffda as core::ffi::c_uint)
+    let mut x1: uint32_t = (0x7ffffda as core::ffi::c_uint)
         .wrapping_add(*arg1.offset(0 as core::ffi::c_int as isize))
         .wrapping_sub(*arg2.offset(0 as core::ffi::c_int as isize));
-    let x2: uint32_t = (0x3fffffe as core::ffi::c_uint)
+    let mut x2: uint32_t = (0x3fffffe as core::ffi::c_uint)
         .wrapping_add(*arg1.offset(1 as core::ffi::c_int as isize))
         .wrapping_sub(*arg2.offset(1 as core::ffi::c_int as isize));
-    let x3: uint32_t = (0x7fffffe as core::ffi::c_uint)
+    let mut x3: uint32_t = (0x7fffffe as core::ffi::c_uint)
         .wrapping_add(*arg1.offset(2 as core::ffi::c_int as isize))
         .wrapping_sub(*arg2.offset(2 as core::ffi::c_int as isize));
-    let x4: uint32_t = (0x3fffffe as core::ffi::c_uint)
+    let mut x4: uint32_t = (0x3fffffe as core::ffi::c_uint)
         .wrapping_add(*arg1.offset(3 as core::ffi::c_int as isize))
         .wrapping_sub(*arg2.offset(3 as core::ffi::c_int as isize));
-    let x5: uint32_t = (0x7fffffe as core::ffi::c_uint)
+    let mut x5: uint32_t = (0x7fffffe as core::ffi::c_uint)
         .wrapping_add(*arg1.offset(4 as core::ffi::c_int as isize))
         .wrapping_sub(*arg2.offset(4 as core::ffi::c_int as isize));
-    let x6: uint32_t = (0x3fffffe as core::ffi::c_uint)
+    let mut x6: uint32_t = (0x3fffffe as core::ffi::c_uint)
         .wrapping_add(*arg1.offset(5 as core::ffi::c_int as isize))
         .wrapping_sub(*arg2.offset(5 as core::ffi::c_int as isize));
-    let x7: uint32_t = (0x7fffffe as core::ffi::c_uint)
+    let mut x7: uint32_t = (0x7fffffe as core::ffi::c_uint)
         .wrapping_add(*arg1.offset(6 as core::ffi::c_int as isize))
         .wrapping_sub(*arg2.offset(6 as core::ffi::c_int as isize));
-    let x8: uint32_t = (0x3fffffe as core::ffi::c_uint)
+    let mut x8: uint32_t = (0x3fffffe as core::ffi::c_uint)
         .wrapping_add(*arg1.offset(7 as core::ffi::c_int as isize))
         .wrapping_sub(*arg2.offset(7 as core::ffi::c_int as isize));
-    let x9: uint32_t = (0x7fffffe as core::ffi::c_uint)
+    let mut x9: uint32_t = (0x7fffffe as core::ffi::c_uint)
         .wrapping_add(*arg1.offset(8 as core::ffi::c_int as isize))
         .wrapping_sub(*arg2.offset(8 as core::ffi::c_int as isize));
-    let x10: uint32_t = (0x3fffffe as core::ffi::c_uint)
+    let mut x10: uint32_t = (0x3fffffe as core::ffi::c_uint)
         .wrapping_add(*arg1.offset(9 as core::ffi::c_int as isize))
         .wrapping_sub(*arg2.offset(9 as core::ffi::c_int as isize));
     *out1.offset(0 as core::ffi::c_int as isize) = x1;
@@ -15882,26 +15880,26 @@ unsafe extern "C" fn fiat_25519_sub(
     *out1.offset(8 as core::ffi::c_int as isize) = x9;
     *out1.offset(9 as core::ffi::c_int as isize) = x10;
 }
-unsafe extern "C" fn fiat_25519_opp(out1: *mut uint32_t, arg1: *const uint32_t) {
-    let x1: uint32_t =
+unsafe extern "C" fn fiat_25519_opp(mut out1: *mut uint32_t, mut arg1: *const uint32_t) {
+    let mut x1: uint32_t =
         (0x7ffffda as core::ffi::c_uint).wrapping_sub(*arg1.offset(0 as core::ffi::c_int as isize));
-    let x2: uint32_t =
+    let mut x2: uint32_t =
         (0x3fffffe as core::ffi::c_uint).wrapping_sub(*arg1.offset(1 as core::ffi::c_int as isize));
-    let x3: uint32_t =
+    let mut x3: uint32_t =
         (0x7fffffe as core::ffi::c_uint).wrapping_sub(*arg1.offset(2 as core::ffi::c_int as isize));
-    let x4: uint32_t =
+    let mut x4: uint32_t =
         (0x3fffffe as core::ffi::c_uint).wrapping_sub(*arg1.offset(3 as core::ffi::c_int as isize));
-    let x5: uint32_t =
+    let mut x5: uint32_t =
         (0x7fffffe as core::ffi::c_uint).wrapping_sub(*arg1.offset(4 as core::ffi::c_int as isize));
-    let x6: uint32_t =
+    let mut x6: uint32_t =
         (0x3fffffe as core::ffi::c_uint).wrapping_sub(*arg1.offset(5 as core::ffi::c_int as isize));
-    let x7: uint32_t =
+    let mut x7: uint32_t =
         (0x7fffffe as core::ffi::c_uint).wrapping_sub(*arg1.offset(6 as core::ffi::c_int as isize));
-    let x8: uint32_t =
+    let mut x8: uint32_t =
         (0x3fffffe as core::ffi::c_uint).wrapping_sub(*arg1.offset(7 as core::ffi::c_int as isize));
-    let x9: uint32_t =
+    let mut x9: uint32_t =
         (0x7fffffe as core::ffi::c_uint).wrapping_sub(*arg1.offset(8 as core::ffi::c_int as isize));
-    let x10: uint32_t =
+    let mut x10: uint32_t =
         (0x3fffffe as core::ffi::c_uint).wrapping_sub(*arg1.offset(9 as core::ffi::c_int as isize));
     *out1.offset(0 as core::ffi::c_int as isize) = x1;
     *out1.offset(1 as core::ffi::c_int as isize) = x2;
@@ -15914,11 +15912,11 @@ unsafe extern "C" fn fiat_25519_opp(out1: *mut uint32_t, arg1: *const uint32_t) 
     *out1.offset(8 as core::ffi::c_int as isize) = x9;
     *out1.offset(9 as core::ffi::c_int as isize) = x10;
 }
-unsafe extern "C" fn _25519_selectznz(
-    out1: *mut uint32_t,
-    arg1: fiat_25519_uint1,
-    arg2: *const uint32_t,
-    arg3: *const uint32_t,
+unsafe extern "C" fn fiat_25519_selectznz(
+    mut out1: *mut uint32_t,
+    mut arg1: fiat_25519_uint1,
+    mut arg2: *const uint32_t,
+    mut arg3: *const uint32_t,
 ) {
     let mut x1: uint32_t = 0;
     fiat_25519_cmovznz_u32(
@@ -16001,7 +15999,7 @@ unsafe extern "C" fn _25519_selectznz(
     *out1.offset(8 as core::ffi::c_int as isize) = x9;
     *out1.offset(9 as core::ffi::c_int as isize) = x10;
 }
-unsafe extern "C" fn fiat_25519_to_bytes(out1: *mut uint8_t, arg1: *const uint32_t) {
+unsafe extern "C" fn fiat_25519_to_bytes(mut out1: *mut uint8_t, mut arg1: *const uint32_t) {
     let mut x1: uint32_t = 0;
     let mut x2: fiat_25519_uint1 = 0;
     fiat_25519_subborrowx_u26(
@@ -16189,83 +16187,83 @@ unsafe extern "C" fn fiat_25519_to_bytes(out1: *mut uint8_t, arg1: *const uint32
         x19,
         x21 & 0x1ffffff as core::ffi::c_uint,
     );
-    let x42: uint32_t = x40 << 6 as core::ffi::c_int;
-    let x43: uint32_t = x38 << 4 as core::ffi::c_int;
-    let x44: uint32_t = x36 << 3 as core::ffi::c_int;
-    let x45: uint32_t = x34.wrapping_mul(0x2 as core::ffi::c_int as uint32_t);
-    let x46: uint32_t = x30 << 6 as core::ffi::c_int;
-    let x47: uint32_t = x28 << 5 as core::ffi::c_int;
-    let x48: uint32_t = x26 << 3 as core::ffi::c_int;
-    let x49: uint32_t = x24 << 2 as core::ffi::c_int;
-    let x50: uint32_t = x22 >> 8 as core::ffi::c_int;
-    let x51: uint8_t = (x22 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
-    let x52: uint32_t = x50 >> 8 as core::ffi::c_int;
-    let x53: uint8_t = (x50 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
-    let x54: uint8_t = (x52 >> 8 as core::ffi::c_int) as uint8_t;
-    let x55: uint8_t = (x52 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
-    let x56: uint32_t = (x54 as core::ffi::c_uint).wrapping_add(x49);
-    let x57: uint32_t = x56 >> 8 as core::ffi::c_int;
-    let x58: uint8_t = (x56 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
-    let x59: uint32_t = x57 >> 8 as core::ffi::c_int;
-    let x60: uint8_t = (x57 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
-    let x61: uint8_t = (x59 >> 8 as core::ffi::c_int) as uint8_t;
-    let x62: uint8_t = (x59 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
-    let x63: uint32_t = (x61 as core::ffi::c_uint).wrapping_add(x48);
-    let x64: uint32_t = x63 >> 8 as core::ffi::c_int;
-    let x65: uint8_t = (x63 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
-    let x66: uint32_t = x64 >> 8 as core::ffi::c_int;
-    let x67: uint8_t = (x64 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
-    let x68: uint8_t = (x66 >> 8 as core::ffi::c_int) as uint8_t;
-    let x69: uint8_t = (x66 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
-    let x70: uint32_t = (x68 as core::ffi::c_uint).wrapping_add(x47);
-    let x71: uint32_t = x70 >> 8 as core::ffi::c_int;
-    let x72: uint8_t = (x70 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
-    let x73: uint32_t = x71 >> 8 as core::ffi::c_int;
-    let x74: uint8_t = (x71 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
-    let x75: uint8_t = (x73 >> 8 as core::ffi::c_int) as uint8_t;
-    let x76: uint8_t = (x73 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
-    let x77: uint32_t = (x75 as core::ffi::c_uint).wrapping_add(x46);
-    let x78: uint32_t = x77 >> 8 as core::ffi::c_int;
-    let x79: uint8_t = (x77 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
-    let x80: uint32_t = x78 >> 8 as core::ffi::c_int;
-    let x81: uint8_t = (x78 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
-    let x82: uint8_t = (x80 >> 8 as core::ffi::c_int) as uint8_t;
-    let x83: uint8_t = (x80 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
-    let x84: uint8_t = (x82 as core::ffi::c_int & 0xff as core::ffi::c_int) as uint8_t;
-    let x85: uint32_t = x32 >> 8 as core::ffi::c_int;
-    let x86: uint8_t = (x32 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
-    let x87: uint32_t = x85 >> 8 as core::ffi::c_int;
-    let x88: uint8_t = (x85 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
-    let x89: fiat_25519_uint1 = (x87 >> 8 as core::ffi::c_int) as fiat_25519_uint1;
-    let x90: uint8_t = (x87 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
-    let x91: uint32_t = (x89 as core::ffi::c_uint).wrapping_add(x45);
-    let x92: uint32_t = x91 >> 8 as core::ffi::c_int;
-    let x93: uint8_t = (x91 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
-    let x94: uint32_t = x92 >> 8 as core::ffi::c_int;
-    let x95: uint8_t = (x92 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
-    let x96: uint8_t = (x94 >> 8 as core::ffi::c_int) as uint8_t;
-    let x97: uint8_t = (x94 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
-    let x98: uint32_t = (x96 as core::ffi::c_uint).wrapping_add(x44);
-    let x99: uint32_t = x98 >> 8 as core::ffi::c_int;
-    let x100: uint8_t = (x98 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
-    let x101: uint32_t = x99 >> 8 as core::ffi::c_int;
-    let x102: uint8_t = (x99 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
-    let x103: uint8_t = (x101 >> 8 as core::ffi::c_int) as uint8_t;
-    let x104: uint8_t = (x101 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
-    let x105: uint32_t = (x103 as core::ffi::c_uint).wrapping_add(x43);
-    let x106: uint32_t = x105 >> 8 as core::ffi::c_int;
-    let x107: uint8_t = (x105 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
-    let x108: uint32_t = x106 >> 8 as core::ffi::c_int;
-    let x109: uint8_t = (x106 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
-    let x110: uint8_t = (x108 >> 8 as core::ffi::c_int) as uint8_t;
-    let x111: uint8_t = (x108 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
-    let x112: uint32_t = (x110 as core::ffi::c_uint).wrapping_add(x42);
-    let x113: uint32_t = x112 >> 8 as core::ffi::c_int;
-    let x114: uint8_t = (x112 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
-    let x115: uint32_t = x113 >> 8 as core::ffi::c_int;
-    let x116: uint8_t = (x113 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
-    let x117: uint8_t = (x115 >> 8 as core::ffi::c_int) as uint8_t;
-    let x118: uint8_t = (x115 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
+    let mut x42: uint32_t = x40 << 6 as core::ffi::c_int;
+    let mut x43: uint32_t = x38 << 4 as core::ffi::c_int;
+    let mut x44: uint32_t = x36 << 3 as core::ffi::c_int;
+    let mut x45: uint32_t = x34.wrapping_mul(0x2 as core::ffi::c_int as uint32_t);
+    let mut x46: uint32_t = x30 << 6 as core::ffi::c_int;
+    let mut x47: uint32_t = x28 << 5 as core::ffi::c_int;
+    let mut x48: uint32_t = x26 << 3 as core::ffi::c_int;
+    let mut x49: uint32_t = x24 << 2 as core::ffi::c_int;
+    let mut x50: uint32_t = x22 >> 8 as core::ffi::c_int;
+    let mut x51: uint8_t = (x22 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
+    let mut x52: uint32_t = x50 >> 8 as core::ffi::c_int;
+    let mut x53: uint8_t = (x50 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
+    let mut x54: uint8_t = (x52 >> 8 as core::ffi::c_int) as uint8_t;
+    let mut x55: uint8_t = (x52 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
+    let mut x56: uint32_t = (x54 as core::ffi::c_uint).wrapping_add(x49);
+    let mut x57: uint32_t = x56 >> 8 as core::ffi::c_int;
+    let mut x58: uint8_t = (x56 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
+    let mut x59: uint32_t = x57 >> 8 as core::ffi::c_int;
+    let mut x60: uint8_t = (x57 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
+    let mut x61: uint8_t = (x59 >> 8 as core::ffi::c_int) as uint8_t;
+    let mut x62: uint8_t = (x59 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
+    let mut x63: uint32_t = (x61 as core::ffi::c_uint).wrapping_add(x48);
+    let mut x64: uint32_t = x63 >> 8 as core::ffi::c_int;
+    let mut x65: uint8_t = (x63 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
+    let mut x66: uint32_t = x64 >> 8 as core::ffi::c_int;
+    let mut x67: uint8_t = (x64 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
+    let mut x68: uint8_t = (x66 >> 8 as core::ffi::c_int) as uint8_t;
+    let mut x69: uint8_t = (x66 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
+    let mut x70: uint32_t = (x68 as core::ffi::c_uint).wrapping_add(x47);
+    let mut x71: uint32_t = x70 >> 8 as core::ffi::c_int;
+    let mut x72: uint8_t = (x70 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
+    let mut x73: uint32_t = x71 >> 8 as core::ffi::c_int;
+    let mut x74: uint8_t = (x71 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
+    let mut x75: uint8_t = (x73 >> 8 as core::ffi::c_int) as uint8_t;
+    let mut x76: uint8_t = (x73 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
+    let mut x77: uint32_t = (x75 as core::ffi::c_uint).wrapping_add(x46);
+    let mut x78: uint32_t = x77 >> 8 as core::ffi::c_int;
+    let mut x79: uint8_t = (x77 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
+    let mut x80: uint32_t = x78 >> 8 as core::ffi::c_int;
+    let mut x81: uint8_t = (x78 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
+    let mut x82: uint8_t = (x80 >> 8 as core::ffi::c_int) as uint8_t;
+    let mut x83: uint8_t = (x80 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
+    let mut x84: uint8_t = (x82 as core::ffi::c_int & 0xff as core::ffi::c_int) as uint8_t;
+    let mut x85: uint32_t = x32 >> 8 as core::ffi::c_int;
+    let mut x86: uint8_t = (x32 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
+    let mut x87: uint32_t = x85 >> 8 as core::ffi::c_int;
+    let mut x88: uint8_t = (x85 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
+    let mut x89: fiat_25519_uint1 = (x87 >> 8 as core::ffi::c_int) as fiat_25519_uint1;
+    let mut x90: uint8_t = (x87 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
+    let mut x91: uint32_t = (x89 as core::ffi::c_uint).wrapping_add(x45);
+    let mut x92: uint32_t = x91 >> 8 as core::ffi::c_int;
+    let mut x93: uint8_t = (x91 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
+    let mut x94: uint32_t = x92 >> 8 as core::ffi::c_int;
+    let mut x95: uint8_t = (x92 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
+    let mut x96: uint8_t = (x94 >> 8 as core::ffi::c_int) as uint8_t;
+    let mut x97: uint8_t = (x94 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
+    let mut x98: uint32_t = (x96 as core::ffi::c_uint).wrapping_add(x44);
+    let mut x99: uint32_t = x98 >> 8 as core::ffi::c_int;
+    let mut x100: uint8_t = (x98 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
+    let mut x101: uint32_t = x99 >> 8 as core::ffi::c_int;
+    let mut x102: uint8_t = (x99 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
+    let mut x103: uint8_t = (x101 >> 8 as core::ffi::c_int) as uint8_t;
+    let mut x104: uint8_t = (x101 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
+    let mut x105: uint32_t = (x103 as core::ffi::c_uint).wrapping_add(x43);
+    let mut x106: uint32_t = x105 >> 8 as core::ffi::c_int;
+    let mut x107: uint8_t = (x105 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
+    let mut x108: uint32_t = x106 >> 8 as core::ffi::c_int;
+    let mut x109: uint8_t = (x106 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
+    let mut x110: uint8_t = (x108 >> 8 as core::ffi::c_int) as uint8_t;
+    let mut x111: uint8_t = (x108 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
+    let mut x112: uint32_t = (x110 as core::ffi::c_uint).wrapping_add(x42);
+    let mut x113: uint32_t = x112 >> 8 as core::ffi::c_int;
+    let mut x114: uint8_t = (x112 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
+    let mut x115: uint32_t = x113 >> 8 as core::ffi::c_int;
+    let mut x116: uint8_t = (x113 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
+    let mut x117: uint8_t = (x115 >> 8 as core::ffi::c_int) as uint8_t;
+    let mut x118: uint8_t = (x115 & 0xff as core::ffi::c_int as core::ffi::c_uint) as uint8_t;
     *out1.offset(0 as core::ffi::c_int as isize) = x51;
     *out1.offset(1 as core::ffi::c_int as isize) = x53;
     *out1.offset(2 as core::ffi::c_int as isize) = x55;
@@ -16299,106 +16297,106 @@ unsafe extern "C" fn fiat_25519_to_bytes(out1: *mut uint8_t, arg1: *const uint32
     *out1.offset(30 as core::ffi::c_int as isize) = x118;
     *out1.offset(31 as core::ffi::c_int as isize) = x117;
 }
-unsafe extern "C" fn fiat_25519_from_bytes(out1: *mut uint32_t, arg1: *const uint8_t) {
-    let x1: uint32_t =
+unsafe extern "C" fn fiat_25519_from_bytes(mut out1: *mut uint32_t, mut arg1: *const uint8_t) {
+    let mut x1: uint32_t =
         (*arg1.offset(31 as core::ffi::c_int as isize) as uint32_t) << 18 as core::ffi::c_int;
-    let x2: uint32_t =
+    let mut x2: uint32_t =
         (*arg1.offset(30 as core::ffi::c_int as isize) as uint32_t) << 10 as core::ffi::c_int;
-    let x3: uint32_t =
+    let mut x3: uint32_t =
         (*arg1.offset(29 as core::ffi::c_int as isize) as uint32_t) << 2 as core::ffi::c_int;
-    let x4: uint32_t =
+    let mut x4: uint32_t =
         (*arg1.offset(28 as core::ffi::c_int as isize) as uint32_t) << 20 as core::ffi::c_int;
-    let x5: uint32_t =
+    let mut x5: uint32_t =
         (*arg1.offset(27 as core::ffi::c_int as isize) as uint32_t) << 12 as core::ffi::c_int;
-    let x6: uint32_t =
+    let mut x6: uint32_t =
         (*arg1.offset(26 as core::ffi::c_int as isize) as uint32_t) << 4 as core::ffi::c_int;
-    let x7: uint32_t =
+    let mut x7: uint32_t =
         (*arg1.offset(25 as core::ffi::c_int as isize) as uint32_t) << 21 as core::ffi::c_int;
-    let x8: uint32_t =
+    let mut x8: uint32_t =
         (*arg1.offset(24 as core::ffi::c_int as isize) as uint32_t) << 13 as core::ffi::c_int;
-    let x9: uint32_t =
+    let mut x9: uint32_t =
         (*arg1.offset(23 as core::ffi::c_int as isize) as uint32_t) << 5 as core::ffi::c_int;
-    let x10: uint32_t =
+    let mut x10: uint32_t =
         (*arg1.offset(22 as core::ffi::c_int as isize) as uint32_t) << 23 as core::ffi::c_int;
-    let x11: uint32_t =
+    let mut x11: uint32_t =
         (*arg1.offset(21 as core::ffi::c_int as isize) as uint32_t) << 15 as core::ffi::c_int;
-    let x12: uint32_t =
+    let mut x12: uint32_t =
         (*arg1.offset(20 as core::ffi::c_int as isize) as uint32_t) << 7 as core::ffi::c_int;
-    let x13: uint32_t =
+    let mut x13: uint32_t =
         (*arg1.offset(19 as core::ffi::c_int as isize) as uint32_t) << 24 as core::ffi::c_int;
-    let x14: uint32_t =
+    let mut x14: uint32_t =
         (*arg1.offset(18 as core::ffi::c_int as isize) as uint32_t) << 16 as core::ffi::c_int;
-    let x15: uint32_t =
+    let mut x15: uint32_t =
         (*arg1.offset(17 as core::ffi::c_int as isize) as uint32_t) << 8 as core::ffi::c_int;
-    let x16: uint8_t = *arg1.offset(16 as core::ffi::c_int as isize);
-    let x17: uint32_t =
+    let mut x16: uint8_t = *arg1.offset(16 as core::ffi::c_int as isize);
+    let mut x17: uint32_t =
         (*arg1.offset(15 as core::ffi::c_int as isize) as uint32_t) << 18 as core::ffi::c_int;
-    let x18: uint32_t =
+    let mut x18: uint32_t =
         (*arg1.offset(14 as core::ffi::c_int as isize) as uint32_t) << 10 as core::ffi::c_int;
-    let x19: uint32_t =
+    let mut x19: uint32_t =
         (*arg1.offset(13 as core::ffi::c_int as isize) as uint32_t) << 2 as core::ffi::c_int;
-    let x20: uint32_t =
+    let mut x20: uint32_t =
         (*arg1.offset(12 as core::ffi::c_int as isize) as uint32_t) << 19 as core::ffi::c_int;
-    let x21: uint32_t =
+    let mut x21: uint32_t =
         (*arg1.offset(11 as core::ffi::c_int as isize) as uint32_t) << 11 as core::ffi::c_int;
-    let x22: uint32_t =
+    let mut x22: uint32_t =
         (*arg1.offset(10 as core::ffi::c_int as isize) as uint32_t) << 3 as core::ffi::c_int;
-    let x23: uint32_t =
+    let mut x23: uint32_t =
         (*arg1.offset(9 as core::ffi::c_int as isize) as uint32_t) << 21 as core::ffi::c_int;
-    let x24: uint32_t =
+    let mut x24: uint32_t =
         (*arg1.offset(8 as core::ffi::c_int as isize) as uint32_t) << 13 as core::ffi::c_int;
-    let x25: uint32_t =
+    let mut x25: uint32_t =
         (*arg1.offset(7 as core::ffi::c_int as isize) as uint32_t) << 5 as core::ffi::c_int;
-    let x26: uint32_t =
+    let mut x26: uint32_t =
         (*arg1.offset(6 as core::ffi::c_int as isize) as uint32_t) << 22 as core::ffi::c_int;
-    let x27: uint32_t =
+    let mut x27: uint32_t =
         (*arg1.offset(5 as core::ffi::c_int as isize) as uint32_t) << 14 as core::ffi::c_int;
-    let x28: uint32_t =
+    let mut x28: uint32_t =
         (*arg1.offset(4 as core::ffi::c_int as isize) as uint32_t) << 6 as core::ffi::c_int;
-    let x29: uint32_t =
+    let mut x29: uint32_t =
         (*arg1.offset(3 as core::ffi::c_int as isize) as uint32_t) << 24 as core::ffi::c_int;
-    let x30: uint32_t =
+    let mut x30: uint32_t =
         (*arg1.offset(2 as core::ffi::c_int as isize) as uint32_t) << 16 as core::ffi::c_int;
-    let x31: uint32_t =
+    let mut x31: uint32_t =
         (*arg1.offset(1 as core::ffi::c_int as isize) as uint32_t) << 8 as core::ffi::c_int;
-    let x32: uint8_t = *arg1.offset(0 as core::ffi::c_int as isize);
-    let x33: uint32_t =
+    let mut x32: uint8_t = *arg1.offset(0 as core::ffi::c_int as isize);
+    let mut x33: uint32_t =
         (x32 as core::ffi::c_uint).wrapping_add(x31.wrapping_add(x30.wrapping_add(x29)));
-    let x34: uint8_t = (x33 >> 26 as core::ffi::c_int) as uint8_t;
-    let x35: uint32_t = x33 & 0x3ffffff as core::ffi::c_uint;
-    let x36: uint32_t = x3.wrapping_add(x2.wrapping_add(x1));
-    let x37: uint32_t = x6.wrapping_add(x5.wrapping_add(x4));
-    let x38: uint32_t = x9.wrapping_add(x8.wrapping_add(x7));
-    let x39: uint32_t = x12.wrapping_add(x11.wrapping_add(x10));
-    let x40: uint32_t =
+    let mut x34: uint8_t = (x33 >> 26 as core::ffi::c_int) as uint8_t;
+    let mut x35: uint32_t = x33 & 0x3ffffff as core::ffi::c_uint;
+    let mut x36: uint32_t = x3.wrapping_add(x2.wrapping_add(x1));
+    let mut x37: uint32_t = x6.wrapping_add(x5.wrapping_add(x4));
+    let mut x38: uint32_t = x9.wrapping_add(x8.wrapping_add(x7));
+    let mut x39: uint32_t = x12.wrapping_add(x11.wrapping_add(x10));
+    let mut x40: uint32_t =
         (x16 as core::ffi::c_uint).wrapping_add(x15.wrapping_add(x14.wrapping_add(x13)));
-    let x41: uint32_t = x19.wrapping_add(x18.wrapping_add(x17));
-    let x42: uint32_t = x22.wrapping_add(x21.wrapping_add(x20));
-    let x43: uint32_t = x25.wrapping_add(x24.wrapping_add(x23));
-    let x44: uint32_t = x28.wrapping_add(x27.wrapping_add(x26));
-    let x45: uint32_t = (x34 as core::ffi::c_uint).wrapping_add(x44);
-    let x46: uint8_t = (x45 >> 25 as core::ffi::c_int) as uint8_t;
-    let x47: uint32_t = x45 & 0x1ffffff as core::ffi::c_uint;
-    let x48: uint32_t = (x46 as core::ffi::c_uint).wrapping_add(x43);
-    let x49: uint8_t = (x48 >> 26 as core::ffi::c_int) as uint8_t;
-    let x50: uint32_t = x48 & 0x3ffffff as core::ffi::c_uint;
-    let x51: uint32_t = (x49 as core::ffi::c_uint).wrapping_add(x42);
-    let x52: uint8_t = (x51 >> 25 as core::ffi::c_int) as uint8_t;
-    let x53: uint32_t = x51 & 0x1ffffff as core::ffi::c_uint;
-    let x54: uint32_t = (x52 as core::ffi::c_uint).wrapping_add(x41);
-    let x55: uint32_t = x54 & 0x3ffffff as core::ffi::c_uint;
-    let x56: uint8_t = (x40 >> 25 as core::ffi::c_int) as uint8_t;
-    let x57: uint32_t = x40 & 0x1ffffff as core::ffi::c_uint;
-    let x58: uint32_t = (x56 as core::ffi::c_uint).wrapping_add(x39);
-    let x59: uint8_t = (x58 >> 26 as core::ffi::c_int) as uint8_t;
-    let x60: uint32_t = x58 & 0x3ffffff as core::ffi::c_uint;
-    let x61: uint32_t = (x59 as core::ffi::c_uint).wrapping_add(x38);
-    let x62: uint8_t = (x61 >> 25 as core::ffi::c_int) as uint8_t;
-    let x63: uint32_t = x61 & 0x1ffffff as core::ffi::c_uint;
-    let x64: uint32_t = (x62 as core::ffi::c_uint).wrapping_add(x37);
-    let x65: uint8_t = (x64 >> 26 as core::ffi::c_int) as uint8_t;
-    let x66: uint32_t = x64 & 0x3ffffff as core::ffi::c_uint;
-    let x67: uint32_t = (x65 as core::ffi::c_uint).wrapping_add(x36);
+    let mut x41: uint32_t = x19.wrapping_add(x18.wrapping_add(x17));
+    let mut x42: uint32_t = x22.wrapping_add(x21.wrapping_add(x20));
+    let mut x43: uint32_t = x25.wrapping_add(x24.wrapping_add(x23));
+    let mut x44: uint32_t = x28.wrapping_add(x27.wrapping_add(x26));
+    let mut x45: uint32_t = (x34 as core::ffi::c_uint).wrapping_add(x44);
+    let mut x46: uint8_t = (x45 >> 25 as core::ffi::c_int) as uint8_t;
+    let mut x47: uint32_t = x45 & 0x1ffffff as core::ffi::c_uint;
+    let mut x48: uint32_t = (x46 as core::ffi::c_uint).wrapping_add(x43);
+    let mut x49: uint8_t = (x48 >> 26 as core::ffi::c_int) as uint8_t;
+    let mut x50: uint32_t = x48 & 0x3ffffff as core::ffi::c_uint;
+    let mut x51: uint32_t = (x49 as core::ffi::c_uint).wrapping_add(x42);
+    let mut x52: uint8_t = (x51 >> 25 as core::ffi::c_int) as uint8_t;
+    let mut x53: uint32_t = x51 & 0x1ffffff as core::ffi::c_uint;
+    let mut x54: uint32_t = (x52 as core::ffi::c_uint).wrapping_add(x41);
+    let mut x55: uint32_t = x54 & 0x3ffffff as core::ffi::c_uint;
+    let mut x56: uint8_t = (x40 >> 25 as core::ffi::c_int) as uint8_t;
+    let mut x57: uint32_t = x40 & 0x1ffffff as core::ffi::c_uint;
+    let mut x58: uint32_t = (x56 as core::ffi::c_uint).wrapping_add(x39);
+    let mut x59: uint8_t = (x58 >> 26 as core::ffi::c_int) as uint8_t;
+    let mut x60: uint32_t = x58 & 0x3ffffff as core::ffi::c_uint;
+    let mut x61: uint32_t = (x59 as core::ffi::c_uint).wrapping_add(x38);
+    let mut x62: uint8_t = (x61 >> 25 as core::ffi::c_int) as uint8_t;
+    let mut x63: uint32_t = x61 & 0x1ffffff as core::ffi::c_uint;
+    let mut x64: uint32_t = (x62 as core::ffi::c_uint).wrapping_add(x37);
+    let mut x65: uint8_t = (x64 >> 26 as core::ffi::c_int) as uint8_t;
+    let mut x66: uint32_t = x64 & 0x3ffffff as core::ffi::c_uint;
+    let mut x67: uint32_t = (x65 as core::ffi::c_uint).wrapping_add(x36);
     *out1.offset(0 as core::ffi::c_int as isize) = x35;
     *out1.offset(1 as core::ffi::c_int as isize) = x47;
     *out1.offset(2 as core::ffi::c_int as isize) = x50;
@@ -16411,66 +16409,66 @@ unsafe extern "C" fn fiat_25519_from_bytes(out1: *mut uint32_t, arg1: *const uin
     *out1.offset(9 as core::ffi::c_int as isize) = x67;
 }
 unsafe extern "C" fn fiat_25519_carry_scmul_121666(
-    out1: *mut uint32_t,
-    arg1: *const uint32_t,
+    mut out1: *mut uint32_t,
+    mut arg1: *const uint32_t,
 ) {
-    let x1: uint64_t = (0x1db42 as core::ffi::c_uint as uint64_t)
+    let mut x1: uint64_t = (0x1db42 as core::ffi::c_uint as uint64_t)
         .wrapping_mul(*arg1.offset(9 as core::ffi::c_int as isize) as u64);
-    let x2: uint64_t = (0x1db42 as core::ffi::c_uint as uint64_t)
+    let mut x2: uint64_t = (0x1db42 as core::ffi::c_uint as uint64_t)
         .wrapping_mul(*arg1.offset(8 as core::ffi::c_int as isize) as u64);
-    let x3: uint64_t = (0x1db42 as core::ffi::c_uint as uint64_t)
+    let mut x3: uint64_t = (0x1db42 as core::ffi::c_uint as uint64_t)
         .wrapping_mul(*arg1.offset(7 as core::ffi::c_int as isize) as u64);
-    let x4: uint64_t = (0x1db42 as core::ffi::c_uint as uint64_t)
+    let mut x4: uint64_t = (0x1db42 as core::ffi::c_uint as uint64_t)
         .wrapping_mul(*arg1.offset(6 as core::ffi::c_int as isize) as u64);
-    let x5: uint64_t = (0x1db42 as core::ffi::c_uint as uint64_t)
+    let mut x5: uint64_t = (0x1db42 as core::ffi::c_uint as uint64_t)
         .wrapping_mul(*arg1.offset(5 as core::ffi::c_int as isize) as u64);
-    let x6: uint64_t = (0x1db42 as core::ffi::c_uint as uint64_t)
+    let mut x6: uint64_t = (0x1db42 as core::ffi::c_uint as uint64_t)
         .wrapping_mul(*arg1.offset(4 as core::ffi::c_int as isize) as u64);
-    let x7: uint64_t = (0x1db42 as core::ffi::c_uint as uint64_t)
+    let mut x7: uint64_t = (0x1db42 as core::ffi::c_uint as uint64_t)
         .wrapping_mul(*arg1.offset(3 as core::ffi::c_int as isize) as u64);
-    let x8: uint64_t = (0x1db42 as core::ffi::c_uint as uint64_t)
+    let mut x8: uint64_t = (0x1db42 as core::ffi::c_uint as uint64_t)
         .wrapping_mul(*arg1.offset(2 as core::ffi::c_int as isize) as u64);
-    let x9: uint64_t = (0x1db42 as core::ffi::c_uint as uint64_t)
+    let mut x9: uint64_t = (0x1db42 as core::ffi::c_uint as uint64_t)
         .wrapping_mul(*arg1.offset(1 as core::ffi::c_int as isize) as u64);
-    let x10: uint64_t = (0x1db42 as core::ffi::c_uint as uint64_t)
+    let mut x10: uint64_t = (0x1db42 as core::ffi::c_uint as uint64_t)
         .wrapping_mul(*arg1.offset(0 as core::ffi::c_int as isize) as u64);
-    let x11: uint32_t = (x10 >> 26 as core::ffi::c_int) as uint32_t;
-    let x12: uint32_t = (x10 & 0x3ffffff as core::ffi::c_uint as u64) as uint32_t;
-    let x13: uint64_t = (x11 as u64).wrapping_add(x9);
-    let x14: uint32_t = (x13 >> 25 as core::ffi::c_int) as uint32_t;
-    let x15: uint32_t = (x13 & 0x1ffffff as core::ffi::c_uint as u64) as uint32_t;
-    let x16: uint64_t = (x14 as u64).wrapping_add(x8);
-    let x17: uint32_t = (x16 >> 26 as core::ffi::c_int) as uint32_t;
-    let x18: uint32_t = (x16 & 0x3ffffff as core::ffi::c_uint as u64) as uint32_t;
-    let x19: uint64_t = (x17 as u64).wrapping_add(x7);
-    let x20: uint32_t = (x19 >> 25 as core::ffi::c_int) as uint32_t;
-    let x21: uint32_t = (x19 & 0x1ffffff as core::ffi::c_uint as u64) as uint32_t;
-    let x22: uint64_t = (x20 as u64).wrapping_add(x6);
-    let x23: uint32_t = (x22 >> 26 as core::ffi::c_int) as uint32_t;
-    let x24: uint32_t = (x22 & 0x3ffffff as core::ffi::c_uint as u64) as uint32_t;
-    let x25: uint64_t = (x23 as u64).wrapping_add(x5);
-    let x26: uint32_t = (x25 >> 25 as core::ffi::c_int) as uint32_t;
-    let x27: uint32_t = (x25 & 0x1ffffff as core::ffi::c_uint as u64) as uint32_t;
-    let x28: uint64_t = (x26 as u64).wrapping_add(x4);
-    let x29: uint32_t = (x28 >> 26 as core::ffi::c_int) as uint32_t;
-    let x30: uint32_t = (x28 & 0x3ffffff as core::ffi::c_uint as u64) as uint32_t;
-    let x31: uint64_t = (x29 as u64).wrapping_add(x3);
-    let x32: uint32_t = (x31 >> 25 as core::ffi::c_int) as uint32_t;
-    let x33: uint32_t = (x31 & 0x1ffffff as core::ffi::c_uint as u64) as uint32_t;
-    let x34: uint64_t = (x32 as u64).wrapping_add(x2);
-    let x35: uint32_t = (x34 >> 26 as core::ffi::c_int) as uint32_t;
-    let x36: uint32_t = (x34 & 0x3ffffff as core::ffi::c_uint as u64) as uint32_t;
-    let x37: uint64_t = (x35 as u64).wrapping_add(x1);
-    let x38: uint32_t = (x37 >> 25 as core::ffi::c_int) as uint32_t;
-    let x39: uint32_t = (x37 & 0x1ffffff as core::ffi::c_uint as u64) as uint32_t;
-    let x40: uint32_t = x38.wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint);
-    let x41: uint32_t = x12.wrapping_add(x40);
-    let x42: fiat_25519_uint1 = (x41 >> 26 as core::ffi::c_int) as fiat_25519_uint1;
-    let x43: uint32_t = x41 & 0x3ffffff as core::ffi::c_uint;
-    let x44: uint32_t = (x42 as core::ffi::c_uint).wrapping_add(x15);
-    let x45: fiat_25519_uint1 = (x44 >> 25 as core::ffi::c_int) as fiat_25519_uint1;
-    let x46: uint32_t = x44 & 0x1ffffff as core::ffi::c_uint;
-    let x47: uint32_t = (x45 as core::ffi::c_uint).wrapping_add(x18);
+    let mut x11: uint32_t = (x10 >> 26 as core::ffi::c_int) as uint32_t;
+    let mut x12: uint32_t = (x10 & 0x3ffffff as core::ffi::c_uint as u64) as uint32_t;
+    let mut x13: uint64_t = (x11 as u64).wrapping_add(x9);
+    let mut x14: uint32_t = (x13 >> 25 as core::ffi::c_int) as uint32_t;
+    let mut x15: uint32_t = (x13 & 0x1ffffff as core::ffi::c_uint as u64) as uint32_t;
+    let mut x16: uint64_t = (x14 as u64).wrapping_add(x8);
+    let mut x17: uint32_t = (x16 >> 26 as core::ffi::c_int) as uint32_t;
+    let mut x18: uint32_t = (x16 & 0x3ffffff as core::ffi::c_uint as u64) as uint32_t;
+    let mut x19: uint64_t = (x17 as u64).wrapping_add(x7);
+    let mut x20: uint32_t = (x19 >> 25 as core::ffi::c_int) as uint32_t;
+    let mut x21: uint32_t = (x19 & 0x1ffffff as core::ffi::c_uint as u64) as uint32_t;
+    let mut x22: uint64_t = (x20 as u64).wrapping_add(x6);
+    let mut x23: uint32_t = (x22 >> 26 as core::ffi::c_int) as uint32_t;
+    let mut x24: uint32_t = (x22 & 0x3ffffff as core::ffi::c_uint as u64) as uint32_t;
+    let mut x25: uint64_t = (x23 as u64).wrapping_add(x5);
+    let mut x26: uint32_t = (x25 >> 25 as core::ffi::c_int) as uint32_t;
+    let mut x27: uint32_t = (x25 & 0x1ffffff as core::ffi::c_uint as u64) as uint32_t;
+    let mut x28: uint64_t = (x26 as u64).wrapping_add(x4);
+    let mut x29: uint32_t = (x28 >> 26 as core::ffi::c_int) as uint32_t;
+    let mut x30: uint32_t = (x28 & 0x3ffffff as core::ffi::c_uint as u64) as uint32_t;
+    let mut x31: uint64_t = (x29 as u64).wrapping_add(x3);
+    let mut x32: uint32_t = (x31 >> 25 as core::ffi::c_int) as uint32_t;
+    let mut x33: uint32_t = (x31 & 0x1ffffff as core::ffi::c_uint as u64) as uint32_t;
+    let mut x34: uint64_t = (x32 as u64).wrapping_add(x2);
+    let mut x35: uint32_t = (x34 >> 26 as core::ffi::c_int) as uint32_t;
+    let mut x36: uint32_t = (x34 & 0x3ffffff as core::ffi::c_uint as u64) as uint32_t;
+    let mut x37: uint64_t = (x35 as u64).wrapping_add(x1);
+    let mut x38: uint32_t = (x37 >> 25 as core::ffi::c_int) as uint32_t;
+    let mut x39: uint32_t = (x37 & 0x1ffffff as core::ffi::c_uint as u64) as uint32_t;
+    let mut x40: uint32_t = x38.wrapping_mul(0x13 as core::ffi::c_int as core::ffi::c_uint);
+    let mut x41: uint32_t = x12.wrapping_add(x40);
+    let mut x42: fiat_25519_uint1 = (x41 >> 26 as core::ffi::c_int) as fiat_25519_uint1;
+    let mut x43: uint32_t = x41 & 0x3ffffff as core::ffi::c_uint;
+    let mut x44: uint32_t = (x42 as core::ffi::c_uint).wrapping_add(x15);
+    let mut x45: fiat_25519_uint1 = (x44 >> 25 as core::ffi::c_int) as fiat_25519_uint1;
+    let mut x46: uint32_t = x44 & 0x1ffffff as core::ffi::c_uint;
+    let mut x47: uint32_t = (x45 as core::ffi::c_uint).wrapping_add(x18);
     *out1.offset(0 as core::ffi::c_int as isize) = x43;
     *out1.offset(1 as core::ffi::c_int as isize) = x46;
     *out1.offset(2 as core::ffi::c_int as isize) = x47;
@@ -16482,29 +16480,29 @@ unsafe extern "C" fn fiat_25519_carry_scmul_121666(
     *out1.offset(8 as core::ffi::c_int as isize) = x36;
     *out1.offset(9 as core::ffi::c_int as isize) = x39;
 }
-unsafe extern "C" fn load_3(in_0: *const uint8_t) -> uint64_t {
-    let mut result: uint64_t;
+unsafe extern "C" fn load_3(mut in_0: *const uint8_t) -> uint64_t {
+    let mut result: uint64_t = 0;
     result = *in_0.offset(0 as core::ffi::c_int as isize) as uint64_t;
     result |= (*in_0.offset(1 as core::ffi::c_int as isize) as uint64_t) << 8 as core::ffi::c_int;
     result |= (*in_0.offset(2 as core::ffi::c_int as isize) as uint64_t) << 16 as core::ffi::c_int;
     return result;
 }
-unsafe extern "C" fn load_4(in_0: *const uint8_t) -> uint64_t {
-    let mut result: uint64_t;
+unsafe extern "C" fn load_4(mut in_0: *const uint8_t) -> uint64_t {
+    let mut result: uint64_t = 0;
     result = *in_0.offset(0 as core::ffi::c_int as isize) as uint64_t;
     result |= (*in_0.offset(1 as core::ffi::c_int as isize) as uint64_t) << 8 as core::ffi::c_int;
     result |= (*in_0.offset(2 as core::ffi::c_int as isize) as uint64_t) << 16 as core::ffi::c_int;
     result |= (*in_0.offset(3 as core::ffi::c_int as isize) as uint64_t) << 24 as core::ffi::c_int;
     return result;
 }
-unsafe extern "C" fn fe_frombytes_strict(h: *mut fe, s: *const uint8_t) {
+unsafe extern "C" fn fe_frombytes_strict(mut h: *mut fe, mut s: *const uint8_t) {
     fiat_25519_from_bytes(((*h).v).as_mut_ptr(), s);
     let mut _assert_fe_i: core::ffi::c_uint = 0 as core::ffi::c_int as core::ffi::c_uint;
     while _assert_fe_i < 10 as core::ffi::c_int as core::ffi::c_uint {
         _assert_fe_i = _assert_fe_i.wrapping_add(1);
     }
 }
-unsafe extern "C" fn fe_frombytes(h: *mut fe, s: *const uint8_t) {
+unsafe extern "C" fn fe_frombytes(mut h: *mut fe, mut s: *const uint8_t) {
     let mut s_copy: [uint8_t; 32] = [0; 32];
     let _ = GFp_memcpy(
         s_copy.as_mut_ptr() as *mut core::ffi::c_void,
@@ -16516,21 +16514,21 @@ unsafe extern "C" fn fe_frombytes(h: *mut fe, s: *const uint8_t) {
         & 0x7f as core::ffi::c_int) as uint8_t;
     fe_frombytes_strict(h, s_copy.as_mut_ptr() as *const uint8_t);
 }
-unsafe extern "C" fn fe_tobytes(s: *mut uint8_t, f: *const fe) {
+unsafe extern "C" fn fe_tobytes(mut s: *mut uint8_t, mut f: *const fe) {
     let mut _assert_fe_i: core::ffi::c_uint = 0 as core::ffi::c_int as core::ffi::c_uint;
     while _assert_fe_i < 10 as core::ffi::c_int as core::ffi::c_uint {
         _assert_fe_i = _assert_fe_i.wrapping_add(1);
     }
     fiat_25519_to_bytes(s, ((*f).v).as_ptr());
 }
-unsafe extern "C" fn fe_0(h: *mut fe) {
+unsafe extern "C" fn fe_0(mut h: *mut fe) {
     let _ = GFp_memset(
         h as *mut core::ffi::c_void,
         0 as core::ffi::c_int,
         ::core::mem::size_of::<fe>() as u32,
     );
 }
-unsafe extern "C" fn fe_loose_0(h: *mut fe_loose) {
+unsafe extern "C" fn fe_loose_0(mut h: *mut fe_loose) {
     let _ = GFp_memset(
         h as *mut core::ffi::c_void,
         0 as core::ffi::c_int,
@@ -16553,7 +16551,7 @@ unsafe extern "C" fn fe_loose_1(mut h: *mut fe_loose) {
     );
     (*h).v[0 as core::ffi::c_int as usize] = 1 as core::ffi::c_int as fe_limb_t;
 }
-unsafe extern "C" fn fe_add(h: *mut fe_loose, f: *const fe, g: *const fe) {
+unsafe extern "C" fn fe_add(mut h: *mut fe_loose, mut f: *const fe, mut g: *const fe) {
     let mut _assert_fe_i: core::ffi::c_uint = 0 as core::ffi::c_int as core::ffi::c_uint;
     while _assert_fe_i < 10 as core::ffi::c_int as core::ffi::c_uint {
         _assert_fe_i = _assert_fe_i.wrapping_add(1);
@@ -16568,7 +16566,7 @@ unsafe extern "C" fn fe_add(h: *mut fe_loose, f: *const fe, g: *const fe) {
         _assert_fe_i_1 = _assert_fe_i_1.wrapping_add(1);
     }
 }
-unsafe extern "C" fn fe_sub(h: *mut fe_loose, f: *const fe, g: *const fe) {
+unsafe extern "C" fn fe_sub(mut h: *mut fe_loose, mut f: *const fe, mut g: *const fe) {
     let mut _assert_fe_i: core::ffi::c_uint = 0 as core::ffi::c_int as core::ffi::c_uint;
     while _assert_fe_i < 10 as core::ffi::c_int as core::ffi::c_uint {
         _assert_fe_i = _assert_fe_i.wrapping_add(1);
@@ -16583,7 +16581,7 @@ unsafe extern "C" fn fe_sub(h: *mut fe_loose, f: *const fe, g: *const fe) {
         _assert_fe_i_1 = _assert_fe_i_1.wrapping_add(1);
     }
 }
-unsafe extern "C" fn fe_carry(h: *mut fe, f: *const fe_loose) {
+unsafe extern "C" fn fe_carry(mut h: *mut fe, mut f: *const fe_loose) {
     let mut _assert_fe_i: core::ffi::c_uint = 0 as core::ffi::c_int as core::ffi::c_uint;
     while _assert_fe_i < 10 as core::ffi::c_int as core::ffi::c_uint {
         _assert_fe_i = _assert_fe_i.wrapping_add(1);
@@ -16595,9 +16593,9 @@ unsafe extern "C" fn fe_carry(h: *mut fe, f: *const fe_loose) {
     }
 }
 unsafe extern "C" fn fe_mul_impl(
-    out: *mut fe_limb_t,
-    in1: *const fe_limb_t,
-    in2: *const fe_limb_t,
+    mut out: *mut fe_limb_t,
+    mut in1: *const fe_limb_t,
+    mut in2: *const fe_limb_t,
 ) {
     let mut _assert_fe_i: core::ffi::c_uint = 0 as core::ffi::c_int as core::ffi::c_uint;
     while _assert_fe_i < 10 as core::ffi::c_int as core::ffi::c_uint {
@@ -16613,22 +16611,22 @@ unsafe extern "C" fn fe_mul_impl(
         _assert_fe_i_1 = _assert_fe_i_1.wrapping_add(1);
     }
 }
-unsafe extern "C" fn fe_mul_ltt(h: *mut fe_loose, f: *const fe, g: *const fe) {
+unsafe extern "C" fn fe_mul_ltt(mut h: *mut fe_loose, mut f: *const fe, mut g: *const fe) {
     fe_mul_impl(((*h).v).as_mut_ptr(), ((*f).v).as_ptr(), ((*g).v).as_ptr());
 }
-unsafe extern "C" fn fe_mul_ttt(h: *mut fe, f: *const fe, g: *const fe) {
+unsafe extern "C" fn fe_mul_ttt(mut h: *mut fe, mut f: *const fe, mut g: *const fe) {
     fe_mul_impl(((*h).v).as_mut_ptr(), ((*f).v).as_ptr(), ((*g).v).as_ptr());
 }
-unsafe extern "C" fn fe_mul_tlt(h: *mut fe, f: *const fe_loose, g: *const fe) {
+unsafe extern "C" fn fe_mul_tlt(mut h: *mut fe, mut f: *const fe_loose, mut g: *const fe) {
     fe_mul_impl(((*h).v).as_mut_ptr(), ((*f).v).as_ptr(), ((*g).v).as_ptr());
 }
-unsafe extern "C" fn fe_mul_ttl(h: *mut fe, f: *const fe, g: *const fe_loose) {
+unsafe extern "C" fn fe_mul_ttl(mut h: *mut fe, mut f: *const fe, mut g: *const fe_loose) {
     fe_mul_impl(((*h).v).as_mut_ptr(), ((*f).v).as_ptr(), ((*g).v).as_ptr());
 }
-unsafe extern "C" fn fe_mul_tll(h: *mut fe, f: *const fe_loose, g: *const fe_loose) {
+unsafe extern "C" fn fe_mul_tll(mut h: *mut fe, mut f: *const fe_loose, mut g: *const fe_loose) {
     fe_mul_impl(((*h).v).as_mut_ptr(), ((*f).v).as_ptr(), ((*g).v).as_ptr());
 }
-unsafe extern "C" fn fe_sq_tl(h: *mut fe, f: *const fe_loose) {
+unsafe extern "C" fn fe_sq_tl(mut h: *mut fe, mut f: *const fe_loose) {
     let mut _assert_fe_i: core::ffi::c_uint = 0 as core::ffi::c_int as core::ffi::c_uint;
     while _assert_fe_i < 10 as core::ffi::c_int as core::ffi::c_uint {
         _assert_fe_i = _assert_fe_i.wrapping_add(1);
@@ -16639,7 +16637,7 @@ unsafe extern "C" fn fe_sq_tl(h: *mut fe, f: *const fe_loose) {
         _assert_fe_i_0 = _assert_fe_i_0.wrapping_add(1);
     }
 }
-unsafe extern "C" fn fe_sq_tt(h: *mut fe, f: *const fe) {
+unsafe extern "C" fn fe_sq_tt(mut h: *mut fe, mut f: *const fe) {
     let mut _assert_fe_i: core::ffi::c_uint = 0 as core::ffi::c_int as core::ffi::c_uint;
     while _assert_fe_i < 10 as core::ffi::c_int as core::ffi::c_uint {
         _assert_fe_i = _assert_fe_i.wrapping_add(1);
@@ -16661,7 +16659,7 @@ unsafe extern "C" fn fe_cswap(mut f: *mut fe, mut g: *mut fe, mut b: fe_limb_t) 
         i = i.wrapping_add(1);
     }
 }
-unsafe extern "C" fn fe_mul121666(h: *mut fe, f: *const fe_loose) {
+unsafe extern "C" fn fe_mul121666(mut h: *mut fe, mut f: *const fe_loose) {
     let mut _assert_fe_i: core::ffi::c_uint = 0 as core::ffi::c_int as core::ffi::c_uint;
     while _assert_fe_i < 10 as core::ffi::c_int as core::ffi::c_uint {
         _assert_fe_i = _assert_fe_i.wrapping_add(1);
@@ -16672,7 +16670,7 @@ unsafe extern "C" fn fe_mul121666(h: *mut fe, f: *const fe_loose) {
         _assert_fe_i_0 = _assert_fe_i_0.wrapping_add(1);
     }
 }
-unsafe extern "C" fn fe_neg(h: *mut fe_loose, f: *const fe) {
+unsafe extern "C" fn fe_neg(mut h: *mut fe_loose, mut f: *const fe) {
     let mut _assert_fe_i: core::ffi::c_uint = 0 as core::ffi::c_int as core::ffi::c_uint;
     while _assert_fe_i < 10 as core::ffi::c_int as core::ffi::c_uint {
         _assert_fe_i = _assert_fe_i.wrapping_add(1);
@@ -16683,7 +16681,7 @@ unsafe extern "C" fn fe_neg(h: *mut fe_loose, f: *const fe) {
         _assert_fe_i_0 = _assert_fe_i_0.wrapping_add(1);
     }
 }
-unsafe extern "C" fn fe_cmov(mut f: *mut fe_loose, g: *const fe_loose, mut b: fe_limb_t) {
+unsafe extern "C" fn fe_cmov(mut f: *mut fe_loose, mut g: *const fe_loose, mut b: fe_limb_t) {
     b = (0 as core::ffi::c_int as core::ffi::c_uint).wrapping_sub(b);
     let mut i: core::ffi::c_uint = 0 as core::ffi::c_int as core::ffi::c_uint;
     while i < 10 as core::ffi::c_int as core::ffi::c_uint {
@@ -16693,21 +16691,21 @@ unsafe extern "C" fn fe_cmov(mut f: *mut fe_loose, g: *const fe_loose, mut b: fe
         i = i.wrapping_add(1);
     }
 }
-unsafe extern "C" fn fe_copy(h: *mut fe, f: *const fe) {
+unsafe extern "C" fn fe_copy(mut h: *mut fe, mut f: *const fe) {
     fe_limbs_copy(((*h).v).as_mut_ptr(), ((*f).v).as_ptr());
 }
-unsafe extern "C" fn fe_copy_lt(h: *mut fe_loose, f: *const fe) {
+unsafe extern "C" fn fe_copy_lt(mut h: *mut fe_loose, mut f: *const fe) {
     fe_limbs_copy(((*h).v).as_mut_ptr(), ((*f).v).as_ptr());
 }
-unsafe extern "C" fn fe_copy_ll(h: *mut fe_loose, f: *const fe_loose) {
+unsafe extern "C" fn fe_copy_ll(mut h: *mut fe_loose, mut f: *const fe_loose) {
     fe_limbs_copy(((*h).v).as_mut_ptr(), ((*f).v).as_ptr());
 }
-unsafe extern "C" fn fe_loose_invert(out: *mut fe, z: *const fe_loose) {
+unsafe extern "C" fn fe_loose_invert(mut out: *mut fe, mut z: *const fe_loose) {
     let mut t0: fe = fe { v: [0; 10] };
     let mut t1: fe = fe { v: [0; 10] };
     let mut t2: fe = fe { v: [0; 10] };
     let mut t3: fe = fe { v: [0; 10] };
-    let mut i: core::ffi::c_int;
+    let mut i: core::ffi::c_int = 0;
     fe_sq_tl(&mut t0, z);
     fe_sq_tt(&mut t1, &mut t0);
     i = 1 as core::ffi::c_int;
@@ -16776,12 +16774,12 @@ unsafe extern "C" fn fe_loose_invert(out: *mut fe, z: *const fe_loose) {
     }
     fe_mul_ttt(out, &mut t1, &mut t0);
 }
-unsafe extern "C" fn fe_invert(out: *mut fe, z: *const fe) {
+unsafe extern "C" fn fe_invert(mut out: *mut fe, mut z: *const fe) {
     let mut l: fe_loose = fe_loose { v: [0; 10] };
     fe_copy_lt(&mut l, z);
     fe_loose_invert(out, &mut l);
 }
-unsafe extern "C" fn fe_isnonzero(f: *const fe_loose) -> core::ffi::c_int {
+unsafe extern "C" fn fe_isnonzero(mut f: *const fe_loose) -> core::ffi::c_int {
     let mut tight: fe = fe { v: [0; 10] };
     fe_carry(&mut tight, f);
     let mut s: [uint8_t; 32] = [0; 32];
@@ -16826,22 +16824,22 @@ unsafe extern "C" fn fe_isnonzero(f: *const fe_loose) -> core::ffi::c_int {
         ::core::mem::size_of::<[uint8_t; 32]>() as u32,
     ) != 0 as core::ffi::c_int) as core::ffi::c_int;
 }
-unsafe extern "C" fn fe_isnegative(f: *const fe) -> core::ffi::c_int {
+unsafe extern "C" fn fe_isnegative(mut f: *const fe) -> core::ffi::c_int {
     let mut s: [uint8_t; 32] = [0; 32];
     fe_tobytes(s.as_mut_ptr(), f);
     return s[0 as core::ffi::c_int as usize] as core::ffi::c_int & 1 as core::ffi::c_int;
 }
-unsafe extern "C" fn fe_sq2_tt(h: *mut fe, f: *const fe) {
+unsafe extern "C" fn fe_sq2_tt(mut h: *mut fe, mut f: *const fe) {
     fe_sq_tt(h, f);
     let mut tmp: fe_loose = fe_loose { v: [0; 10] };
     fe_add(&mut tmp, h, h);
     fe_carry(h, &mut tmp);
 }
-unsafe extern "C" fn fe_pow22523(out: *mut fe, z: *const fe) {
+unsafe extern "C" fn fe_pow22523(mut out: *mut fe, mut z: *const fe) {
     let mut t0: fe = fe { v: [0; 10] };
     let mut t1: fe = fe { v: [0; 10] };
     let mut t2: fe = fe { v: [0; 10] };
-    let mut i: core::ffi::c_int;
+    let mut i: core::ffi::c_int = 0;
     fe_sq_tt(&mut t0, z);
     fe_sq_tt(&mut t1, &mut t0);
     i = 1 as core::ffi::c_int;
@@ -16912,8 +16910,8 @@ unsafe extern "C" fn fe_pow22523(out: *mut fe, z: *const fe) {
 }
 #[no_mangle]
 pub unsafe extern "C" fn GFp_x25519_ge_frombytes_vartime(
-    h: *mut ge_p3,
-    s: *const uint8_t,
+    mut h: *mut ge_p3,
+    mut s: *const uint8_t,
 ) -> core::ffi::c_int {
     let mut u: fe = fe { v: [0; 10] };
     let mut v: fe_loose = fe_loose { v: [0; 10] };
@@ -16955,45 +16953,45 @@ pub unsafe extern "C" fn GFp_x25519_ge_frombytes_vartime(
     fe_mul_ttt(&mut (*h).T, &mut (*h).X, &mut (*h).Y);
     return 1 as core::ffi::c_int;
 }
-unsafe extern "C" fn ge_p2_0(h: *mut ge_p2) {
+unsafe extern "C" fn ge_p2_0(mut h: *mut ge_p2) {
     fe_0(&mut (*h).X);
     fe_1(&mut (*h).Y);
     fe_1(&mut (*h).Z);
 }
-unsafe extern "C" fn ge_p3_0(h: *mut ge_p3) {
+unsafe extern "C" fn ge_p3_0(mut h: *mut ge_p3) {
     fe_0(&mut (*h).X);
     fe_1(&mut (*h).Y);
     fe_1(&mut (*h).Z);
     fe_0(&mut (*h).T);
 }
-unsafe extern "C" fn ge_precomp_0(h: *mut ge_precomp) {
+unsafe extern "C" fn ge_precomp_0(mut h: *mut ge_precomp) {
     fe_loose_1(&mut (*h).yplusx);
     fe_loose_1(&mut (*h).yminusx);
     fe_loose_0(&mut (*h).xy2d);
 }
-unsafe extern "C" fn ge_p3_to_p2(r: *mut ge_p2, p: *const ge_p3) {
+unsafe extern "C" fn ge_p3_to_p2(mut r: *mut ge_p2, mut p: *const ge_p3) {
     fe_copy(&mut (*r).X, &(*p).X);
     fe_copy(&mut (*r).Y, &(*p).Y);
     fe_copy(&mut (*r).Z, &(*p).Z);
 }
-unsafe extern "C" fn x25519_ge_p3_to_cached(r: *mut ge_cached, p: *const ge_p3) {
+unsafe extern "C" fn x25519_ge_p3_to_cached(mut r: *mut ge_cached, mut p: *const ge_p3) {
     fe_add(&mut (*r).YplusX, &(*p).Y, &(*p).X);
     fe_sub(&mut (*r).YminusX, &(*p).Y, &(*p).X);
     fe_copy_lt(&mut (*r).Z, &(*p).Z);
     fe_mul_ltt(&mut (*r).T2d, &(*p).T, &d2);
 }
-unsafe extern "C" fn x25519_ge_p1p1_to_p2(r: *mut ge_p2, p: *const ge_p1p1) {
+unsafe extern "C" fn x25519_ge_p1p1_to_p2(mut r: *mut ge_p2, mut p: *const ge_p1p1) {
     fe_mul_tll(&mut (*r).X, &(*p).X, &(*p).T);
     fe_mul_tll(&mut (*r).Y, &(*p).Y, &(*p).Z);
     fe_mul_tll(&mut (*r).Z, &(*p).Z, &(*p).T);
 }
-unsafe extern "C" fn x25519_ge_p1p1_to_p3(r: *mut ge_p3, p: *const ge_p1p1) {
+unsafe extern "C" fn x25519_ge_p1p1_to_p3(mut r: *mut ge_p3, mut p: *const ge_p1p1) {
     fe_mul_tll(&mut (*r).X, &(*p).X, &(*p).T);
     fe_mul_tll(&mut (*r).Y, &(*p).Y, &(*p).Z);
     fe_mul_tll(&mut (*r).Z, &(*p).Z, &(*p).T);
     fe_mul_tll(&mut (*r).T, &(*p).X, &(*p).Y);
 }
-unsafe extern "C" fn ge_p2_dbl(r: *mut ge_p1p1, p: *const ge_p2) {
+unsafe extern "C" fn ge_p2_dbl(mut r: *mut ge_p1p1, mut p: *const ge_p2) {
     let mut trX: fe = fe { v: [0; 10] };
     let mut trZ: fe = fe { v: [0; 10] };
     let mut trT: fe = fe { v: [0; 10] };
@@ -17010,7 +17008,7 @@ unsafe extern "C" fn ge_p2_dbl(r: *mut ge_p1p1, p: *const ge_p2) {
     fe_carry(&mut trZ, &mut (*r).Z);
     fe_sub(&mut (*r).T, &mut trT, &mut trZ);
 }
-unsafe extern "C" fn ge_p3_dbl(r: *mut ge_p1p1, p: *const ge_p3) {
+unsafe extern "C" fn ge_p3_dbl(mut r: *mut ge_p1p1, mut p: *const ge_p3) {
     let mut q: ge_p2 = ge_p2 {
         X: fe { v: [0; 10] },
         Y: fe { v: [0; 10] },
@@ -17019,7 +17017,7 @@ unsafe extern "C" fn ge_p3_dbl(r: *mut ge_p1p1, p: *const ge_p3) {
     ge_p3_to_p2(&mut q, p);
     ge_p2_dbl(r, &mut q);
 }
-unsafe extern "C" fn ge_madd(r: *mut ge_p1p1, p: *const ge_p3, q: *const ge_precomp) {
+unsafe extern "C" fn ge_madd(mut r: *mut ge_p1p1, mut p: *const ge_p3, mut q: *const ge_precomp) {
     let mut trY: fe = fe { v: [0; 10] };
     let mut trZ: fe = fe { v: [0; 10] };
     let mut trT: fe = fe { v: [0; 10] };
@@ -17035,7 +17033,7 @@ unsafe extern "C" fn ge_madd(r: *mut ge_p1p1, p: *const ge_p3, q: *const ge_prec
     fe_add(&mut (*r).Z, &mut trZ, &mut trT);
     fe_sub(&mut (*r).T, &mut trZ, &mut trT);
 }
-unsafe extern "C" fn ge_msub(r: *mut ge_p1p1, p: *const ge_p3, q: *const ge_precomp) {
+unsafe extern "C" fn ge_msub(mut r: *mut ge_p1p1, mut p: *const ge_p3, mut q: *const ge_precomp) {
     let mut trY: fe = fe { v: [0; 10] };
     let mut trZ: fe = fe { v: [0; 10] };
     let mut trT: fe = fe { v: [0; 10] };
@@ -17052,9 +17050,9 @@ unsafe extern "C" fn ge_msub(r: *mut ge_p1p1, p: *const ge_p3, q: *const ge_prec
     fe_add(&mut (*r).T, &mut trZ, &mut trT);
 }
 unsafe extern "C" fn x25519_ge_add(
-    r: *mut ge_p1p1,
-    p: *const ge_p3,
-    q: *const ge_cached,
+    mut r: *mut ge_p1p1,
+    mut p: *const ge_p3,
+    mut q: *const ge_cached,
 ) {
     let mut trX: fe = fe { v: [0; 10] };
     let mut trY: fe = fe { v: [0; 10] };
@@ -17074,9 +17072,9 @@ unsafe extern "C" fn x25519_ge_add(
     fe_sub(&mut (*r).T, &mut trZ, &mut trT);
 }
 unsafe extern "C" fn x25519_ge_sub(
-    r: *mut ge_p1p1,
-    p: *const ge_p3,
-    q: *const ge_cached,
+    mut r: *mut ge_p1p1,
+    mut p: *const ge_p3,
+    mut q: *const ge_cached,
 ) {
     let mut trX: fe = fe { v: [0; 10] };
     let mut trY: fe = fe { v: [0; 10] };
@@ -17095,38 +17093,38 @@ unsafe extern "C" fn x25519_ge_sub(
     fe_sub(&mut (*r).Z, &mut trZ, &mut trT);
     fe_add(&mut (*r).T, &mut trZ, &mut trT);
 }
-unsafe extern "C" fn equal(b: core::ffi::c_schar, c: core::ffi::c_schar) -> uint8_t {
-    let ub: uint8_t = b as uint8_t;
-    let uc: uint8_t = c as uint8_t;
-    let x: uint8_t = (ub as core::ffi::c_int ^ uc as core::ffi::c_int) as uint8_t;
+unsafe extern "C" fn equal(mut b: core::ffi::c_schar, mut c: core::ffi::c_schar) -> uint8_t {
+    let mut ub: uint8_t = b as uint8_t;
+    let mut uc: uint8_t = c as uint8_t;
+    let mut x: uint8_t = (ub as core::ffi::c_int ^ uc as core::ffi::c_int) as uint8_t;
     let mut y: uint32_t = x as uint32_t;
     y = (y as core::ffi::c_uint).wrapping_sub(1 as core::ffi::c_int as core::ffi::c_uint)
         as uint32_t as uint32_t;
     y >>= 31 as core::ffi::c_int;
     return y as uint8_t;
 }
-unsafe extern "C" fn cmov(t: *mut ge_precomp, u: *const ge_precomp, b: uint8_t) {
+unsafe extern "C" fn cmov(mut t: *mut ge_precomp, mut u: *const ge_precomp, mut b: uint8_t) {
     fe_cmov(&mut (*t).yplusx, &(*u).yplusx, b as fe_limb_t);
     fe_cmov(&mut (*t).yminusx, &(*u).yminusx, b as fe_limb_t);
     fe_cmov(&mut (*t).xy2d, &(*u).xy2d, b as fe_limb_t);
 }
-unsafe extern "C" fn negative(b: core::ffi::c_schar) -> uint8_t {
+unsafe extern "C" fn negative(mut b: core::ffi::c_schar) -> uint8_t {
     let mut x: uint32_t = b as uint32_t;
     x >>= 31 as core::ffi::c_int;
     return x as uint8_t;
 }
 unsafe extern "C" fn table_select(
-    t: *mut ge_precomp,
-    pos: core::ffi::c_int,
-    b: core::ffi::c_schar,
+    mut t: *mut ge_precomp,
+    mut pos: core::ffi::c_int,
+    mut b: core::ffi::c_schar,
 ) {
     let mut minust: ge_precomp = ge_precomp {
         yplusx: fe_loose { v: [0; 10] },
         yminusx: fe_loose { v: [0; 10] },
         xy2d: fe_loose { v: [0; 10] },
     };
-    let bnegative: uint8_t = negative(b);
-    let babs: uint8_t = (b as core::ffi::c_int
+    let mut bnegative: uint8_t = negative(b);
+    let mut babs: uint8_t = (b as core::ffi::c_int
         - (((-(bnegative as core::ffi::c_int) & b as core::ffi::c_int) as uint8_t
             as core::ffi::c_int)
             << 1 as core::ffi::c_int)) as uint8_t;
@@ -17219,9 +17217,9 @@ unsafe extern "C" fn table_select(
     cmov(t, &mut minust, bnegative);
 }
 #[no_mangle]
-pub unsafe extern "C" fn GFp_x25519_ge_scalarmult_base(h: *mut ge_p3, a: *const uint8_t) {
+pub unsafe extern "C" fn GFp_x25519_ge_scalarmult_base(mut h: *mut ge_p3, mut a: *const uint8_t) {
     let mut e: [core::ffi::c_schar; 64] = [0; 64];
-    let mut carry: core::ffi::c_schar;
+    let mut carry: core::ffi::c_schar = 0;
     let mut r: ge_p1p1 = ge_p1p1 {
         X: fe_loose { v: [0; 10] },
         Y: fe_loose { v: [0; 10] },
@@ -17238,7 +17236,7 @@ pub unsafe extern "C" fn GFp_x25519_ge_scalarmult_base(h: *mut ge_p3, a: *const 
         yminusx: fe_loose { v: [0; 10] },
         xy2d: fe_loose { v: [0; 10] },
     };
-    let mut i: core::ffi::c_int;
+    let mut i: core::ffi::c_int = 0;
     i = 0 as core::ffi::c_int;
     while i < 32 as core::ffi::c_int {
         e[(2 as core::ffi::c_int * i + 0 as core::ffi::c_int) as usize] =
@@ -17287,10 +17285,10 @@ pub unsafe extern "C" fn GFp_x25519_ge_scalarmult_base(h: *mut ge_p3, a: *const 
         i += 2 as core::ffi::c_int;
     }
 }
-unsafe extern "C" fn slide(r: *mut core::ffi::c_schar, a: *const uint8_t) {
-    let mut i: core::ffi::c_int;
-    let mut b: core::ffi::c_int;
-    let mut k: core::ffi::c_int;
+unsafe extern "C" fn slide(mut r: *mut core::ffi::c_schar, mut a: *const uint8_t) {
+    let mut i: core::ffi::c_int = 0;
+    let mut b: core::ffi::c_int = 0;
+    let mut k: core::ffi::c_int = 0;
     i = 0 as core::ffi::c_int;
     while i < 256 as core::ffi::c_int {
         *r.offset(i as isize) = (1 as core::ffi::c_int
@@ -17344,10 +17342,10 @@ unsafe extern "C" fn slide(r: *mut core::ffi::c_schar, a: *const uint8_t) {
     }
 }
 unsafe extern "C" fn ge_double_scalarmult_vartime(
-    r: *mut ge_p2,
-    a: *const uint8_t,
-    A: *const ge_p3,
-    b: *const uint8_t,
+    mut r: *mut ge_p2,
+    mut a: *const uint8_t,
+    mut A: *const ge_p3,
+    mut b: *const uint8_t,
 ) {
     let mut aslide: [core::ffi::c_schar; 256] = [0; 256];
     let mut bslide: [core::ffi::c_schar; 256] = [0; 256];
@@ -17375,7 +17373,7 @@ unsafe extern "C" fn ge_double_scalarmult_vartime(
         Z: fe { v: [0; 10] },
         T: fe { v: [0; 10] },
     };
-    let mut i: core::ffi::c_int;
+    let mut i: core::ffi::c_int = 0;
     slide(aslide.as_mut_ptr(), a);
     slide(bslide.as_mut_ptr(), b);
     x25519_ge_p3_to_cached(
@@ -17513,11 +17511,11 @@ unsafe extern "C" fn ge_double_scalarmult_vartime(
     }
 }
 #[inline]
-unsafe extern "C" fn int64_lshift21(a: int64_t) -> int64_t {
+unsafe extern "C" fn int64_lshift21(mut a: int64_t) -> int64_t {
     return ((a as uint64_t) << 21 as core::ffi::c_int) as int64_t;
 }
 #[no_mangle]
-pub unsafe extern "C" fn GFp_x25519_sc_reduce(s: *mut uint8_t) {
+pub unsafe extern "C" fn GFp_x25519_sc_reduce(mut s: *mut uint8_t) {
     let mut s0: int64_t =
         (2097151 as core::ffi::c_int as u64 & load_3(s as *const uint8_t)) as int64_t;
     let mut s1: int64_t = (2097151 as core::ffi::c_int as u64
@@ -17571,82 +17569,82 @@ pub unsafe extern "C" fn GFp_x25519_sc_reduce(s: *mut uint8_t) {
     let mut s17: int64_t = (2097151 as core::ffi::c_int as u64
         & load_4(s.offset(44 as core::ffi::c_int as isize) as *const uint8_t)
             >> 5 as core::ffi::c_int) as int64_t;
-    let s18: int64_t = (2097151 as core::ffi::c_int as u64
+    let mut s18: int64_t = (2097151 as core::ffi::c_int as u64
         & load_3(s.offset(47 as core::ffi::c_int as isize) as *const uint8_t)
             >> 2 as core::ffi::c_int) as int64_t;
-    let s19: int64_t = (2097151 as core::ffi::c_int as u64
+    let mut s19: int64_t = (2097151 as core::ffi::c_int as u64
         & load_4(s.offset(49 as core::ffi::c_int as isize) as *const uint8_t)
             >> 7 as core::ffi::c_int) as int64_t;
-    let s20: int64_t = (2097151 as core::ffi::c_int as u64
+    let mut s20: int64_t = (2097151 as core::ffi::c_int as u64
         & load_4(s.offset(52 as core::ffi::c_int as isize) as *const uint8_t)
             >> 4 as core::ffi::c_int) as int64_t;
-    let s21: int64_t = (2097151 as core::ffi::c_int as u64
+    let mut s21: int64_t = (2097151 as core::ffi::c_int as u64
         & load_3(s.offset(55 as core::ffi::c_int as isize) as *const uint8_t)
             >> 1 as core::ffi::c_int) as int64_t;
-    let s22: int64_t = (2097151 as core::ffi::c_int as u64
+    let mut s22: int64_t = (2097151 as core::ffi::c_int as u64
         & load_4(s.offset(57 as core::ffi::c_int as isize) as *const uint8_t)
             >> 6 as core::ffi::c_int) as int64_t;
-    let s23: int64_t = (load_4(s.offset(60 as core::ffi::c_int as isize) as *const uint8_t)
+    let mut s23: int64_t = (load_4(s.offset(60 as core::ffi::c_int as isize) as *const uint8_t)
         >> 3 as core::ffi::c_int) as int64_t;
-    let mut carry0: int64_t;
-    let mut carry1: int64_t;
-    let mut carry2: int64_t;
-    let mut carry3: int64_t;
-    let mut carry4: int64_t;
-    let mut carry5: int64_t;
-    let mut carry6: int64_t;
-    let mut carry7: int64_t;
-    let mut carry8: int64_t;
-    let mut carry9: int64_t;
-    let mut carry10: int64_t;
-    let mut carry11: int64_t;
-    let carry12: int64_t;
-    let carry13: int64_t;
-    let carry14: int64_t;
-    let carry15: int64_t;
-    let carry16: int64_t;
+    let mut carry0: int64_t = 0;
+    let mut carry1: int64_t = 0;
+    let mut carry2: int64_t = 0;
+    let mut carry3: int64_t = 0;
+    let mut carry4: int64_t = 0;
+    let mut carry5: int64_t = 0;
+    let mut carry6: int64_t = 0;
+    let mut carry7: int64_t = 0;
+    let mut carry8: int64_t = 0;
+    let mut carry9: int64_t = 0;
+    let mut carry10: int64_t = 0;
+    let mut carry11: int64_t = 0;
+    let mut carry12: int64_t = 0;
+    let mut carry13: int64_t = 0;
+    let mut carry14: int64_t = 0;
+    let mut carry15: int64_t = 0;
+    let mut carry16: int64_t = 0;
     s11 += s23 * 666643 as core::ffi::c_int as i64;
     s12 += s23 * 470296 as core::ffi::c_int as i64;
     s13 += s23 * 654183 as core::ffi::c_int as i64;
     s14 -= s23 * 997805 as core::ffi::c_int as i64;
     s15 += s23 * 136657 as core::ffi::c_int as i64;
     s16 -= s23 * 683901 as core::ffi::c_int as i64;
-    s23 as core::ffi::c_int as int64_t;
+    s23 = 0 as core::ffi::c_int as int64_t;
     s10 += s22 * 666643 as core::ffi::c_int as i64;
     s11 += s22 * 470296 as core::ffi::c_int as i64;
     s12 += s22 * 654183 as core::ffi::c_int as i64;
     s13 -= s22 * 997805 as core::ffi::c_int as i64;
     s14 += s22 * 136657 as core::ffi::c_int as i64;
     s15 -= s22 * 683901 as core::ffi::c_int as i64;
-    s22 as core::ffi::c_int as int64_t;
+    s22 = 0 as core::ffi::c_int as int64_t;
     s9 += s21 * 666643 as core::ffi::c_int as i64;
     s10 += s21 * 470296 as core::ffi::c_int as i64;
     s11 += s21 * 654183 as core::ffi::c_int as i64;
     s12 -= s21 * 997805 as core::ffi::c_int as i64;
     s13 += s21 * 136657 as core::ffi::c_int as i64;
     s14 -= s21 * 683901 as core::ffi::c_int as i64;
-    s21 as core::ffi::c_int as int64_t;
+    s21 = 0 as core::ffi::c_int as int64_t;
     s8 += s20 * 666643 as core::ffi::c_int as i64;
     s9 += s20 * 470296 as core::ffi::c_int as i64;
     s10 += s20 * 654183 as core::ffi::c_int as i64;
     s11 -= s20 * 997805 as core::ffi::c_int as i64;
     s12 += s20 * 136657 as core::ffi::c_int as i64;
     s13 -= s20 * 683901 as core::ffi::c_int as i64;
-    s20 as core::ffi::c_int as int64_t;
+    s20 = 0 as core::ffi::c_int as int64_t;
     s7 += s19 * 666643 as core::ffi::c_int as i64;
     s8 += s19 * 470296 as core::ffi::c_int as i64;
     s9 += s19 * 654183 as core::ffi::c_int as i64;
     s10 -= s19 * 997805 as core::ffi::c_int as i64;
     s11 += s19 * 136657 as core::ffi::c_int as i64;
     s12 -= s19 * 683901 as core::ffi::c_int as i64;
-    s19 as core::ffi::c_int as int64_t;
+    s19 = 0 as core::ffi::c_int as int64_t;
     s6 += s18 * 666643 as core::ffi::c_int as i64;
     s7 += s18 * 470296 as core::ffi::c_int as i64;
     s8 += s18 * 654183 as core::ffi::c_int as i64;
     s9 -= s18 * 997805 as core::ffi::c_int as i64;
     s10 += s18 * 136657 as core::ffi::c_int as i64;
     s11 -= s18 * 683901 as core::ffi::c_int as i64;
-    s18 as core::ffi::c_int as int64_t;
+    s18 = 0 as core::ffi::c_int as int64_t;
     carry6 =
         s6 + ((1 as core::ffi::c_int) << 20 as core::ffi::c_int) as i64 >> 21 as core::ffi::c_int;
     s7 += carry6;
@@ -17697,35 +17695,35 @@ pub unsafe extern "C" fn GFp_x25519_sc_reduce(s: *mut uint8_t) {
     s8 -= s17 * 997805 as core::ffi::c_int as i64;
     s9 += s17 * 136657 as core::ffi::c_int as i64;
     s10 -= s17 * 683901 as core::ffi::c_int as i64;
-    s17 as core::ffi::c_int as int64_t;
+    s17 = 0 as core::ffi::c_int as int64_t;
     s4 += s16 * 666643 as core::ffi::c_int as i64;
     s5 += s16 * 470296 as core::ffi::c_int as i64;
     s6 += s16 * 654183 as core::ffi::c_int as i64;
     s7 -= s16 * 997805 as core::ffi::c_int as i64;
     s8 += s16 * 136657 as core::ffi::c_int as i64;
     s9 -= s16 * 683901 as core::ffi::c_int as i64;
-    s16 as core::ffi::c_int as int64_t;
+    s16 = 0 as core::ffi::c_int as int64_t;
     s3 += s15 * 666643 as core::ffi::c_int as i64;
     s4 += s15 * 470296 as core::ffi::c_int as i64;
     s5 += s15 * 654183 as core::ffi::c_int as i64;
     s6 -= s15 * 997805 as core::ffi::c_int as i64;
     s7 += s15 * 136657 as core::ffi::c_int as i64;
     s8 -= s15 * 683901 as core::ffi::c_int as i64;
-    s15 as core::ffi::c_int as int64_t;
+    s15 = 0 as core::ffi::c_int as int64_t;
     s2 += s14 * 666643 as core::ffi::c_int as i64;
     s3 += s14 * 470296 as core::ffi::c_int as i64;
     s4 += s14 * 654183 as core::ffi::c_int as i64;
     s5 -= s14 * 997805 as core::ffi::c_int as i64;
     s6 += s14 * 136657 as core::ffi::c_int as i64;
     s7 -= s14 * 683901 as core::ffi::c_int as i64;
-    s14 as core::ffi::c_int as int64_t;
+    s14 = 0 as core::ffi::c_int as int64_t;
     s1 += s13 * 666643 as core::ffi::c_int as i64;
     s2 += s13 * 470296 as core::ffi::c_int as i64;
     s3 += s13 * 654183 as core::ffi::c_int as i64;
     s4 -= s13 * 997805 as core::ffi::c_int as i64;
     s5 += s13 * 136657 as core::ffi::c_int as i64;
     s6 -= s13 * 683901 as core::ffi::c_int as i64;
-    s13 as core::ffi::c_int as int64_t;
+    s13 = 0 as core::ffi::c_int as int64_t;
     s0 += s12 * 666643 as core::ffi::c_int as i64;
     s1 += s12 * 470296 as core::ffi::c_int as i64;
     s2 += s12 * 654183 as core::ffi::c_int as i64;
@@ -17830,7 +17828,7 @@ pub unsafe extern "C" fn GFp_x25519_sc_reduce(s: *mut uint8_t) {
     s3 -= s12 * 997805 as core::ffi::c_int as i64;
     s4 += s12 * 136657 as core::ffi::c_int as i64;
     s5 -= s12 * 683901 as core::ffi::c_int as i64;
-    s12 as core::ffi::c_int as int64_t;
+    s12 = 0 as core::ffi::c_int as int64_t;
     carry0 = s0 >> 21 as core::ffi::c_int;
     s1 += carry0;
     s0 -= int64_lshift21(carry0);
@@ -17908,154 +17906,154 @@ pub unsafe extern "C" fn GFp_x25519_sc_reduce(s: *mut uint8_t) {
     *s.offset(31 as core::ffi::c_int as isize) = (s11 >> 17 as core::ffi::c_int) as uint8_t;
 }
 unsafe extern "C" fn sc_muladd(
-    s: *mut uint8_t,
-    a: *const uint8_t,
-    b: *const uint8_t,
-    c: *const uint8_t,
+    mut s: *mut uint8_t,
+    mut a: *const uint8_t,
+    mut b: *const uint8_t,
+    mut c: *const uint8_t,
 ) {
-    let a0: int64_t = (2097151 as core::ffi::c_int as u64 & load_3(a)) as int64_t;
-    let a1: int64_t = (2097151 as core::ffi::c_int as u64
+    let mut a0: int64_t = (2097151 as core::ffi::c_int as u64 & load_3(a)) as int64_t;
+    let mut a1: int64_t = (2097151 as core::ffi::c_int as u64
         & load_4(a.offset(2 as core::ffi::c_int as isize)) >> 5 as core::ffi::c_int)
         as int64_t;
-    let a2: int64_t = (2097151 as core::ffi::c_int as u64
+    let mut a2: int64_t = (2097151 as core::ffi::c_int as u64
         & load_3(a.offset(5 as core::ffi::c_int as isize)) >> 2 as core::ffi::c_int)
         as int64_t;
-    let a3: int64_t = (2097151 as core::ffi::c_int as u64
+    let mut a3: int64_t = (2097151 as core::ffi::c_int as u64
         & load_4(a.offset(7 as core::ffi::c_int as isize)) >> 7 as core::ffi::c_int)
         as int64_t;
-    let a4: int64_t = (2097151 as core::ffi::c_int as u64
+    let mut a4: int64_t = (2097151 as core::ffi::c_int as u64
         & load_4(a.offset(10 as core::ffi::c_int as isize)) >> 4 as core::ffi::c_int)
         as int64_t;
-    let a5: int64_t = (2097151 as core::ffi::c_int as u64
+    let mut a5: int64_t = (2097151 as core::ffi::c_int as u64
         & load_3(a.offset(13 as core::ffi::c_int as isize)) >> 1 as core::ffi::c_int)
         as int64_t;
-    let a6: int64_t = (2097151 as core::ffi::c_int as u64
+    let mut a6: int64_t = (2097151 as core::ffi::c_int as u64
         & load_4(a.offset(15 as core::ffi::c_int as isize)) >> 6 as core::ffi::c_int)
         as int64_t;
-    let a7: int64_t = (2097151 as core::ffi::c_int as u64
+    let mut a7: int64_t = (2097151 as core::ffi::c_int as u64
         & load_3(a.offset(18 as core::ffi::c_int as isize)) >> 3 as core::ffi::c_int)
         as int64_t;
-    let a8: int64_t = (2097151 as core::ffi::c_int as u64
+    let mut a8: int64_t = (2097151 as core::ffi::c_int as u64
         & load_3(a.offset(21 as core::ffi::c_int as isize))) as int64_t;
-    let a9: int64_t = (2097151 as core::ffi::c_int as u64
+    let mut a9: int64_t = (2097151 as core::ffi::c_int as u64
         & load_4(a.offset(23 as core::ffi::c_int as isize)) >> 5 as core::ffi::c_int)
         as int64_t;
-    let a10: int64_t = (2097151 as core::ffi::c_int as u64
+    let mut a10: int64_t = (2097151 as core::ffi::c_int as u64
         & load_3(a.offset(26 as core::ffi::c_int as isize)) >> 2 as core::ffi::c_int)
         as int64_t;
-    let a11: int64_t =
+    let mut a11: int64_t =
         (load_4(a.offset(28 as core::ffi::c_int as isize)) >> 7 as core::ffi::c_int) as int64_t;
-    let b0: int64_t = (2097151 as core::ffi::c_int as u64 & load_3(b)) as int64_t;
-    let b1: int64_t = (2097151 as core::ffi::c_int as u64
+    let mut b0: int64_t = (2097151 as core::ffi::c_int as u64 & load_3(b)) as int64_t;
+    let mut b1: int64_t = (2097151 as core::ffi::c_int as u64
         & load_4(b.offset(2 as core::ffi::c_int as isize)) >> 5 as core::ffi::c_int)
         as int64_t;
-    let b2: int64_t = (2097151 as core::ffi::c_int as u64
+    let mut b2: int64_t = (2097151 as core::ffi::c_int as u64
         & load_3(b.offset(5 as core::ffi::c_int as isize)) >> 2 as core::ffi::c_int)
         as int64_t;
-    let b3: int64_t = (2097151 as core::ffi::c_int as u64
+    let mut b3: int64_t = (2097151 as core::ffi::c_int as u64
         & load_4(b.offset(7 as core::ffi::c_int as isize)) >> 7 as core::ffi::c_int)
         as int64_t;
-    let b4: int64_t = (2097151 as core::ffi::c_int as u64
+    let mut b4: int64_t = (2097151 as core::ffi::c_int as u64
         & load_4(b.offset(10 as core::ffi::c_int as isize)) >> 4 as core::ffi::c_int)
         as int64_t;
-    let b5: int64_t = (2097151 as core::ffi::c_int as u64
+    let mut b5: int64_t = (2097151 as core::ffi::c_int as u64
         & load_3(b.offset(13 as core::ffi::c_int as isize)) >> 1 as core::ffi::c_int)
         as int64_t;
-    let b6: int64_t = (2097151 as core::ffi::c_int as u64
+    let mut b6: int64_t = (2097151 as core::ffi::c_int as u64
         & load_4(b.offset(15 as core::ffi::c_int as isize)) >> 6 as core::ffi::c_int)
         as int64_t;
-    let b7: int64_t = (2097151 as core::ffi::c_int as u64
+    let mut b7: int64_t = (2097151 as core::ffi::c_int as u64
         & load_3(b.offset(18 as core::ffi::c_int as isize)) >> 3 as core::ffi::c_int)
         as int64_t;
-    let b8: int64_t = (2097151 as core::ffi::c_int as u64
+    let mut b8: int64_t = (2097151 as core::ffi::c_int as u64
         & load_3(b.offset(21 as core::ffi::c_int as isize))) as int64_t;
-    let b9: int64_t = (2097151 as core::ffi::c_int as u64
+    let mut b9: int64_t = (2097151 as core::ffi::c_int as u64
         & load_4(b.offset(23 as core::ffi::c_int as isize)) >> 5 as core::ffi::c_int)
         as int64_t;
-    let b10: int64_t = (2097151 as core::ffi::c_int as u64
+    let mut b10: int64_t = (2097151 as core::ffi::c_int as u64
         & load_3(b.offset(26 as core::ffi::c_int as isize)) >> 2 as core::ffi::c_int)
         as int64_t;
-    let b11: int64_t =
+    let mut b11: int64_t =
         (load_4(b.offset(28 as core::ffi::c_int as isize)) >> 7 as core::ffi::c_int) as int64_t;
-    let c0: int64_t = (2097151 as core::ffi::c_int as u64 & load_3(c)) as int64_t;
-    let c1: int64_t = (2097151 as core::ffi::c_int as u64
+    let mut c0: int64_t = (2097151 as core::ffi::c_int as u64 & load_3(c)) as int64_t;
+    let mut c1: int64_t = (2097151 as core::ffi::c_int as u64
         & load_4(c.offset(2 as core::ffi::c_int as isize)) >> 5 as core::ffi::c_int)
         as int64_t;
-    let c2: int64_t = (2097151 as core::ffi::c_int as u64
+    let mut c2: int64_t = (2097151 as core::ffi::c_int as u64
         & load_3(c.offset(5 as core::ffi::c_int as isize)) >> 2 as core::ffi::c_int)
         as int64_t;
-    let c3: int64_t = (2097151 as core::ffi::c_int as u64
+    let mut c3: int64_t = (2097151 as core::ffi::c_int as u64
         & load_4(c.offset(7 as core::ffi::c_int as isize)) >> 7 as core::ffi::c_int)
         as int64_t;
-    let c4: int64_t = (2097151 as core::ffi::c_int as u64
+    let mut c4: int64_t = (2097151 as core::ffi::c_int as u64
         & load_4(c.offset(10 as core::ffi::c_int as isize)) >> 4 as core::ffi::c_int)
         as int64_t;
-    let c5: int64_t = (2097151 as core::ffi::c_int as u64
+    let mut c5: int64_t = (2097151 as core::ffi::c_int as u64
         & load_3(c.offset(13 as core::ffi::c_int as isize)) >> 1 as core::ffi::c_int)
         as int64_t;
-    let c6: int64_t = (2097151 as core::ffi::c_int as u64
+    let mut c6: int64_t = (2097151 as core::ffi::c_int as u64
         & load_4(c.offset(15 as core::ffi::c_int as isize)) >> 6 as core::ffi::c_int)
         as int64_t;
-    let c7: int64_t = (2097151 as core::ffi::c_int as u64
+    let mut c7: int64_t = (2097151 as core::ffi::c_int as u64
         & load_3(c.offset(18 as core::ffi::c_int as isize)) >> 3 as core::ffi::c_int)
         as int64_t;
-    let c8: int64_t = (2097151 as core::ffi::c_int as u64
+    let mut c8: int64_t = (2097151 as core::ffi::c_int as u64
         & load_3(c.offset(21 as core::ffi::c_int as isize))) as int64_t;
-    let c9: int64_t = (2097151 as core::ffi::c_int as u64
+    let mut c9: int64_t = (2097151 as core::ffi::c_int as u64
         & load_4(c.offset(23 as core::ffi::c_int as isize)) >> 5 as core::ffi::c_int)
         as int64_t;
-    let c10: int64_t = (2097151 as core::ffi::c_int as u64
+    let mut c10: int64_t = (2097151 as core::ffi::c_int as u64
         & load_3(c.offset(26 as core::ffi::c_int as isize)) >> 2 as core::ffi::c_int)
         as int64_t;
-    let c11: int64_t =
+    let mut c11: int64_t =
         (load_4(c.offset(28 as core::ffi::c_int as isize)) >> 7 as core::ffi::c_int) as int64_t;
-    let mut s0: int64_t;
-    let mut s1: int64_t;
-    let mut s2: int64_t;
-    let mut s3: int64_t;
-    let mut s4: int64_t;
-    let mut s5: int64_t;
-    let mut s6: int64_t;
-    let mut s7: int64_t;
-    let mut s8: int64_t;
-    let mut s9: int64_t;
-    let mut s10: int64_t;
-    let mut s11: int64_t;
-    let mut s12: int64_t;
-    let mut s13: int64_t;
-    let mut s14: int64_t;
-    let mut s15: int64_t;
-    let mut s16: int64_t;
-    let mut s17: int64_t;
-    let mut s18: int64_t;
-    let mut s19: int64_t;
-    let mut s20: int64_t;
-    let mut s21: int64_t;
-    let mut s22: int64_t;
-    let mut s23: int64_t;
-    let mut carry0: int64_t;
-    let mut carry1: int64_t;
-    let mut carry2: int64_t;
-    let mut carry3: int64_t;
-    let mut carry4: int64_t;
-    let mut carry5: int64_t;
-    let mut carry6: int64_t;
-    let mut carry7: int64_t;
-    let mut carry8: int64_t;
-    let mut carry9: int64_t;
-    let mut carry10: int64_t;
-    let mut carry11: int64_t;
-    let mut carry12: int64_t;
-    let mut carry13: int64_t;
-    let mut carry14: int64_t;
-    let mut carry15: int64_t;
-    let mut carry16: int64_t;
-    let carry17: int64_t;
-    let carry18: int64_t;
-    let carry19: int64_t;
-    let carry20: int64_t;
-    let carry21: int64_t;
-    let carry22: int64_t;
+    let mut s0: int64_t = 0;
+    let mut s1: int64_t = 0;
+    let mut s2: int64_t = 0;
+    let mut s3: int64_t = 0;
+    let mut s4: int64_t = 0;
+    let mut s5: int64_t = 0;
+    let mut s6: int64_t = 0;
+    let mut s7: int64_t = 0;
+    let mut s8: int64_t = 0;
+    let mut s9: int64_t = 0;
+    let mut s10: int64_t = 0;
+    let mut s11: int64_t = 0;
+    let mut s12: int64_t = 0;
+    let mut s13: int64_t = 0;
+    let mut s14: int64_t = 0;
+    let mut s15: int64_t = 0;
+    let mut s16: int64_t = 0;
+    let mut s17: int64_t = 0;
+    let mut s18: int64_t = 0;
+    let mut s19: int64_t = 0;
+    let mut s20: int64_t = 0;
+    let mut s21: int64_t = 0;
+    let mut s22: int64_t = 0;
+    let mut s23: int64_t = 0;
+    let mut carry0: int64_t = 0;
+    let mut carry1: int64_t = 0;
+    let mut carry2: int64_t = 0;
+    let mut carry3: int64_t = 0;
+    let mut carry4: int64_t = 0;
+    let mut carry5: int64_t = 0;
+    let mut carry6: int64_t = 0;
+    let mut carry7: int64_t = 0;
+    let mut carry8: int64_t = 0;
+    let mut carry9: int64_t = 0;
+    let mut carry10: int64_t = 0;
+    let mut carry11: int64_t = 0;
+    let mut carry12: int64_t = 0;
+    let mut carry13: int64_t = 0;
+    let mut carry14: int64_t = 0;
+    let mut carry15: int64_t = 0;
+    let mut carry16: int64_t = 0;
+    let mut carry17: int64_t = 0;
+    let mut carry18: int64_t = 0;
+    let mut carry19: int64_t = 0;
+    let mut carry20: int64_t = 0;
+    let mut carry21: int64_t = 0;
+    let mut carry22: int64_t = 0;
     s0 = c0 + a0 * b0;
     s1 = c1 + a0 * b1 + a1 * b0;
     s2 = c2 + a0 * b2 + a1 * b1 + a2 * b0;
@@ -18240,42 +18238,42 @@ unsafe extern "C" fn sc_muladd(
     s14 -= s23 * 997805 as core::ffi::c_int as i64;
     s15 += s23 * 136657 as core::ffi::c_int as i64;
     s16 -= s23 * 683901 as core::ffi::c_int as i64;
-    s23 as core::ffi::c_int as int64_t;
+    s23 = 0 as core::ffi::c_int as int64_t;
     s10 += s22 * 666643 as core::ffi::c_int as i64;
     s11 += s22 * 470296 as core::ffi::c_int as i64;
     s12 += s22 * 654183 as core::ffi::c_int as i64;
     s13 -= s22 * 997805 as core::ffi::c_int as i64;
     s14 += s22 * 136657 as core::ffi::c_int as i64;
     s15 -= s22 * 683901 as core::ffi::c_int as i64;
-    s22 as core::ffi::c_int as int64_t;
+    s22 = 0 as core::ffi::c_int as int64_t;
     s9 += s21 * 666643 as core::ffi::c_int as i64;
     s10 += s21 * 470296 as core::ffi::c_int as i64;
     s11 += s21 * 654183 as core::ffi::c_int as i64;
     s12 -= s21 * 997805 as core::ffi::c_int as i64;
     s13 += s21 * 136657 as core::ffi::c_int as i64;
     s14 -= s21 * 683901 as core::ffi::c_int as i64;
-    s21 as core::ffi::c_int as int64_t;
+    s21 = 0 as core::ffi::c_int as int64_t;
     s8 += s20 * 666643 as core::ffi::c_int as i64;
     s9 += s20 * 470296 as core::ffi::c_int as i64;
     s10 += s20 * 654183 as core::ffi::c_int as i64;
     s11 -= s20 * 997805 as core::ffi::c_int as i64;
     s12 += s20 * 136657 as core::ffi::c_int as i64;
     s13 -= s20 * 683901 as core::ffi::c_int as i64;
-    s20 as core::ffi::c_int as int64_t;
+    s20 = 0 as core::ffi::c_int as int64_t;
     s7 += s19 * 666643 as core::ffi::c_int as i64;
     s8 += s19 * 470296 as core::ffi::c_int as i64;
     s9 += s19 * 654183 as core::ffi::c_int as i64;
     s10 -= s19 * 997805 as core::ffi::c_int as i64;
     s11 += s19 * 136657 as core::ffi::c_int as i64;
     s12 -= s19 * 683901 as core::ffi::c_int as i64;
-    s19 as core::ffi::c_int as int64_t;
+    s19 = 0 as core::ffi::c_int as int64_t;
     s6 += s18 * 666643 as core::ffi::c_int as i64;
     s7 += s18 * 470296 as core::ffi::c_int as i64;
     s8 += s18 * 654183 as core::ffi::c_int as i64;
     s9 -= s18 * 997805 as core::ffi::c_int as i64;
     s10 += s18 * 136657 as core::ffi::c_int as i64;
     s11 -= s18 * 683901 as core::ffi::c_int as i64;
-    s18 as core::ffi::c_int as int64_t;
+    s18 = 0 as core::ffi::c_int as int64_t;
     carry6 =
         s6 + ((1 as core::ffi::c_int) << 20 as core::ffi::c_int) as i64 >> 21 as core::ffi::c_int;
     s7 += carry6;
@@ -18326,35 +18324,35 @@ unsafe extern "C" fn sc_muladd(
     s8 -= s17 * 997805 as core::ffi::c_int as i64;
     s9 += s17 * 136657 as core::ffi::c_int as i64;
     s10 -= s17 * 683901 as core::ffi::c_int as i64;
-    s17 as core::ffi::c_int as int64_t;
+    s17 = 0 as core::ffi::c_int as int64_t;
     s4 += s16 * 666643 as core::ffi::c_int as i64;
     s5 += s16 * 470296 as core::ffi::c_int as i64;
     s6 += s16 * 654183 as core::ffi::c_int as i64;
     s7 -= s16 * 997805 as core::ffi::c_int as i64;
     s8 += s16 * 136657 as core::ffi::c_int as i64;
     s9 -= s16 * 683901 as core::ffi::c_int as i64;
-    s16 as core::ffi::c_int as int64_t;
+    s16 = 0 as core::ffi::c_int as int64_t;
     s3 += s15 * 666643 as core::ffi::c_int as i64;
     s4 += s15 * 470296 as core::ffi::c_int as i64;
     s5 += s15 * 654183 as core::ffi::c_int as i64;
     s6 -= s15 * 997805 as core::ffi::c_int as i64;
     s7 += s15 * 136657 as core::ffi::c_int as i64;
     s8 -= s15 * 683901 as core::ffi::c_int as i64;
-    s15 as core::ffi::c_int as int64_t;
+    s15 = 0 as core::ffi::c_int as int64_t;
     s2 += s14 * 666643 as core::ffi::c_int as i64;
     s3 += s14 * 470296 as core::ffi::c_int as i64;
     s4 += s14 * 654183 as core::ffi::c_int as i64;
     s5 -= s14 * 997805 as core::ffi::c_int as i64;
     s6 += s14 * 136657 as core::ffi::c_int as i64;
     s7 -= s14 * 683901 as core::ffi::c_int as i64;
-    s14 as core::ffi::c_int as int64_t;
+    s14 = 0 as core::ffi::c_int as int64_t;
     s1 += s13 * 666643 as core::ffi::c_int as i64;
     s2 += s13 * 470296 as core::ffi::c_int as i64;
     s3 += s13 * 654183 as core::ffi::c_int as i64;
     s4 -= s13 * 997805 as core::ffi::c_int as i64;
     s5 += s13 * 136657 as core::ffi::c_int as i64;
     s6 -= s13 * 683901 as core::ffi::c_int as i64;
-    s13 as core::ffi::c_int as int64_t;
+    s13 = 0 as core::ffi::c_int as int64_t;
     s0 += s12 * 666643 as core::ffi::c_int as i64;
     s1 += s12 * 470296 as core::ffi::c_int as i64;
     s2 += s12 * 654183 as core::ffi::c_int as i64;
@@ -18459,7 +18457,7 @@ unsafe extern "C" fn sc_muladd(
     s3 -= s12 * 997805 as core::ffi::c_int as i64;
     s4 += s12 * 136657 as core::ffi::c_int as i64;
     s5 -= s12 * 683901 as core::ffi::c_int as i64;
-    s12 as core::ffi::c_int as int64_t;
+    s12 = 0 as core::ffi::c_int as int64_t;
     carry0 = s0 >> 21 as core::ffi::c_int;
     s1 += carry0;
     s0 -= int64_lshift21(carry0);
@@ -18538,9 +18536,9 @@ unsafe extern "C" fn sc_muladd(
 }
 #[no_mangle]
 pub unsafe extern "C" fn GFp_x25519_scalar_mult_generic_masked(
-    out: *mut uint8_t,
-    scalar_masked: *const uint8_t,
-    point: *const uint8_t,
+    mut out: *mut uint8_t,
+    mut scalar_masked: *const uint8_t,
+    mut point: *const uint8_t,
 ) {
     let mut x1: fe = fe { v: [0; 10] };
     let mut x2: fe = fe { v: [0; 10] };
@@ -18566,10 +18564,10 @@ pub unsafe extern "C" fn GFp_x25519_scalar_mult_generic_masked(
     fe_copy(&mut x3, &mut x1);
     fe_1(&mut z3);
     let mut swap: core::ffi::c_uint = 0 as core::ffi::c_int as core::ffi::c_uint;
-    let mut pos: core::ffi::c_int;
+    let mut pos: core::ffi::c_int = 0;
     pos = 254 as core::ffi::c_int;
     while pos >= 0 as core::ffi::c_int {
-        let b: core::ffi::c_uint = (1 as core::ffi::c_int
+        let mut b: core::ffi::c_uint = (1 as core::ffi::c_int
             & e[(pos / 8 as core::ffi::c_int) as usize] as core::ffi::c_int
                 >> (pos & 7 as core::ffi::c_int))
             as core::ffi::c_uint;
@@ -18605,8 +18603,8 @@ pub unsafe extern "C" fn GFp_x25519_scalar_mult_generic_masked(
 }
 #[no_mangle]
 pub unsafe extern "C" fn GFp_x25519_public_from_private_generic_masked(
-    out_public_value: *mut uint8_t,
-    private_key_masked: *const uint8_t,
+    mut out_public_value: *mut uint8_t,
+    mut private_key_masked: *const uint8_t,
 ) {
     let mut e: [uint8_t; 32] = [0; 32];
     let _ = GFp_memcpy(
@@ -18631,38 +18629,38 @@ pub unsafe extern "C" fn GFp_x25519_public_from_private_generic_masked(
     fe_tobytes(out_public_value, &mut zminusy_inv);
 }
 #[no_mangle]
-pub unsafe extern "C" fn GFp_x25519_fe_invert(out: *mut fe, z: *const fe) {
+pub unsafe extern "C" fn GFp_x25519_fe_invert(mut out: *mut fe, mut z: *const fe) {
     fe_invert(out, z);
 }
 #[no_mangle]
-pub unsafe extern "C" fn GFp_x25519_fe_isnegative(f: *const fe) -> uint8_t {
+pub unsafe extern "C" fn GFp_x25519_fe_isnegative(mut f: *const fe) -> uint8_t {
     return fe_isnegative(f) as uint8_t;
 }
 #[no_mangle]
-pub unsafe extern "C" fn GFp_x25519_fe_mul_ttt(h: *mut fe, f: *const fe, g: *const fe) {
+pub unsafe extern "C" fn GFp_x25519_fe_mul_ttt(mut h: *mut fe, mut f: *const fe, mut g: *const fe) {
     fe_mul_ttt(h, f, g);
 }
 #[no_mangle]
-pub unsafe extern "C" fn GFp_x25519_fe_neg(f: *mut fe) {
+pub unsafe extern "C" fn GFp_x25519_fe_neg(mut f: *mut fe) {
     let mut t: fe_loose = fe_loose { v: [0; 10] };
     fe_neg(&mut t, f);
     fe_carry(f, &mut t);
 }
 #[no_mangle]
-pub unsafe extern "C" fn GFp_x25519_fe_tobytes(s: *mut uint8_t, h: *const fe) {
+pub unsafe extern "C" fn GFp_x25519_fe_tobytes(mut s: *mut uint8_t, mut h: *const fe) {
     fe_tobytes(s, h);
 }
 #[no_mangle]
 pub unsafe extern "C" fn GFp_x25519_ge_double_scalarmult_vartime(
-    r: *mut ge_p2,
-    a: *const uint8_t,
-    A: *const ge_p3,
-    b: *const uint8_t,
+    mut r: *mut ge_p2,
+    mut a: *const uint8_t,
+    mut A: *const ge_p3,
+    mut b: *const uint8_t,
 ) {
     ge_double_scalarmult_vartime(r, a, A, b);
 }
 #[no_mangle]
-pub unsafe extern "C" fn GFp_x25519_sc_mask(a: *mut uint8_t) {
+pub unsafe extern "C" fn GFp_x25519_sc_mask(mut a: *mut uint8_t) {
     let ref mut fresh2 = *a.offset(0 as core::ffi::c_int as isize);
     *fresh2 = (*fresh2 as core::ffi::c_int & 248 as core::ffi::c_int) as uint8_t;
     let ref mut fresh3 = *a.offset(31 as core::ffi::c_int as isize);
@@ -18672,10 +18670,10 @@ pub unsafe extern "C" fn GFp_x25519_sc_mask(a: *mut uint8_t) {
 }
 #[no_mangle]
 pub unsafe extern "C" fn GFp_x25519_sc_muladd(
-    s: *mut uint8_t,
-    a: *const uint8_t,
-    b: *const uint8_t,
-    c: *const uint8_t,
+    mut s: *mut uint8_t,
+    mut a: *const uint8_t,
+    mut b: *const uint8_t,
+    mut c: *const uint8_t,
 ) {
     sc_muladd(s, a, b, c);
 }

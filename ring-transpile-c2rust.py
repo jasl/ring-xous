@@ -53,7 +53,8 @@ TARGETS = [
             "-D__riscv_xlen=32",
             "-m32"
         ],
-        "save_to_dir": "src/c2rust/xous"
+        "save_to_dir": "src/c2rust/xous",
+        "skip_lint": False
     },
     {
         "target": "wasm32-unknown-unknown",
@@ -63,7 +64,8 @@ TARGETS = [
             "-D__wasm32__",
             "-m32"
         ],
-        "save_to_dir": "src/c2rust/wasm32"
+        "save_to_dir": "src/c2rust/wasm32",
+        "skip_lint": True
     }
 ]
 
@@ -105,8 +107,8 @@ def massage_line(line):
     line = line.replace("libc::c_void", "core::ffi::c_void")
 
     # Fix program-specific oddities
-    line = line.replace(" bf16",
-                        " u128")  # fixed in https://github.com/immunant/c2rust/issues/486, but not yet released
+    # line = line.replace(" bf16",
+    #                     " u128")  # fixed in https://github.com/immunant/c2rust/issues/486
     if line == "GFp_memcpy(":
         line = line.replace("GFp_memcpy(", "let _ = GFp_memcpy(")
     if line == "GFp_memset(":
@@ -241,6 +243,7 @@ def run():
         target = target_entry["target"]
         append_arguments = target_entry["compile_arguments"]
         save_to_dir = target_entry["save_to_dir"]
+        skip_lint = target_entry["skip_lint"]
 
         print(f"Transpiling for {target}")
 
@@ -257,26 +260,30 @@ def run():
             rs_file = file.replace(".c", ".rs")
             with open(rs_file, "r") as src_file:
                 with open(f"{save_to_dir}/{mod_name}.rs", "w") as dest_file:
-                    print("#![allow(non_camel_case_types)]", file=dest_file)
-                    print("#![allow(non_snake_case)]", file=dest_file)
-                    print("#![allow(non_upper_case_globals)]", file=dest_file)
+                    if skip_lint:
+                        print("#![allow(warnings)]", file=dest_file)
+                    else:
+                        print("#![allow(non_camel_case_types)]", file=dest_file)
+                        print("#![allow(non_snake_case)]", file=dest_file)
+                        print("#![allow(non_upper_case_globals)]", file=dest_file)
                     # print("use core::ffi::*;", file=dest_file)
                     for line in src_file:
                         print(massage_line(line), file=dest_file)
                 subprocess.run(["rm", rs_file])
                 subprocess.run(["rustfmt", f"{save_to_dir}/{mod_name}.rs"])
-        # multiple passes of linting are needed to tease out all the unused mut warnings
-        # each pass removes some muts from the warning tree that propagates backwards...
-        # we don't loop this but make it individual calls because the depth of this sort of depends
-        # upon the code itself.
-        for i in range(3):
-            print(f"Linting...iter: {i}")
-            lint(save_to_dir, target)
+
+        if not skip_lint:
+            # multiple passes of linting are needed to tease out all the unused mut warnings
+            # each pass removes some muts from the warning tree that propagates backwards...
+            # we don't loop this but make it individual calls because the depth of this sort of depends
+            # upon the code itself.
+            for i in range(3):
+                print(f"Linting...iter: {i}")
+                lint(save_to_dir, target)
 
         print("Add this to the end of `src/lib.rs`:")
 
         print(f"#[cfg(target=\"{target}\")]")
-
         print("mod c2rust {")
         for file in RING_C_FILES:
             mod_name = file.split("/")[-1].split(".")[0]
